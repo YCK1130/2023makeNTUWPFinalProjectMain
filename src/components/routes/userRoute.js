@@ -4,15 +4,15 @@ import { Route, Redirect } from "react-router-dom";
 // slices
 import { selectSession } from "../../slices/sessionSlice";
 
-// TODO
-export default function AdminRoute({ children, path }) {
+// for user
+export default function UserRoute({ children, path }) {
   const { isLogin, authority } = useSelector(selectSession);
   return (
     <Route
       path={path}
       render={() => {
         if (!isLogin) return <Redirect to="/login" />;
-        if (authority !== 2 && children.type.name !== "Selection")
+        if (authority !== 0)
           return <Redirect to="/" />;
         return children;
       }}

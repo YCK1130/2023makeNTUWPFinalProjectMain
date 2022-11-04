@@ -12,7 +12,10 @@ $ npm install
 $ # or     
 $ yarn install
 ```
-
+### Copy .env
+```shell
+$ cp .env.default .env
+```
 ### Run database
 ```shell
 $ # ./makeNTU-2023-competition/server

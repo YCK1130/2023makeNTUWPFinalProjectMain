@@ -9,7 +9,7 @@ import PublicRoute from "./components/routes/publicRoute";
 import PrivateRoute from "./components/routes/privateRoute";
 import LoginRoute from "./components/routes/loginRoute";
 import MainRoute from "./components/routes/mainRoute";
-import AdminRoute from "./components/routes/adminRoute";
+import UserRoute from "./components/routes/userRoute";
 // containers
 import Drawer from "./containers/drawer";
 import Main from "./containers/main";
