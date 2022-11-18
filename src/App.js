@@ -16,6 +16,7 @@ import Main from "./containers/main";
 import Login from "./containers/login";
 import StudentData from "./containers/studentData";
 import theme from "./theme";
+import User from "./containers/user";
 // compononets
 import Loading from "./components/loading";
 // initialize, slices
@@ -53,6 +54,7 @@ export default function App() {
           <Drawer>
             <Routes />
           </Drawer>
+          <User></User>
         </Router>
       </ThemeProvider>
     </div>
