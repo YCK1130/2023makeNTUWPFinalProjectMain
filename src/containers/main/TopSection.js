@@ -15,7 +15,7 @@ export default function Top() {
     root: {
       flexGrow: 1,
       width: "100%",
-      height: "100vh",
+      height: "80vh",
       overflow: "auto",
     },
     paper: {
@@ -49,7 +49,7 @@ export default function Top() {
             padding: "10px",
             margin: "auto",
             marginTop: "5%",
-            marginLeft: "30%",
+            // marginLeft: "30%",
             width: "90%",
             maxWidth: "500px",
             maxHeight: "500px",
