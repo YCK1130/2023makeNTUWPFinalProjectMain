@@ -38,6 +38,8 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
+    position: "relative",
+    zIndex: theme.zIndex.drawer - 1000,
   },
   root: {
     //  display: "flex",
@@ -46,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
     color: "#fff",
     boxShadow: "none",
-    backgroundColor: "rgb(25,34,49,.7)",
+    // backgroundColor: "rgb(25,34,49,.7)",
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -137,7 +139,7 @@ const Drawer = ({ children }) => {
   const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setOpen(() => !open);
   };
 
   const handleDrawerClose = () => {
@@ -157,6 +159,11 @@ const Drawer = ({ children }) => {
             to: "/studentdata",
             icon: <PeopleIcon />,
           },
+          {
+            text: "Board List",
+            to: "/boardlist",
+            icon: <PeopleIcon />,
+          },
         ],
       }[authority] || [{ text: "Main", to: "/", icon: <HomeIcon /> }];
 
@@ -170,6 +177,7 @@ const Drawer = ({ children }) => {
           [classes.appBarShift]: open,
         })}
         position="fixed"
+        sx={{ backgroundColor: "rgb(15,15,15)" }}
       >
         <Toolbar>
           <IconButton
@@ -243,13 +251,13 @@ const Drawer = ({ children }) => {
         }}
       >
         <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <KeyboardArrowUpIcon />
             ) : (
               <ChevronLeftIcon />
             )}
-          </IconButton>
+          </IconButton> */}
         </div>
 
         <List>

@@ -15,7 +15,7 @@ export default function Top() {
     root: {
       flexGrow: 1,
       width: "100%",
-      height: `calc(80vh - 64px)`,
+      height: "80vh",
       overflow: "auto",
     },
     paper: {
