@@ -25,10 +25,8 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import HomeIcon from "@mui/icons-material/Home"; // Main
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"; // Login, Logout
 import PeopleIcon from "@mui/icons-material/People"; // Student Data
-import DeveloperBoardIcon from '@mui/icons-material/DeveloperBoard'; //boardList
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; //租借開發版
-
-
+import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard"; //boardList
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; //租借開發版
 
 import { Redirect } from "react-router";
 import { selectSession, logout } from "../../slices/sessionSlice";
@@ -156,7 +154,8 @@ const Drawer = ({ children }) => {
         { text: "Login", to: "/login", icon: <ExitToAppIcon /> },
       ]
     : {
-        1: [ //admin區
+        1: [
+          //admin區
           { text: "Main", to: "/", icon: <HomeIcon /> },
           {
             text: "Student Data",
@@ -174,13 +173,14 @@ const Drawer = ({ children }) => {
             icon: <PeopleIcon />,
           },
         ],
-        0: [ //user區
+        0: [
+          //user區
           {
             text: "租借開發版",
             to: "/user",
             icon: <ShoppingCartIcon />,
           },
-        ]
+        ],
       }[authority] || [{ text: "Main", to: "/", icon: <HomeIcon /> }];
 
   const userName = isLogin ? userID : "";

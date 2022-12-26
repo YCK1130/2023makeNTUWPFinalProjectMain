@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@mui/material/Button';
-import SearchBar from './Components/SearchBar'
+import { useState } from "react";
+import styled from "styled-components";
+import Button from "@mui/material/Button";
+import SearchBar from "./Components/SearchBar";
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -13,7 +13,7 @@ const HeaderContainer = styled.div`
 `;
 
 const handleExit = async () => {
-  window.close()
+  window.close();
   //console.log("Exit借用板塊")
 };
 export default function Header({ setKeyWord }) {
