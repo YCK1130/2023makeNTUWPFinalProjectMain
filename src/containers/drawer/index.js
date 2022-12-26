@@ -150,7 +150,7 @@ const Drawer = ({ children }) => {
         { text: "Login", to: "/login", icon: <ExitToAppIcon /> },
       ]
     : {
-        1: [
+        1: [ //admin區
           { text: "Main", to: "/", icon: <HomeIcon /> },
           {
             text: "Student Data",
@@ -158,6 +158,13 @@ const Drawer = ({ children }) => {
             icon: <PeopleIcon />,
           },
         ],
+        0: [ //user區
+          {
+            text: "租借開發版",
+            to: "/user",
+            icon: <PeopleIcon />,
+          },
+        ]
       }[authority] || [{ text: "Main", to: "/", icon: <HomeIcon /> }];
 
   const userName = isLogin ? userID : "";
