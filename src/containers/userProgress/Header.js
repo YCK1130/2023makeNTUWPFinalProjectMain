@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -40,7 +40,7 @@ const handleExit = async () => {
   return (
     <Wrapper>
       <Typography variant="h2">MakeNTU 開發版借用</Typography>
-      <Button variant="contained" color="neutral" onClick={handleExit}>
+      <Button variant="contained" onClick={handleExit}>
         Exit
       </Button>
     </Wrapper>

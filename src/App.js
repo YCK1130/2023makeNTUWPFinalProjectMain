@@ -14,6 +14,7 @@ import UserRoute from "./components/routes/userRoute";
 import Drawer from "./containers/drawer";
 import Main from "./containers/main";
 import Login from "./containers/login";
+import UserProgress from "./containers/userProgress";
 import StudentData from "./containers/studentData";
 import AdminBoardList from "./containers/adminBoardList";
 import theme from "./theme";
@@ -44,6 +45,9 @@ const Routes = () => {
       <PrivateRoute exact path="/boardlist">
         <AdminBoardList />
       </PrivateRoute>
+      <UserRoute exact path="/user">
+        <UserProgress />
+      </UserRoute>
       <Redirect to="/login" />
     </Switch>
   );

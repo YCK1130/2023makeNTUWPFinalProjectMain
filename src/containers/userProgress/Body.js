@@ -101,14 +101,14 @@ function Body(){
       ) : (
         <Wrapper>
           {board.map((e)=>{
-            return <Card name={e.name} tag={e.tag} left={e.left} limit={3} v={e.v} id={e.ID} addNeedList={addNeedList}/>
+            return <Card key={e.name+e.ID} name={e.name} tag={e.tag} left={e.left} limit={3} v={e.v} id={e.ID} addNeedList={addNeedList}/>
           })}
         </Wrapper>
       )}
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
-              color="inherit"
+              
               disabled={activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
