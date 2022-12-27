@@ -34,7 +34,8 @@ export default function Card(props) {
       <Grid container spacing={2}>
         <Grid item>
           <ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="nano33" src="/photoData/nano33.jpg" />
+            <Img alt="nano33" src="/photoData/nano33.jpg" /> 
+            {/* 這裡是放照片的 */}
           </ButtonBase>
         </Grid>
         <Grid item xs={12} sm container>

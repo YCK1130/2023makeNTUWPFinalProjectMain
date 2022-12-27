@@ -42,7 +42,10 @@ function Body(){
   const [activeStep, setActiveStep] = React.useState(0);
 
   const addNeedList = (id, quantity) => {
-    needList.set(id,quantity);
+    if(quantity===0){
+      needList.delete(id,needList.get(id));
+    }
+    else{needList.set(id,quantity);}
     //console.log([...needList]);
   } 
 
@@ -55,6 +58,7 @@ function Body(){
   };
 
   const handleReset = () => {
+    needList.clear();
     setActiveStep(0);
   };
 
@@ -72,18 +76,18 @@ function Body(){
   
 
   return (
-    <Box sx={{ width: '100%' }}>
-
-      <Stepper activeStep={activeStep}>
-        {steps.map((label) => {
-          return (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-
+    <Box sx={{ width: '100%'}}>
+      <Box mb={2}>
+        <Stepper activeStep={activeStep}>
+          {steps.map((label) => {
+            return (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+      </Box>
       {activeStep === steps.length-1 ? (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
@@ -108,7 +112,6 @@ function Body(){
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
-              
               disabled={activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
