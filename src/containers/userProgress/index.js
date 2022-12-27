@@ -6,11 +6,11 @@ import Paper from '@mui/material/Paper';
 const Wrapper = styled.div`
   margin: auto;
   width: 80%;
-  height: 100vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
 `;
 
 const StyledPaper = styled(Paper)`
@@ -21,7 +21,7 @@ function App() {
   return (
     <Wrapper>
       <StyledPaper elevation={3}>
-        <Header />
+        {/* <Header /> */}
         <Body />
       </StyledPaper>
     </Wrapper>
