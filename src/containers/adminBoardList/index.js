@@ -1,14 +1,16 @@
 import React from "react";
-import TopBar from "./TopBar";
-import BoardList from "./BoardList";
-import Footer from "./Footer";
+import ConsoleHeader from "./ConsoleHeader";
+import BoardConsole from "./BoardConsole";
+import ConsoleFooter from "./ConsoleFooter";
+import { useState } from "react";
 
 export default function BoardPage() {
+  const [searchKeyWord, setKeyWord] = useState("");
   return (
     <div>
-      <Footer />
-      <BoardList />
-      <Footer />
+      <ConsoleHeader />
+      <BoardConsole keyWord={searchKeyWord} />
+      <ConsoleFooter setKeyWord={setKeyWord} />
     </div>
   );
 }

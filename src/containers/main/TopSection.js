@@ -66,7 +66,7 @@ export default function Top() {
                 MakeNTU
               </Typography>
               <Typography
-                variant="h3"
+                variant="h4"
                 className={classes.text}
                 style={{ marginBottom: "18px" }}
               >
@@ -79,7 +79,7 @@ export default function Top() {
                   width: "70%",
                   display: "flex",
                   margin: "auto",
-                  marginTop: "15%",
+                  marginTop: "5%",
                   marginBottom: "3%",
                 }}
                 variant="outlined"
