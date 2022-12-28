@@ -8,7 +8,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import PropTypes from "prop-types";
 
-function SearchBar({ handleSearch, handleChage }) {
+function SearchBar({visibility, handleSearch, handleChage }) {
   return (
     <Paper
       component="form"
@@ -20,6 +20,7 @@ function SearchBar({ handleSearch, handleChage }) {
         width: "75%",
         borderRadius: "10px",
         backgroundColor: "rgba(255,255,255,0.1)",
+        visibility:{visibility}||1
       }}
     >
       <IconButton sx={{ p: "10px" }} aria-label="menu">

@@ -7,7 +7,10 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
+
+import SearchBar from "./Components/SearchBar";
 import Card from "./Cards";
+import { useEffect } from "react";
 
 const steps = ["挑選開發版", "確認送出", "資訊"];
 
@@ -54,7 +57,9 @@ const Wrapper = styled.div`
 
 function Body() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [rerender, setRerender] = React.useState(false);
 
+  
   const addNeedList = (id, quantity) => {
     if (quantity === 0) {
       needList.delete(id, needList.get(id));
@@ -63,20 +68,21 @@ function Body() {
     }
     //console.log([...needList]);
   };
-
+  
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
+  
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
+  
   const handleReset = () => {
     needList.clear();
     setActiveStep(0);
+    setRerender(true);
   };
-
+  
   const order = () => {
     let a = [];
     for (var [key, value] of needList.entries()) {
@@ -85,8 +91,51 @@ function Body() {
     console.log(a);
     return a;
   };
-
+  
   const showNeedList = order();
+  
+  const renderCard = () => {
+    let newBoard = board.map((e) => {
+      if (activeStep === steps.length - 2) {
+        if (needList.has(e.ID)) {
+          return (
+            <Card
+              key={e.name + e.ID}
+              name={e.name}
+              tag={e.tag}
+              left={e.left}
+              limit={3}
+              v={e.v}
+              id={e.ID}
+              needList={needList}
+              addNeedList={addNeedList}
+            />
+          );
+        }
+      } else {
+        return (
+          <Card
+            key={e.name + e.ID}
+            name={e.name}
+            tag={e.tag}
+            left={e.left}
+            limit={3}
+            v={e.v}
+            id={e.ID}
+            needList={needList}
+            addNeedList={addNeedList}
+            rerender={rerender}
+          />
+        );
+      }
+    })
+
+    return newBoard
+  }
+
+  useEffect(() => {
+    setRerender(false);
+  },[rerender])
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -126,56 +175,29 @@ function Body() {
               justifyContent: "space-around",
             }}
           >
-            {board.map((e) => {
-              if (activeStep === steps.length - 2) {
-                if (needList.has(e.ID)) {
-                  return (
-                    <Card
-                      key={e.name + e.ID}
-                      name={e.name}
-                      tag={e.tag}
-                      left={e.left}
-                      limit={3}
-                      v={e.v}
-                      id={e.ID}
-                      needList={needList}
-                      addNeedList={addNeedList}
-                    />
-                  );
-                }
-              } else {
-                return (
-                  <Card
-                    key={e.name + e.ID}
-                    name={e.name}
-                    tag={e.tag}
-                    left={e.left}
-                    limit={3}
-                    v={e.v}
-                    id={e.ID}
-                    needList={needList}
-                    addNeedList={addNeedList}
-                  />
-                );
-              }
-            })}
+            {renderCard()}
           </Box>
         </Wrapper>
       )}
 
-      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-        <Button disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
+      <Box sx={{ display: "flex", flexDirection: "row", pt: 2 , justifyContent:"space-evenly"}}>
+        <Button disabled={activeStep === 0||activeStep === steps.length - 1} onClick={handleBack} sx={{ mr: 1 }}>
           Back
         </Button>
-        <Box sx={{ flex: "1 1 auto" }} />
+        
+        {activeStep === 0 ? (
+          <SearchBar></SearchBar>
+        ) : <SearchBar visibility={"hidden"}></SearchBar>}
 
-        {activeStep === steps.length - 1 ? (
-          <Button onClick={handleReset}>Reset</Button>
-        ) : null}
+        <Box sx={{maxWidth:"15%"}}>
+          {activeStep !== steps.length - 1 ? (
+            <Button onClick={handleReset}>Reset</Button>
+          ) : null}
 
-        <Button onClick={handleNext}>
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
-        </Button>
+          <Button onClick={handleNext}>
+            {activeStep === steps.length - 1 ? "Finish" : "Next"}
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
