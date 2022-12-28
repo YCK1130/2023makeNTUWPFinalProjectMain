@@ -25,6 +25,7 @@
     "express-async-handler": "^1.1.4",
     "express-session": "^1.17.1",
     "fast-csv": "^4.3.6",
+    "http": "^0.0.1-security",
     "http-proxy-middleware": "^2.0.0",
     "moment": "^2.29.1",
     "mongoose": "^5.12.0",
@@ -49,6 +50,7 @@
     "react-scroll": "^1.8.1",
     "redis": "^3.0.2",
     "styled-components": "^5.2.0",
+    "ws": "^8.11.0",
     "yargs": "^16.2.0"
   },
   "scripts": {

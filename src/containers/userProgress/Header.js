@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Button from "@mui/material/Button";
 import SearchBar from "./Components/SearchBar";
 
+import { useMakeNTU } from "../hooks/useMakeNTU";
+
 const HeaderContainer = styled.div`
   width: 100%;
   height: auto;
@@ -19,9 +21,12 @@ const handleExit = async () => {
 export default function Header({ setKeyWord }) {
   const [searchWord, setSearchWord] = useState("");
 
+  const {sendMessage} = useMakeNTU();
+
   const handleSearch = () => {
-    console.log(searchWord);
-    setKeyWord(searchWord);
+    //console.log(searchWord);
+    //setKeyWord(searchWord);
+    sendMessage("123");
     // setSearchWord(e.target.value);
   };
   return (

@@ -106,7 +106,7 @@ router
       }
       teamID = teamID.toUpperCase();
 
-      const user = await model.Team.findOne({ teamID }).exec();
+      const user = await model.TeamModel.findOne({ teamID }).exec();
       if (!user) {
         res.status(400).end();
         return;
@@ -173,7 +173,7 @@ router.route("/password").put(
         const newpasswordHash = await bcrypt.hash(data.new_password, salt);
         const filter = { teamID: data.teamID.toUpperCase() };
         const update = { password: newpasswordHash };
-        const result = await model.Team.findOneAndUpdate(filter, update);
+        const result = await model.TeamModel.findOneAndUpdate(filter, update);
       })
     );
 
@@ -186,7 +186,7 @@ router
   .get(
     permissionRequired(constants.AUTHORITY_ADMIN),
     asyncHandler(async (req, res, next) => {
-      const teamGroup = await model.Team.find({}).exec();
+      const teamGroup = await model.TeamModel.find({}).exec();
       const filtered = [];
       const items = Object.keys(req.query);
       let pass = true;
@@ -241,7 +241,7 @@ router
           const team = { ...teamRaw };
           team.password = hash;
           team.teamID = team.teamID.toUpperCase();
-          const match = await model.Team.findOne({
+          const match = await model.TeamModel.findOne({
             teamID: team.teamID,
           }).exec();
           if (!match) {
@@ -254,7 +254,7 @@ router
       // Save all teams
       await Promise.all(
         teams.map(async (team) => {
-          const teamDocument = new model.Team(team);
+          const teamDocument = new model.TeamModel(team);
           await teamDocument.save();
         })
       );
@@ -280,9 +280,9 @@ router
       await Promise.all(
         deleteData_new.map(async (data) => {
           const teamID = data.toUpperCase();
-          const team = await model.Team.findOne({ teamID }).exec();
+          const team = await model.TeamModel.findOne({ teamID }).exec();
           if (team) {
-            await model.Team.deleteOne({ teamID });
+            await model.TeamModel.deleteOne({ teamID });
           }
         })
       );
@@ -313,12 +313,12 @@ router
           const { teamName } = data;
           const salt = await bcrypt.genSalt(10);
           teamID = teamID.toUpperCase();
-          const team = await model.Team.findOne({ teamID }).exec();
+          const team = await model.TeamModel.findOne({ teamID }).exec();
           if (team) {
             if (password) {
               const hash = await bcrypt.hash(password, salt);
               password = hash;
-              await model.Team.updateOne(
+              await model.TeamModel.updateOne(
                 {
                   teamID,
                 },
@@ -329,7 +329,7 @@ router
                 }
               );
             } else {
-              await model.Team.updateOne(
+              await model.TeamModel.updateOne(
                 {
                   teamID,
                 },
@@ -370,9 +370,9 @@ router.route("/authority").put(
         let { teamID } = data;
         const { authority } = data;
         teamID = teamID.toUpperCase();
-        const user = await model.Team.findOne({ teamID }).exec();
+        const user = await model.TeamModel.findOne({ teamID }).exec();
         if (user) {
-          await model.Team.updateOne({ teamID }, { authority });
+          await model.TeamModel.updateOne({ teamID }, { authority });
         }
       })
     );

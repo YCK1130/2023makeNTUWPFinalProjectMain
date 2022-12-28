@@ -50,7 +50,7 @@ const teamSchema = new mongoose.Schema({
   requests:[{type: mongoose.Types.ObjectId, ref: "Request"}]
 });
 
-const Team = conn.model("Team", teamSchema);
+const TeamModel = conn.model("Team", teamSchema);
 
 
 const requestSchema = new mongoose.Schema({
@@ -76,7 +76,7 @@ const requestSchema = new mongoose.Schema({
   }]
 })
 
-const Request = conn.model("Request", requestSchema);
+const RequestModel = conn.model("Request", requestSchema);
 
 const boardSchema = new mongoose.Schema({
   boardID:{ 
@@ -109,12 +109,12 @@ const boardSchema = new mongoose.Schema({
   }],
 })
 
-const Board = conn.model("Board", boardSchema);
+const BoardModel = conn.model("Board", boardSchema);
 // ========================================
 
 module.exports = {
-  Team,
-  Request,
-  Board,
+  TeamModel,
+  RequestModel,
+  BoardModel,
   conn,
 };
