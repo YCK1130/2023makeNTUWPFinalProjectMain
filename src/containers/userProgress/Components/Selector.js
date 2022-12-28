@@ -3,9 +3,16 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { useEffect } from 'react';
 
 export default function Selector(props) {
   const [q, setQ] = React.useState(0);
+
+  useEffect(()=>{
+  },[])
+  if(props.defaultValue !== 0&&q===0){
+    setQ(props.defaultValue);
+  }
 
   const handleChange = (event) => {
     props.addNeedList(props.id, event.target.value);
@@ -33,6 +40,7 @@ export default function Selector(props) {
         value={q}
         label="quantity"
         onChange={handleChange}
+        defaultValue={props.defaultValue||0}
       >
         {a.map((e) => {
             return <MenuItem value={e}>{e}</MenuItem>

@@ -14,7 +14,7 @@ const steps = ['挑選開發版', '確認送出', '資訊'];
 
 const needList = new Map();
 
-const board = [
+const board = [ //這裡會需要query
   {name:"Nano 33 IoT", tag:"Arduino", left:"2", v:true, ID:"1"},
   {name:"Nano 33 IoT", tag:"Arduino", left:"5", v:true, ID:"2"},
   {name:"Nano 33 IoT", tag:"Arduino", left:"1", v:true, ID:"3"},
@@ -105,7 +105,7 @@ function Body(){
       ) : (
         <Wrapper>
           {board.map((e)=>{
-            return <Card key={e.name+e.ID} name={e.name} tag={e.tag} left={e.left} limit={3} v={e.v} id={e.ID} addNeedList={addNeedList}/>
+            return <Card key={e.name+e.ID} name={e.name} tag={e.tag} left={e.left} limit={3} v={e.v} id={e.ID} needList={needList} addNeedList={addNeedList}/>
           })}
         </Wrapper>
       )}
