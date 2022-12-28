@@ -19,6 +19,7 @@ function SearchBar({ handleSearch, handleChage }) {
         alignItems: "center",
         width: "75%",
         borderRadius: "10px",
+        backgroundColor: "rgba(255,255,255,0.1)",
       }}
     >
       <IconButton sx={{ p: "10px" }} aria-label="menu">

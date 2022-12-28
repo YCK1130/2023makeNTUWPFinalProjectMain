@@ -4,7 +4,7 @@ import { useState } from "react";
 import SearchBar from "../../components/searchBar";
 import PropTypes from "prop-types";
 
-const FooterContainer = styled.div`
+const HeaderContainer = styled.div`
   width: 100%;
   height: auto;
   display: flex;
@@ -12,10 +12,7 @@ const FooterContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-Footer.propTypes = {
-  setKeyWord: PropTypes.func.isRequired,
-};
-export default function Footer({ setKeyWord }) {
+export default function Header({ setKeyWord }) {
   const [searchWord, setSearchWord] = useState("");
 
   const handleSearch = () => {
@@ -24,8 +21,8 @@ export default function Footer({ setKeyWord }) {
     // setSearchWord(e.target.value);
   };
   return (
-    <FooterContainer>
+    <HeaderContainer>
       <SearchBar handleSearch={handleSearch} handleChage={setSearchWord} />
-    </FooterContainer>
+    </HeaderContainer>
   );
 }

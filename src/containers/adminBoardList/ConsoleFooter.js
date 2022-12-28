@@ -12,10 +12,10 @@ const FooterContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-Footer.propTypes = {
+ConsoleFooter.propTypes = {
   setKeyWord: PropTypes.func.isRequired,
 };
-export default function Footer({ setKeyWord }) {
+export default function ConsoleFooter({ setKeyWord }) {
   const [searchWord, setSearchWord] = useState("");
 
   const handleSearch = () => {
