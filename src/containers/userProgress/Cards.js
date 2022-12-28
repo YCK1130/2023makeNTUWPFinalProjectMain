@@ -33,7 +33,8 @@ export default function Card(props) {
   return (
     <Paper
       sx={{
-        width: 1/5 ,
+        maxWidth: 1/4,
+        maxHeight: 1/3,
         p: 2,
         margin: '5px',
         flexGrow: 3,

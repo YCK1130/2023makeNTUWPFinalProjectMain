@@ -1,50 +1,33 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
+import SearchBar from './Components/SearchBar'
 
-const theme = createTheme({
-  status: {
-    danger: '#e53e3e',
-  },
-  palette: {
-    primary: {
-      main: '#0971f1',
-      darker: '#053e85',
-    },
-    neutral: {
-      main: '#64748B',
-      contrastText: '#fff',
-    },
-  },
-});
-
-const Wrapper = styled.section`
+const HeaderContainer = styled.div`
+  width: 100%;
+  height: auto;
   display: flex;
+  margin: auto;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-
-  & button {
-    margin-left: 1em;
-  }
 `;
 
-const Header = () => {
-
 const handleExit = async () => {
-    window.close()
-    //console.log("Exit借用板塊")
+  window.close()
+  //console.log("Exit借用板塊")
 };
+export default function Header({ setKeyWord }) {
+  const [searchWord, setSearchWord] = useState("");
 
-
+  const handleSearch = () => {
+    console.log(searchWord);
+    setKeyWord(searchWord);
+    // setSearchWord(e.target.value);
+  };
   return (
-    <Wrapper>
-      <Typography variant="h2">MakeNTU 開發版借用</Typography>
-      <Button variant="contained" onClick={handleExit}>
-        Exit
-      </Button>
-    </Wrapper>
+    <HeaderContainer>
+      <SearchBar handleSearch={handleSearch} handleChage={setSearchWord} />
+      {/* <Button variant="contained" onClick={handleExit}>Exit</Button> */}
+    </HeaderContainer>
   );
-};
-
-export default Header;
+}
