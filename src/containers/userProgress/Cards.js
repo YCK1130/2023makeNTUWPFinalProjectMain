@@ -6,6 +6,9 @@ import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 
 import Selector from './Components/Selector';
+import { NearMeDisabled } from '@mui/icons-material';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -15,10 +18,18 @@ const Img = styled('img')({
 });
 
 
-
 export default function Card(props) {
 
+  const [num, setNum] = React.useState(0);
+
+
   //console.log(props.addNeedList);
+  useEffect(()=>{
+    if(props.needList.has(props.id)){
+      setNum(props.needList.get(props.id));
+    }
+  },[])
+
   return (
     <Paper
       sx={{
@@ -52,7 +63,7 @@ export default function Card(props) {
               </Typography>
             </Grid>
             <Grid item>
-              <Selector id={props.id} limit={Math.min(props.limit,props.left)} addNeedList={props.addNeedList}/>
+              <Selector id={props.id} defaultValue={num} limit={Math.min(props.limit,props.left)} addNeedList={props.addNeedList}/>
             </Grid>
           </Grid>
           <Grid item>
