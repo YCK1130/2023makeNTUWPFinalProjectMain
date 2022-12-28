@@ -181,6 +181,14 @@ const Drawer = ({ children }) => {
             icon: <ShoppingCartIcon />,
           },
         ],
+        0: [
+          //user區
+          {
+            text: "租借開發版",
+            to: "/user",
+            icon: <PeopleIcon />,
+          },
+        ],
       }[authority] || [{ text: "Main", to: "/", icon: <HomeIcon /> }];
 
   const userName = isLogin ? userID : "";

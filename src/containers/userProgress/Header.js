@@ -21,7 +21,7 @@ const handleExit = async () => {
 export default function Header({ setKeyWord }) {
   const [searchWord, setSearchWord] = useState("");
 
-  const {sendMessage} = useMakeNTU();
+  const { sendMessage } = useMakeNTU();
 
   const handleSearch = () => {
     //console.log(searchWord);
