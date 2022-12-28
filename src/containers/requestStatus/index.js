@@ -1,6 +1,5 @@
 import React from "react";
-import ConsoleHeader from "./ConsoleHeader";
-import BoardConsole from "./BoardConsole";
+import StatusConsole from "./StatusConsole";
 import RequestConsole from "./RequestConsole";
 import { useState } from "react";
 import styled from "styled-components";
@@ -20,7 +19,7 @@ export default function BoardPage() {
   return (
     <ConsoleWrapper>
       <RequestConsole />
-      <BoardConsole keyWord={searchKeyWord} />
+      <StatusConsole keyWord={searchKeyWord} />
     </ConsoleWrapper>
   );
 }

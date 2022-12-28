@@ -97,11 +97,9 @@ const someCards = [
     image: "",
   },
 ];
-export default function BoardConsole({ keyWord }) {
+export default function StatusConsole() {
   const history = useHistory();
-  const [cards, setCards] = useState([]);
-  const [addCardData, setAddCardData] = useState({});
-  const [delCardID, setDelCardID] = useState(0);
+  const [userStatus, setUserStatus] = useState([]);
   const [changedData, setChangedData] = useState([]);
   const useStyles = makeStyles(() => ({
     root: {
@@ -128,43 +126,14 @@ export default function BoardConsole({ keyWord }) {
     },
   }));
   useEffect(() => {
-    setCards(someCards);
+    //獲取user資料
+    console.log("fetching data...");
+    setUserStatus(someCards);
   }, []);
 
-  const updateData = () => {
-    console.log("updating");
-  };
   useEffect(() => {
     console.log(changedData);
   }, [changedData]);
-
-  useEffect(() => {
-    const exist = cards.filter((card) => card.name === addCardData.name);
-    if (exist.length !== 0 || addCardData.name === undefined) {
-      console.log("existed");
-      return;
-    }
-    console.log("handling", addCardData);
-    setCards([
-      {
-        ...addCardData,
-        id: uuidv4(),
-        remain: 3,
-        image: "",
-      },
-      ...cards,
-    ]);
-    setAddCardData({});
-  }, [addCardData]);
-
-  useEffect(() => {
-    if (cards.length === 0) return;
-    const exist = cards.filter((card) => card.id === delCardID);
-    const remainCards = cards.filter((card) => card.id !== delCardID);
-
-    console.log("deleting", exist);
-    setCards(remainCards);
-  }, [delCardID]);
 
   const classes = useStyles();
   const { isLogin } = useSelector(selectSession);
@@ -182,16 +151,8 @@ export default function BoardConsole({ keyWord }) {
           justifyContent: "space-around",
         }}
       >
-        {cards.map((card) => {
-          return (
-            <Request
-              key={card?.name + card?.id}
-              data={card}
-              handleDeleteCard={setDelCardID}
-              changedData={changedData}
-              setChangedData={setChangedData}
-            ></Request>
-          );
+        {userStatus.map((card) => {
+          return <Request key={card?.name + card?.id} data={card}></Request>;
         })}
       </Box>
     </Wrapper>

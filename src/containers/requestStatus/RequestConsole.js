@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
+import Request from "../../components/request";
 
 const Wrapper = styled.div`
   width: 45%;
@@ -27,11 +28,21 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
+      style={{ width: "100%", height: "90%" }}
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            paddingRight: "10px",
+            overflowY: "hidden",
+            overflowX: "hidden",
+            borderRadius: "5px",
+          }}
+        >
+          {children}
         </Box>
       )}
     </div>
@@ -50,19 +61,76 @@ function a11yProps(index) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
-export default function BasicTabs() {
+const someReqs = [
+  {
+    id: 1,
+    name: "aaa",
+    status: "solved",
+  },
+  {
+    id: 1,
+    name: "aaa",
+    status: "solved",
+  },
+  {
+    id: 1,
+    name: "aaa",
+    status: "solved",
+  },
+  {
+    id: 1,
+    name: "aaa",
+    status: "solved",
+  },
+  {
+    id: 1,
+    name: "aaa",
+    status: "solved",
+  },
+  {
+    id: 1,
+    name: "aaa",
+    status: "solved",
+  },
+  {
+    id: 2,
+    name: "bbb",
+    status: "unSolved",
+  },
+  {
+    id: 2,
+    name: "bbb",
+    status: "unSolved",
+  },
+  {
+    id: 2,
+    name: "bbb",
+    status: "unSolved",
+  },
+  {
+    id: 2,
+    name: "bbb",
+    status: "unSolved",
+  },
+];
+export default function RequestConsole() {
   const [value, setValue] = useState(0);
+  const [requests, setRequests] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  useEffect(() => {
+    //獲取user資料
+    console.log("fetching data...");
+    setRequests(someReqs);
+  }, []);
   return (
     <Wrapper>
       <Box
         sx={{
           width: "100%",
+          height: "10%",
           borderBottom: 2,
           borderColor: "divider",
           backgroundColor: "rgba(0,0,0,0.1)",
@@ -79,10 +147,34 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        未完成
+        {requests
+          .filter(
+            (request) =>
+              request?.status?.toUpperCase() === "unSolved".toUpperCase()
+          )
+          .map((request) => {
+            return (
+              <Request
+                key={request?.name + request?.id}
+                data={request}
+              ></Request>
+            );
+          })}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        已完成
+        {requests
+          .filter(
+            (request) =>
+              request?.status?.toUpperCase() === "solved".toUpperCase()
+          )
+          .map((request) => {
+            return (
+              <Request
+                key={request?.name + request?.id}
+                data={request}
+              ></Request>
+            );
+          })}
       </TabPanel>
     </Wrapper>
   );

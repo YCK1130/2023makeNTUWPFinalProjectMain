@@ -56,8 +56,6 @@ export default function ComplexGrid({
         margin: "5px",
         width: "100%",
         height: "auto",
-        maxWidth: 230,
-        minWidth: 150,
         flexGrow: 1,
         position: "relative",
 
