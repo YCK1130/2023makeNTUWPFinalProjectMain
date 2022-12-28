@@ -13,8 +13,8 @@ import { useEffect } from 'react';
 const Img = styled('img')({
   margin: 'auto',
   display: 'block',
-  maxWidth: '100%',
-  maxHeight: '100%',
+  maxWidth: "100%",
+  maxHeight: "auto",
 });
 
 
@@ -34,7 +34,9 @@ export default function Card(props) {
     <Paper
       sx={{
         maxWidth: 1/4,
-        maxHeight: 1/3,
+        minWidth: 230,
+        maxHeight: 320,
+        minHeight: 180,
         p: 2,
         margin: '5px',
         flexGrow: 3,
@@ -50,7 +52,7 @@ export default function Card(props) {
             {/* 這裡是放照片的 */}
           </ButtonBase>
         </Grid>
-        <Grid item xs={12} sm container>
+        <Grid item xs={{minWidth: 150,minHeight: 160,}} sm container>
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div">
