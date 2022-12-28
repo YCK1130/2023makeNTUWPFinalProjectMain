@@ -42,6 +42,12 @@ const teamSchema = new mongoose.Schema({
     immutable: false,
   },
   // selections,
+  //image 頭像
+  myCards:[{
+    board:{type: mongoose.Types.ObjectId, ref: "Board",},
+    quantity:{type: Number},
+  }],
+  requests:[{type: mongoose.Types.ObjectId, ref: "Request"}]
 });
 
 const Team = conn.model("Team", teamSchema);
