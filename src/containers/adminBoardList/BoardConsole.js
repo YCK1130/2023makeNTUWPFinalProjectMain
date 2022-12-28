@@ -177,6 +177,7 @@ export default function BoardConsole({ keyWord }) {
           height: "100%",
           backgroundColor: "rgba(255,255,255,0.6)",
           overflowY: "scroll",
+          overflowX: "hidden",
           borderRadius: "5px",
           display: "flex",
           flexWrap: "wrap",
