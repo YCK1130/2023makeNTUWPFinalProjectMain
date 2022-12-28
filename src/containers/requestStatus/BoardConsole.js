@@ -5,6 +5,7 @@ import { makeStyles } from "@mui/styles";
 import { Button, Grid, Paper, Typography, Box } from "@mui/material/";
 import { Link, useHistory } from "react-router-dom";
 import { selectSession } from "../../slices/sessionSlice";
+import Request from "../../components/request";
 import AdminCard from "../../components/adminCard";
 import styled from "styled-components";
 import TemplateCard from "../../components/templateCard";
@@ -15,15 +16,13 @@ import { v4 as uuidv4 } from "uuid";
  */
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 65vh;
-  margin: 5px 0 5px 0;
+  width: 45%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: start;
   justify-content: center;
-  // overflow-y: scroll;
 `;
 const someCards = [
   {
@@ -173,7 +172,7 @@ export default function BoardConsole({ keyWord }) {
     <Wrapper>
       <Box
         sx={{
-          width: "80%",
+          width: "100%",
           height: "100%",
           backgroundColor: "rgba(255,255,255,0.6)",
           overflowY: "scroll",
@@ -183,16 +182,15 @@ export default function BoardConsole({ keyWord }) {
           justifyContent: "space-around",
         }}
       >
-        {<TemplateCard setAddCardData={setAddCardData} />}
         {cards.map((card) => {
           return (
-            <AdminCard
+            <Request
               key={card?.name + card?.id}
               data={card}
               handleDeleteCard={setDelCardID}
               changedData={changedData}
               setChangedData={setChangedData}
-            ></AdminCard>
+            ></Request>
           );
         })}
       </Box>

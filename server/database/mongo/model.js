@@ -18,6 +18,7 @@ const conn = mongoose.createConnection(
 //   selections[courseID] = [String];
 // });
 
+/*user*/
 const teamSchema = new mongoose.Schema({
   teamID: {
     type: String,
