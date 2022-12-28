@@ -16,6 +16,7 @@ import Main from "./containers/main";
 import Login from "./containers/login";
 import StudentData from "./containers/studentData";
 import AdminBoardList from "./containers/adminBoardList";
+import RequestStatus from "./containers/requestStatus";
 import theme from "./theme";
 // compononets
 import Loading from "./components/loading";
@@ -43,6 +44,9 @@ const Routes = () => {
       </PrivateRoute>
       <PrivateRoute exact path="/boardlist">
         <AdminBoardList />
+      </PrivateRoute>
+      <PrivateRoute exact path="/requestStatus">
+        <RequestStatus />
       </PrivateRoute>
       <Redirect to="/login" />
     </Switch>

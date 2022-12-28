@@ -164,6 +164,11 @@ const Drawer = ({ children }) => {
             to: "/boardlist",
             icon: <PeopleIcon />,
           },
+          {
+            text: "Request Status",
+            to: "/requestStatus",
+            icon: <PeopleIcon />,
+          },
         ],
       }[authority] || [{ text: "Main", to: "/", icon: <HomeIcon /> }];
 
