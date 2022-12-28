@@ -634,7 +634,7 @@ export default function StudentData() {
             Edit Single Student
           </DialogTitle>
         )}
-        <DialogContent>
+        <DialogContent sx={{ overflow: "hidden" }}>
           <TextField
             id="teamID"
             label="teamID"
@@ -645,6 +645,7 @@ export default function StudentData() {
             onChange={onIdChange}
             helperText={errorsMsg.id}
             disabled={editId !== ""}
+            sx={{ margin: "5px" }}
           />
           <TextField
             id="teamName"
@@ -655,6 +656,7 @@ export default function StudentData() {
             error={errors.teamName}
             onChange={onNameChange}
             helperText={errorsMsg.teamName}
+            sx={{ margin: "5px" }}
           />
 
           <FormControl fullWidth>
@@ -664,6 +666,7 @@ export default function StudentData() {
               value={newStudent.authority}
               error={errors.authority}
               onChange={onAuthorityChange}
+              sx={{ margin: "5px" }}
             >
               {authorityData.map((e) => (
                 <MenuItem key={e} value={e}>
