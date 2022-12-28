@@ -1,4 +1,4 @@
-import Header from './Header';
+import Footer from './Header';
 import Body from './Body';
 import styled from 'styled-components';
 import Paper from '@mui/material/Paper';
@@ -6,7 +6,6 @@ import Paper from '@mui/material/Paper';
 const Wrapper = styled.div`
   margin: auto;
   width: 80%;
-  height: 75vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,12 +18,10 @@ const StyledPaper = styled(Paper)`
 
 function App() {
   return (
-    <Wrapper>
-      <StyledPaper elevation={3}>
-        {/* <Header /> */}
-        <Body />
-      </StyledPaper>
-    </Wrapper>
+    <div>
+      <Body />
+      <Footer />
+    </div>
   );
 }
 

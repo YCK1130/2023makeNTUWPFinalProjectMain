@@ -26,16 +26,30 @@ const board = [ //這裡會需要query
   {name:"Nano 33 IoT", tag:"Arduino", left:"3", v:true, ID:"9"},
   {name:"Nano 33 IoT", tag:"Arduino", left:"5", v:true, ID:"10"},
   {name:"Nano 33 IoT", tag:"Arduino", left:"2", v:true, ID:"11"},
-  {name:"Nano 33 IoT", tag:"Arduino", left:"5", v:false, ID:"12"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"2", v:true, ID:"13"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"5", v:true, ID:"14"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"1", v:true, ID:"15"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"5", v:true, ID:"16"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"2", v:true, ID:"17"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"0", v:true, ID:"18"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"5", v:true, ID:"19"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"1", v:true, ID:"20"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"3", v:true, ID:"21"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"5", v:true, ID:"22"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"2", v:true, ID:"23"},
+  {name:"Nano 33 IoT", tag:"Arduino", left:"5", v:false, ID:"24"},
 ]
 
 const Wrapper = styled.div`
+  width: 100%;
+  height: 70vh;
+  margin: 5px 0 5px 0;
   display: flex;
-  flex-direction:row;
-  flex-wrap:wrap;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: start;
-  justify-content: start;
-  overflow-y: scroll;
+  justify-content: center;
+  //overflow-y: scroll;
 `;
 
 function Body(){
@@ -89,6 +103,7 @@ function Body(){
         </Stepper>
       </Box>
       {activeStep === steps.length-1 ? (
+        <Wrapper>
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
             All steps completed - you&apos;re finished
@@ -96,33 +111,51 @@ function Body(){
           {showNeedList.map((e) => {
             return <Typography sx={{ mt: 2, mb: 1 }}>{e}</Typography>
           })}
-
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
         </React.Fragment>
+        </Wrapper>
       ) : (
         <Wrapper>
+          <Box
+            sx={{
+            width: "80%",
+            height: "100%",
+            backgroundColor: "rgba(255,255,255,0.6)",
+            overflowY: "scroll",
+            borderRadius: "5px",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-around",
+          }}>
           {board.map((e)=>{
-            return <Card key={e.name+e.ID} name={e.name} tag={e.tag} left={e.left} limit={3} v={e.v} id={e.ID} needList={needList} addNeedList={addNeedList}/>
+            if(activeStep === steps.length-2){
+              if(needList.has(e.ID)){
+                return <Card key={e.name+e.ID} name={e.name} tag={e.tag} left={e.left} limit={3} v={e.v} id={e.ID} needList={needList} addNeedList={addNeedList}/>
+              }
+            }
+            else{
+              return <Card key={e.name+e.ID} name={e.name} tag={e.tag} left={e.left} limit={3} v={e.v} id={e.ID} needList={needList} addNeedList={addNeedList}/>
+            }
           })}
+        </Box>
         </Wrapper>
       )}
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
+          <Button
+            disabled={activeStep === 0}
+            onClick={handleBack}
+             sx={{ mr: 1 }}
+          >
+            Back
+          </Button>
+          <Box sx={{ flex: '1 1 auto' }} />
 
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
+          {activeStep === steps.length - 1 ? <Button onClick={handleReset}>Reset</Button> : null}
+
+          <Button onClick={handleNext}>
+            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+          </Button>
+          
       </Box>
     </Box>
   );
