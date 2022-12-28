@@ -79,7 +79,7 @@ export default function Header({ setKeyWord }) {
           alignItems="flex-start"
           direction="row"
         >
-          <Grid item sm={4}>
+          <Grid item sm={5}>
             <Grid
               container
               spacing={1}

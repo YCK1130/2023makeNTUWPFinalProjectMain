@@ -178,9 +178,9 @@ export default function ComplexGrid({ setAddCardData }) {
       </Grid>
       <ButtonBase
         sx={{
-          width: "20px",
-          height: "20px",
-          borderRadius: "10px",
+          width: "30px",
+          height: "30px",
+          borderRadius: "20px",
           position: "absolute",
           right: 0,
           top: 0,
