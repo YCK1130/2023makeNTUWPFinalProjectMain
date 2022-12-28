@@ -5,11 +5,16 @@ import App from "./App";
 import store from "./store";
 import * as serviceWorker from "./serviceWorker";
 
+import { MakeNTUProvider } from "./containers/hooks/useMakeNTU";
+
+
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <MakeNTUProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </MakeNTUProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
