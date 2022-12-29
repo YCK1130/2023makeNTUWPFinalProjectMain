@@ -6,6 +6,7 @@ const client = new WebSocket("ws://localhost:4000"); //step 2
 
 const MakeNTUContext = React.createContext({
 	sendMessage: () => {},
+	sendData: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -49,6 +50,7 @@ const MakeNTUProvider = (props) => {
 		<MakeNTUContext.Provider
 			value={{
 				sendMessage,
+				sendData,
 			}}
 			{...props}
 		/>

@@ -5,14 +5,21 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
+import Grid from '@mui/material/Grid';
 import Typography from "@mui/material/Typography";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
 
 import SearchBar from "./Components/SearchBar";
 import Card from "./Cards";
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { selectSession } from "../../slices/sessionSlice";
+import { useMakeNTU } from "../hooks/useMakeNTU";
 
-const steps = ["挑選開發版", "確認送出", "資訊"];
+const steps = ["挑選開發版", "確認並送出", "申請結果"];
 
 const needList = new Map();
 
@@ -55,10 +62,22 @@ const Wrapper = styled.div`
   //overflow-y: scroll;
 `;
 
+
 function Body() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [rerender, setRerender] = React.useState(false);
+  const [searchWord, setSearchWord] = React.useState("");
 
+  const { sendData } = useMakeNTU();
+  const { userID } = useSelector(selectSession);
+
+
+  const handleSearch = () => {
+    //console.log(searchWord);
+    //setKeyWord(searchWord);
+    //sendMessage(searchWord);
+    // setSearchWord(e.target.value);
+  };
   
   const addNeedList = (id, quantity) => {
     if (quantity === 0) {
@@ -70,6 +89,23 @@ function Body() {
   };
   
   const handleNext = () => {
+    if(activeStep === steps.length - 1){
+      setActiveStep(0);
+      needList.clear();
+      return;
+    }
+    else if(activeStep === steps.length - 2){
+      let requestBody = [];
+      let group = userID;
+
+      for (var [key, value] of needList.entries()) {
+        requestBody.push([key, value]);
+      }
+
+      sendData(["REQUEST", {group, requestBody}]);
+    }
+    
+    console.log("User "+userID);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
   
@@ -86,9 +122,13 @@ function Body() {
   const order = () => {
     let a = [];
     for (var [key, value] of needList.entries()) {
-      a.push("板子" + key + "  " + value + "個");
+      a.push("板子ID:" + key + "  申請" + value + "個");
     }
-    console.log(a);
+    //console.log(a);
+
+    if(a.length === 0){
+      a.push("Warning!!!!!  Something wrong!!!!!")
+    }
     return a;
   };
   
@@ -152,14 +192,32 @@ function Body() {
       </Box>
       {activeStep === steps.length - 1 ? (
         <Wrapper>
-          <React.Fragment>
+          {/* <React.Fragment>
             <Typography sx={{ mt: 2, mb: 1 }}>
               All steps completed - you&apos;re finished
+              <br></br>
+              What have you order:
+              <br></br>
             </Typography>
+            <br></br>
             {showNeedList.map((e) => {
-              return <Typography sx={{ mt: 2, mb: 1 }}>{e}</Typography>;
+              return <Typography sx={{ mt: 2, mb: 1 }}>{"     " + e}<br /></Typography>
             })}
-          </React.Fragment>
+          </React.Fragment> */}
+          <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
+            <Grid item xs={12} md={6}>
+              <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+                All steps completed (you&apos;re finished)
+                <br></br>
+                This is your order list:
+              </Typography>
+              <List dense={false}>
+                {showNeedList.map((e) => {
+                  return <ListItem><ListItemText primary={e}/></ListItem>
+                })}
+              </List>
+            </Grid>
+          </Box>
         </Wrapper>
       ) : (
         <Wrapper>
@@ -186,8 +244,8 @@ function Body() {
         </Button>
         
         {activeStep === 0 ? (
-          <SearchBar></SearchBar>
-        ) : <SearchBar visibility={"hidden"}></SearchBar>}
+          <SearchBar handleSearch={handleSearch} handleChage={setSearchWord}></SearchBar>
+        ) : <SearchBar visibility={"hidden"} handleSearch={handleSearch} handleChage={setSearchWord}></SearchBar>}
 
         <Box sx={{maxWidth:"15%"}}>
           {activeStep !== steps.length - 1 ? (
@@ -195,7 +253,9 @@ function Body() {
           ) : null}
 
           <Button onClick={handleNext}>
-            {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            {activeStep === steps.length - 2 ? 
+              "Confirm" : activeStep === steps.length - 1 ?
+              "Finish" : "Next"}
           </Button>
         </Box>
       </Box>

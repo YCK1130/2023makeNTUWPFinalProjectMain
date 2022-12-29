@@ -59,7 +59,7 @@ const requestSchema = new mongoose.Schema({
     required: true,
   },
   borrower:{ //租借者，以team為單位
-    type: mongoose.Types.ObjectId, ref: "Team",
+    type: String,//mongoose.Types.ObjectId, ref: "Team",
     required: true,
   },
   sendingTime:{ //發送要求時間
@@ -71,7 +71,7 @@ const requestSchema = new mongoose.Schema({
     required: true,
   },
   requestBody:[{ //提的要求
-    board:{type: mongoose.Types.ObjectId, ref: "Board",},
+    board:{type: String}, //type: mongoose.Types.ObjectId, ref: "Board",
     quantity:{type: Number},
   }]
 })
