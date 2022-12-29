@@ -11,7 +11,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 
-
 import SearchBar from "./Components/SearchBar";
 import Card from "./Cards";
 import { useEffect } from "react";
@@ -25,7 +24,7 @@ const needList = new Map();
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 70vh;
+  height: 74vh;
   margin: 5px 0 5px 0;
   display: flex;
   flex-direction: row;
@@ -40,16 +39,15 @@ function Body() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [rerender, setRerender] = React.useState(false);
   const [searchWord, setSearchWord] = React.useState("");
+  const [searchMethod, setSearchMethod] = React.useState("Name");
+
 
   const { sendData, cardData } = useMakeNTU();
   const { userID } = useSelector(selectSession);
 
 
-  const handleSearch = () => {
-    //console.log(searchWord);
-    //setKeyWord(searchWord);
-    //sendMessage(searchWord);
-    // setSearchWord(e.target.value);
+  const handleCheck = (m) => {
+    setSearchMethod(m);
   };
   
   const addNeedList = (id, quantity) => {
@@ -126,20 +124,23 @@ function Body() {
           );
         }
       } else { //這裡要filter
-        return (
-          <Card
-            key={e.name + e.ID}
-            name={e.name}
-            tag={e.tag}
-            left={e.left}
-            limit={3}
-            v={e.v}
-            id={e.ID}
-            needList={needList}
-            addNeedList={addNeedList}
-            rerender={rerender}
-          />
-        );
+        
+        if((searchMethod === "Name" && e.name.indexOf(searchWord) !== -1)||(searchMethod === "Tag" && e.tag.indexOf(searchWord) !== -1)){
+          return (
+            <Card
+              key={e.name + e.ID}
+              name={e.name}
+              tag={e.tag}
+              left={e.left}
+              limit={3}
+              v={e.v}
+              id={e.ID}
+              needList={needList}
+              addNeedList={addNeedList}
+              rerender={rerender}
+            />
+          );
+        }
       }
     })
 
@@ -197,6 +198,7 @@ function Body() {
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "space-around",
+              alignContent: "start"
             }}
           >
             {renderCard()}
@@ -210,8 +212,8 @@ function Body() {
         </Button>
         
         {activeStep === 0 ? (
-          <SearchBar handleSearch={handleSearch} handleChage={setSearchWord}></SearchBar>
-        ) : <SearchBar visibility={"hidden"} handleSearch={handleSearch} handleChage={setSearchWord}></SearchBar>}
+          <SearchBar handleCheck={setSearchMethod} handleChange={setSearchWord} searchMethod={searchMethod} />
+        ) : <SearchBar visibility={"hidden"} handleCheck={setSearchMethod} handleChange={setSearchWord} searchMethod={searchMethod} />}
 
         <Box sx={{maxWidth:"15%"}}>
           {activeStep !== steps.length - 1 ? (
