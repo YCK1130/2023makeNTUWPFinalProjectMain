@@ -11,26 +11,17 @@ const MakeNTUContext = React.createContext({
 
 const MakeNTUProvider = (props) => {
 
+	const [cardData, setCardData] = React.useState([]);
+
 	client.onmessage = async (byteString) => {
 		//收回傳訊息
 		const { data } = byteString;
 		const [task, payload] = JSON.parse(data);
+		
 		switch (task) {
-			case "init": {
-				//console.log(payload);
-				//setMessages(payload);
-				break;
-			}
-			case "output": {
-				//setMessages(() => [...messages, ...payload]);
-				break;
-			}
-			case "clear": {
-				//setMessages(payload);
-				break;
-			}
-			case "status": {
-				//setStatus(payload);
+			case "INITUSER": {
+				setCardData(payload);
+				console.log(payload);
 				break;
 			}
 			default:
@@ -51,6 +42,7 @@ const MakeNTUProvider = (props) => {
 			value={{
 				sendMessage,
 				sendData,
+				cardData,
 			}}
 			{...props}
 		/>

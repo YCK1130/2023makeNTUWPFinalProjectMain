@@ -23,33 +23,6 @@ const steps = ["挑選開發版", "確認並送出", "申請結果"];
 
 const needList = new Map();
 
-const board = [
-  //這裡會需要query
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "1" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "2" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "1", v: true, ID: "3" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "4" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "5" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "0", v: true, ID: "6" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "7" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "1", v: true, ID: "8" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "3", v: true, ID: "9" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "10" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "11" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "13" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "14" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "1", v: true, ID: "15" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "16" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "17" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "0", v: true, ID: "18" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "19" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "1", v: true, ID: "20" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "3", v: true, ID: "21" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "22" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "23" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: false, ID: "24" },
-];
-
 const Wrapper = styled.div`
   width: 100%;
   height: 70vh;
@@ -68,7 +41,7 @@ function Body() {
   const [rerender, setRerender] = React.useState(false);
   const [searchWord, setSearchWord] = React.useState("");
 
-  const { sendData } = useMakeNTU();
+  const { sendData, cardData } = useMakeNTU();
   const { userID } = useSelector(selectSession);
 
 
@@ -135,7 +108,7 @@ function Body() {
   const showNeedList = order();
   
   const renderCard = () => {
-    let newBoard = board.map((e) => {
+    let newBoard = cardData.map((e) => {
       if (activeStep === steps.length - 2) {
         if (needList.has(e.ID)) {
           return (
@@ -152,7 +125,7 @@ function Body() {
             />
           );
         }
-      } else {
+      } else { //這裡要filter
         return (
           <Card
             key={e.name + e.ID}
@@ -176,6 +149,11 @@ function Body() {
   useEffect(() => {
     setRerender(false);
   },[rerender])
+  
+  useEffect(() => {
+    let payload = 0;
+    sendData(["TEST",payload]);
+  },[rerender])
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -192,18 +170,6 @@ function Body() {
       </Box>
       {activeStep === steps.length - 1 ? (
         <Wrapper>
-          {/* <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-              <br></br>
-              What have you order:
-              <br></br>
-            </Typography>
-            <br></br>
-            {showNeedList.map((e) => {
-              return <Typography sx={{ mt: 2, mb: 1 }}>{"     " + e}<br /></Typography>
-            })}
-          </React.Fragment> */}
           <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
             <Grid item xs={12} md={6}>
               <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
