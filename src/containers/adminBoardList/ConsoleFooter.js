@@ -16,16 +16,9 @@ ConsoleFooter.propTypes = {
   setKeyWord: PropTypes.func.isRequired,
 };
 export default function ConsoleFooter({ setKeyWord }) {
-  const [searchWord, setSearchWord] = useState("");
-
-  const handleSearch = () => {
-    console.log(searchWord);
-    setKeyWord(searchWord);
-    // setSearchWord(e.target.value);
-  };
   return (
     <FooterContainer>
-      <SearchBar handleSearch={handleSearch} handleChage={setSearchWord} />
+      <SearchBar handleChange={setKeyWord} />
     </FooterContainer>
   );
 }

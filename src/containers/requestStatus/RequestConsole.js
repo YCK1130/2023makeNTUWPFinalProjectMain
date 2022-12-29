@@ -37,7 +37,6 @@ function TabPanel(props) {
             width: "100%",
             height: "100%",
             paddingRight: "10px",
-            overflowY: "hidden",
             overflowX: "hidden",
             borderRadius: "5px",
           }}
@@ -66,46 +65,6 @@ const someReqs = [
     id: 1,
     name: "aaa",
     status: "solved",
-  },
-  {
-    id: 1,
-    name: "aaa",
-    status: "solved",
-  },
-  {
-    id: 1,
-    name: "aaa",
-    status: "solved",
-  },
-  {
-    id: 1,
-    name: "aaa",
-    status: "solved",
-  },
-  {
-    id: 1,
-    name: "aaa",
-    status: "solved",
-  },
-  {
-    id: 1,
-    name: "aaa",
-    status: "solved",
-  },
-  {
-    id: 2,
-    name: "bbb",
-    status: "unSolved",
-  },
-  {
-    id: 2,
-    name: "bbb",
-    status: "unSolved",
-  },
-  {
-    id: 2,
-    name: "bbb",
-    status: "unSolved",
   },
   {
     id: 2,

@@ -17,6 +17,8 @@ import {
   ListItemText,
   ListItemIcon,
   IconButton,
+  Alert,
+  Snackbar,
 } from "@mui/material/";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -27,9 +29,10 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp"; // Login, Logout
 import PeopleIcon from "@mui/icons-material/People"; // Student Data
 import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard"; //boardList
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; //租借開發版
-
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 import { Redirect } from "react-router";
 import { selectSession, logout } from "../../slices/sessionSlice";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 // route
 
 const drawerWidth = 200;
@@ -139,7 +142,7 @@ const Drawer = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-
+  const { alert, setAlert } = useMakeNTU();
   const handleDrawerOpen = () => {
     setOpen(() => !open);
   };
@@ -170,11 +173,12 @@ const Drawer = ({ children }) => {
           {
             text: "Request Status",
             to: "/requestStatus",
-            icon: <PeopleIcon />,
+            icon: <FactCheckIcon />,
           },
         ],
         0: [
           //user區
+          { text: "Main", to: "/", icon: <HomeIcon /> },
           {
             text: "租借開發版",
             to: "/user",
@@ -309,6 +313,16 @@ const Drawer = ({ children }) => {
       >
         {children}
       </div>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={alert?.open}
+        autoHideDuration={1000}
+        onClose={() => setAlert({ ...alert, open: false })}
+      >
+        <Alert variant="filled" severity={alert?.severity}>
+          {alert?.msg}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

@@ -6,10 +6,12 @@ import { useState } from "react";
 
 export default function BoardPage() {
   const [searchKeyWord, setKeyWord] = useState("");
+  const [saving, setSaving] = useState(false);
+
   return (
     <div>
-      <ConsoleHeader />
-      <BoardConsole keyWord={searchKeyWord} />
+      <ConsoleHeader setSaving={setSaving} />
+      <BoardConsole keyWord={searchKeyWord} saving={saving} />
       <ConsoleFooter setKeyWord={setKeyWord} />
     </div>
   );

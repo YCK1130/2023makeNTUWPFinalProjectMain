@@ -48,28 +48,33 @@ ComplexGrid.propTypes = {
 };
 export default function ComplexGrid({ setAddCardData }) {
   const [values, setValues] = useState({
+    name: "Untitled",
     limit: 1,
     totalNum: 5,
   });
   const handleChange = (event) => {
     setValues({
       ...values,
-      [event.target.name]: event.target.value,
+      [event.target.name]:
+        event.target.name === "name"
+          ? event.target.value
+          : parseInt(event.target.value),
     });
   };
   const handleKeyDown = (event) => {
     if (event.key !== "Enter") {
-      console.log(event.key);
+      // console.log(event.key);
       return;
     }
     let { name, limit, totalNum } = values;
     if (name && limit && totalNum) {
       setAddCardData(values);
+      event.target.value = "";
     } else {
       console.log("something missing: ", name, limit, totalNum);
     }
   };
-  console.log(values);
+  // console.log(values);
   return (
     <Paper
       sx={{
@@ -104,9 +109,18 @@ export default function ComplexGrid({ setAddCardData }) {
             label="Name"
             name="name"
             // value={values.name}
-            defaultValue={"Enter Board Name"}
+            // defaultValue={"Enter Board Name"}
+            error={!values.name}
+            helperText={!values.name ? "Required!" : ""}
+            autoComplete="off"
             onChange={handleChange}
             onFocus={(event) => {
+              if (!event.target.value) {
+                setValues({
+                  ...values,
+                  name: "",
+                });
+              }
               event.target.select();
             }}
             onKeyDown={handleKeyDown}
@@ -150,6 +164,9 @@ export default function ComplexGrid({ setAddCardData }) {
             onKeyDown={handleKeyDown}
             variant="standard"
             sx={{ width: "50%" }}
+            autoComplete="off"
+            error={!values.limit}
+            helperText={!values.limit ? "Required!" : ""}
           />
         </Grid>
         <Grid
@@ -173,6 +190,9 @@ export default function ComplexGrid({ setAddCardData }) {
             onKeyDown={handleKeyDown}
             variant="standard"
             sx={{ width: "50%" }}
+            autoComplete="off"
+            error={!values.totalNum}
+            helperText={!values.totalNum ? "Required!" : ""}
           />
         </Grid>
       </Grid>

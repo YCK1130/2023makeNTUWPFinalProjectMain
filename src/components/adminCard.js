@@ -56,23 +56,31 @@ export default function ComplexGrid({
   }, []);
 
   const handleChange = (event) => {
+    const { name, value } = event.target;
+    const changingValue = parseInt(value);
+
     setValues({
       ...values,
-      [event.target.name]: event.target.value,
+      [name]: changingValue,
     });
 
     const existing = changedData.filter((item) => item.id === data.id);
     if (existing.length > 0) {
+      console.log("changing: ", changedData);
       setChangedData(
         changedData.map((item) => {
           if (item.id !== data.id) return item;
-          return { ...data, [event.target.name]: event.target.value };
+          return {
+            ...data,
+            ...values,
+            [name]: changingValue,
+          };
         })
       );
     } else {
       setChangedData([
         ...changedData,
-        { ...data, [event.target.name]: event.target.value },
+        { ...data, ...values, [name]: changingValue },
       ]);
     }
   };
@@ -109,6 +117,7 @@ export default function ComplexGrid({
             gutterBottom
             variant="subtitle1"
             component="div"
+            autoComplete="off"
             sx={{
               width: "100%",
               padding: "2px",
@@ -148,6 +157,7 @@ export default function ComplexGrid({
             }}
             variant="standard"
             sx={{ width: "50%" }}
+            autoComplete="off"
           />
         </Grid>
         <Grid
@@ -170,6 +180,7 @@ export default function ComplexGrid({
             }}
             variant="standard"
             sx={{ width: "50%" }}
+            autoComplete="off"
           />
         </Grid>
       </Grid>

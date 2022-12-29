@@ -8,7 +8,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import PropTypes from "prop-types";
 
-function SearchBar({ handleSearch, handleChage }) {
+function SearchBar({ handleChange }) {
   return (
     <Paper
       component="form"
@@ -31,11 +31,10 @@ function SearchBar({ handleSearch, handleChage }) {
         placeholder="Search"
         onChange={(e) => {
           //   console.log(e.target.value);
-          handleChage(e.target.value);
+          handleChange(e.target.value);
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            handleSearch();
             e.preventDefault();
           }
         }}
@@ -46,7 +45,7 @@ function SearchBar({ handleSearch, handleChage }) {
         type="button"
         sx={{ p: "10px" }}
         aria-label="search"
-        onClick={handleSearch}
+        onClick={(e) => handleChange(e.target.value)}
       >
         <SearchIcon />
       </IconButton>
@@ -54,7 +53,6 @@ function SearchBar({ handleSearch, handleChage }) {
   );
 }
 SearchBar.propTypes = {
-  handleSearch: PropTypes.func.isRequired,
-  handleChage: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
 };
 export default SearchBar;

@@ -8,7 +8,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import PropTypes from "prop-types";
 
-function SearchBar({ handleSearch, handleChage }) {
+function SearchBar({ handleChage }) {
   return (
     <Paper
       component="form"
@@ -54,7 +54,6 @@ function SearchBar({ handleSearch, handleChage }) {
   );
 }
 SearchBar.propTypes = {
-  handleSearch: PropTypes.func.isRequired,
   handleChage: PropTypes.func.isRequired,
 };
 export default SearchBar;

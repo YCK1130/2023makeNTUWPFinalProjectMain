@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogActions,
   Grid,
+  Box,
 } from "@mui/material";
 
 const HeaderContainer = styled.div`
@@ -28,23 +29,31 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-export default function Header({ setKeyWord }) {
-  const [searchWord, setSearchWord] = useState("");
-  const [addOpen, setAddOpen] = useState(false);
+export default function Header({ setSaving }) {
+  const [importOpen, setImportOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
+  const handleCloseImport = () => {
+    setImportOpen(false);
+  };
+  const handleImport = () => {
+    handleCloseImport();
+  };
+  const handleOpenImport = () => {
+    setImportOpen(true);
+  };
 
-  const handleSearch = () => {
-    console.log(searchWord);
-    setKeyWord(searchWord);
-    // setSearchWord(e.target.value);
+  const handleCloseExport = () => {
+    setExportOpen(false);
   };
-  const handleCloseAdd = () => {
-    setAddOpen(false);
+  const handleExport = () => {
+    handleCloseExport();
   };
-  const handleAddStudent = () => {
-    handleCloseAdd();
+  const handleOpenExport = () => {
+    setExportOpen(true);
   };
-  const handleOpenAdd = () => {
-    setAddOpen(true);
+
+  const handleSave = () => {
+    setSaving(true);
   };
   return (
     <HeaderContainer>
@@ -52,22 +61,36 @@ export default function Header({ setKeyWord }) {
         <Dialog
           aria-labelledby="simple-dialog-title"
           // disableBackdropClick
-          open={addOpen}
-          onClose={handleCloseAdd}
+          open={importOpen}
+          onClose={handleCloseImport}
           // sx={{ backgroundColor: "rgba(0,0,0,1)" }}
         >
-          <DialogTitle id="simple-dialog-title">
-            Importing/Exporting Data
-          </DialogTitle>
-          <DialogContent></DialogContent>
+          <DialogTitle id="simple-dialog-title">Importing Data</DialogTitle>
+          <DialogContent>
+            <Box sx={{ minWidth: "15vw", minHeight: "10vh" }} />
+          </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseAdd}>Cancel</Button>
-            <Button
-              onClick={handleAddStudent}
-              variant="contained"
-              color="primary"
-            >
-              {"Add"}
+            <Button onClick={handleCloseImport}>Cancel</Button>
+            <Button onClick={handleImport} variant="contained" color="primary">
+              {"Import"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          aria-labelledby="simple-dialog-title"
+          // disableBackdropClick
+          open={exportOpen}
+          onClose={handleCloseExport}
+          // sx={{ backgroundColor: "rgba(0,0,0,1)" }}
+        >
+          <DialogTitle id="simple-dialog-title">Exporting Data</DialogTitle>
+          <DialogContent>
+            <Box sx={{ minWidth: "15vw", minHeight: "10vh" }} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseExport}>Cancel</Button>
+            <Button onClick={handleExport} variant="contained" color="primary">
+              {"Export"}
             </Button>
           </DialogActions>
         </Dialog>
@@ -91,7 +114,7 @@ export default function Header({ setKeyWord }) {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleOpenAdd}
+                  onClick={handleOpenImport}
                 >
                   Import
                 </Button>
@@ -100,7 +123,7 @@ export default function Header({ setKeyWord }) {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleOpenAdd}
+                  onClick={handleOpenExport}
                 >
                   Export
                 </Button>
@@ -108,8 +131,8 @@ export default function Header({ setKeyWord }) {
             </Grid>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" onClick={handleOpenAdd}>
-              Edit
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              Save
             </Button>
           </Grid>
         </Grid>
