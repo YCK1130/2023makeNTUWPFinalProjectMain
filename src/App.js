@@ -15,6 +15,7 @@ import Drawer from "./containers/drawer";
 import Main from "./containers/main";
 import Login from "./containers/login";
 import UserProgress from "./containers/userProgress";
+import UserState from "./containers/userState";
 import StudentData from "./containers/studentData";
 import theme from "./theme";
 // compononets
@@ -43,6 +44,9 @@ const Routes = () => {
       </PrivateRoute>
       <UserRoute exact path="/user">
         <UserProgress />
+      </UserRoute>
+      <UserRoute exact path="/user/state">
+        <UserState />
       </UserRoute>
       <Redirect to="/login" />
     </Switch>
