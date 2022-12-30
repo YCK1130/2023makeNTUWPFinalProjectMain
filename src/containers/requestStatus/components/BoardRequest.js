@@ -10,9 +10,9 @@ function BoardRequest(props) {
   //every team
   const { team } = props;
   const [open, setOpen] = React.useState(false);
-  const notReturned = team?.requests
-    ?.filter((req) => req.status !== "solved")
-    ?.count();
+  const notReturned = team?.requests?.filter(
+    (req) => req.status !== "solved"
+  )?.length;
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
@@ -25,7 +25,7 @@ function BoardRequest(props) {
           </>
         ) : (
           <>
-            <TableCell align="center">{`${notReturned} 未歸還`}</TableCell>
+            <TableCell align="center">{`${notReturned} 種未歸還`}</TableCell>
             <TableCell align="right">
               <IconButton
                 aria-label="expand row"

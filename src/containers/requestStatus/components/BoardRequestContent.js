@@ -27,12 +27,15 @@ function BoardRequestContent(props) {
   const [editt, setEditt] = React.useState(editStuff);
 */
   React.useEffect(() => {
-    let newBoards = [];
-    console.log(team);
-    return;
-    for (let [key, value] of team) {
-      newBoards.push({ board: key, quantity: value });
-    }
+    // let newBoards = [];
+    if (!team?.myCards) return;
+    if (Object.keys(team.myCards).length === 0) return;
+    console.log(Object.keys(team.myCards));
+    let newBoards = Object.keys(team.myCards).map((key) => ({
+      board: key,
+      quantity: team.myCards[key],
+    }));
+    console.log("team", newBoards);
     setBoards(newBoards);
   }, [team]);
 

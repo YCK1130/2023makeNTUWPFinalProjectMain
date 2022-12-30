@@ -28,13 +28,15 @@ const sendStatus = (payload, ws) => {
 };
 
 const updateMyCards = async (group, request) => {
-    let gp = await model.TeamModel.findOne({teamID: group});
+  let gp = await model.TeamModel.findOne({ teamID: group });
 
-    request.map((e)=>{
-        gp.myCards.has(e[0]) ? gp.myCards.set(e[0], gp.myCards.get(e[0]) + e[1]):gp.myCards.set(e[0], e[1])
-    })
-    await gp.save();
-    console.log(gp.myCards)
+  request.map((e) => {
+    gp.myCards.has(e[0])
+      ? gp.myCards.set(e[0], gp.myCards.get(e[0]) + e[1])
+      : gp.myCards.set(e[0], e[1]);
+  });
+  await gp.save();
+  console.log(gp.myCards);
 };
 
 module.exports = {
@@ -43,8 +45,10 @@ module.exports = {
     const [task, payload] = JSON.parse(data);
     console.log(task, payload);
     switch (task) {
-      case "TEST": {
-        sendData(["INITUSER", board], ws);
+      case "INITUSERCARD": {
+        const boards = await model.BoardModel.find({});
+        sendData(["INITUSERCARD", boards], ws);
+        // sendStatus(["success", "Get successfully"], ws);
         break;
       }
       case "ADDBOARD": {
@@ -115,9 +119,9 @@ module.exports = {
         let { group, requestBody } = payload;
         // console.log(group);
         // console.log(requestBody);
-        
-        let gp = await model.TeamModel.findOne({teamID: group});
-        
+
+        let gp = await model.TeamModel.findOne({ teamID: group });
+
         let count = await model.RequestModel.find({
           borrower: gp,
         }).count();
@@ -125,7 +129,7 @@ module.exports = {
         let body = requestBody.map((e) => {
           return { board: e[0], quantity: e[1] };
         });
-        
+
         const request = new model.RequestModel({
           requestID: "Group" + group + "_request" + (count + 1),
           borrower: gp,
@@ -141,8 +145,8 @@ module.exports = {
         }
 
         await model.TeamModel.updateMany(
-            { teamID: group },
-            { $push: { requests: request } }
+          { teamID: group },
+          { $push: { requests: request } }
         );
 
         updateMyCards(group, requestBody);
