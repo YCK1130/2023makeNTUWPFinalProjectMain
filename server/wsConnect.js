@@ -37,6 +37,7 @@ const updateMyCards = async (group, request) => {
   });
   await gp.save();
   console.log(gp.myCards);
+  //console.log(gp, "hi");
 };
 
 module.exports = {
@@ -46,7 +47,9 @@ module.exports = {
     console.log(task, payload);
     switch (task) {
       case "GETUSER": {
-        const userData = await model.TeamModel.find({ teamID: payload });
+        let userData = await model.TeamModel.findOne({ teamID: payload });
+        userData = await userData.populate("requests").execPopulate();
+        console.log(userData);
         sendData(["GETUSER", userData], ws);
         sendStatus(["success", "Get successfully"], ws);
         break;
