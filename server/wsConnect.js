@@ -41,6 +41,13 @@ module.exports = {
     const [task, payload] = JSON.parse(data);
     console.log(task, payload);
     switch (task) {
+      case "GETUSER": {
+        const userData = await model.TeamModel.find({ teamID: payload });
+        sendData(["GETUSER", userData], ws);
+        sendStatus(["success", "Get successfully"], ws);
+        break;
+      }
+
       case "TEST": {
         sendData(["INITUSER", board], ws);
         break;

@@ -19,6 +19,8 @@ const MakeNTUContext = React.createContext({
   updateBoardStatus: "",
   showAlert: () => {},
   setAlert: () => {},
+  userData: [],
+  getUser: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -28,7 +30,7 @@ const MakeNTUProvider = (props) => {
   const [updateBoardStatus, setUpdateBoardStatus] = React.useState("");
 
   const [cardData, setCardData] = React.useState([]);
-
+  const [userData, setUserData] = React.useState([]);
   client.onmessage = async (byteString) => {
     //收回傳訊息
     const { data } = byteString;
@@ -36,6 +38,10 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
+      case "GETUSER": {
+        setUserData(payload);
+        break;
+      }
       case "INITUSER": {
         setCardData(payload);
         console.log(payload);
@@ -100,6 +106,9 @@ const MakeNTUProvider = (props) => {
   const getBoards = () => {
     sendData(["GETBOARD"]);
   };
+  const getUser = (payload) => {
+    sendData(["GETUSER", payload]);
+  };
 
   return (
     <MakeNTUContext.Provider
@@ -118,6 +127,8 @@ const MakeNTUProvider = (props) => {
         setAlert,
         sendData,
         cardData,
+        getUser,
+        userData,
       }}
       {...props}
     />

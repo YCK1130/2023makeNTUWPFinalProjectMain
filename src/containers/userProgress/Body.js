@@ -31,7 +31,7 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
   align-items: start;
   justify-content: center;
-  //overflow-y: scroll;
+  //overflow-y: hidden;
 `;
 
 function Body() {

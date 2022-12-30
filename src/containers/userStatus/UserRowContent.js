@@ -15,25 +15,26 @@ const rowContent = (props) => {
   return (
     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <Table size="small" sx={{ m: 1 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Stuff</TableCell>
-              <TableCell>Amount</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {row.details.map((detailRow) => (
-              <TableRow key={detailRow.Amout}>
-                <TableCell component="th" scope="row">
-                  {detailRow.stuff}
-                </TableCell>
-                <TableCell>{detailRow.amount}</TableCell>
+        <Box sx={{ maxHeight: "30vh", overflowY: "auto", overflowX: "hidden" }}>
+          <Table size="small" sx={{ m: 1 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Stuff</TableCell>
+                <TableCell>Amount</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-
+            </TableHead>
+            <TableBody>
+              {row.details.map((detailRow) => (
+                <TableRow key={detailRow.Amout}>
+                  <TableCell component="th" scope="row">
+                    {detailRow.stuff}
+                  </TableCell>
+                  <TableCell>{detailRow.amount}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
         <Box sx={{ margin: 1, display: "flex", flexDirection: "row-reverse" }}>
           {row.status === "pending" ? (
             <Chip label="Cancel" variant="outlined" onClick={handleClick} />
