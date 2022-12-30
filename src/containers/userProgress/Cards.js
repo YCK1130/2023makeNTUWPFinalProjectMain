@@ -22,8 +22,8 @@ export default function Card(props) {
 
   //console.log(props.addNeedList);
   useEffect(() => {
-    if (props.needList.has(props.id)) {
-      setNum(props.needList.get(props.id));
+    if (props.needList.has(props.name)) {
+      setNum(props.needList.get(props.name));
     }
   }, []);
 
@@ -63,6 +63,7 @@ export default function Card(props) {
             <Grid item>
               <Selector
                 id={props.id}
+                name={props.name}
                 defaultValue={num}
                 limit={Math.min(props.limit, props.left)}
                 addNeedList={props.addNeedList}

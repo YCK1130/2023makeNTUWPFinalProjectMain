@@ -25,6 +25,8 @@ db.once("open", async () => {
   console.log("Successfully connect to MongoDB!");
   console.log(`dbName = "${process.env.MONGO_DBNAME}"`);
   await model.BoardModel.deleteMany({});
+  await model.RequestModel.deleteMany({});
+
   const app = express();
   const server = http.createServer(app);
   const wss = new ws.WebSocketServer({ server });

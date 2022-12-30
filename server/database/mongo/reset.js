@@ -52,7 +52,7 @@ module.exports = () => {
     // Save all teams
     await Promise.all(
       teams.map(async (team) => {
-        const teamDocument = new model.Team(team);
+        const teamDocument = new model.TeamModel(team);
         await teamDocument.save();
       })
     );
