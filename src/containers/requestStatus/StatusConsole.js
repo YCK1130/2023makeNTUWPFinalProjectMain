@@ -2,7 +2,19 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Element } from "react-scroll";
 import { makeStyles } from "@mui/styles";
-import { Button, Grid, Paper, Typography, Box } from "@mui/material/";
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  Tabs,
+  Tab,
+  Typography,
+  Box,
+  Paper,
+} from "@mui/material/";
 import { Link, useHistory } from "react-router-dom";
 import { selectSession } from "../../slices/sessionSlice";
 import Request from "../../components/request";
@@ -10,6 +22,9 @@ import AdminCard from "../../components/adminCard";
 import styled from "styled-components";
 import TemplateCard from "../../components/templateCard";
 import { v4 as uuidv4 } from "uuid";
+import BoardRequest from "./components/BoardRequest";
+import GroupStatus from "./components/GroupStatus";
+import { StudentDataAPI } from "../../api";
 
 /**
  * This is Main Page
@@ -125,10 +140,12 @@ export default function StatusConsole() {
       fontWeight: "400",
     },
   }));
-  useEffect(() => {
+  useEffect(async () => {
     //獲取user資料
     console.log("fetching data...");
-    setUserStatus(someCards);
+    const { data: userData } = await StudentDataAPI.getStudentData();
+    console.log(userData);
+    setUserStatus(userData);
   }, []);
 
   useEffect(() => {
@@ -151,9 +168,41 @@ export default function StatusConsole() {
           justifyContent: "space-around",
         }}
       >
-        {userStatus.map((card) => {
-          return <Request key={card?.name + card?.id} data={card}></Request>;
-        })}
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow
+                sx={{
+                  backgroundColor: "rgba(255,255,255,0.2)",
+                  alignItems: "middle",
+                  maxHeight: "10vh",
+                }}
+              >
+                <TableCell />
+                <TableCell
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: "h5.fontSize",
+                  }}
+                  align="center"
+                >
+                  TEAM STATE
+                </TableCell>
+                <TableCell />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {userStatus?.map((team) => {
+                return (
+                  <BoardRequest
+                    key={team?.name + team?.id}
+                    team={team}
+                  ></BoardRequest>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
     </Wrapper>
   );

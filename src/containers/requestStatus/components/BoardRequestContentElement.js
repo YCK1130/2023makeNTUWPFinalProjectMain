@@ -2,6 +2,7 @@ import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
@@ -9,15 +10,15 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useRef } from "react";
 function BoardRequestContentElement(props) {
-  const { detailRow, changeReturn, numReturn, index } = props;
+  const { card, changeReturn, numReturn, index } = props;
   const [keyin, setKeyin] = React.useState(-1);
 
   return (
-    <TableRow key={detailRow.stuff}>
+    <TableRow key={card.stuff}>
       <TableCell component="th" scope="row">
-        {detailRow.stuff}
+        {card.board}
       </TableCell>
-      <TableCell>{detailRow.amount} 個</TableCell>
+      <TableCell>{card.quantity} 個</TableCell>
       <TableCell>
         <Chip
           size="small"
@@ -27,8 +28,8 @@ function BoardRequestContentElement(props) {
           onClick={() => {
             console.log(keyin);
             setKeyin(-1);
-            changeReturn(detailRow.stuff, -1, index, true);
-            console.log(index, detailRow.stuff);
+            changeReturn(card.board, -1, index, true);
+            console.log(index, card.board);
             //console.log(editt[index].numReturn.toString(), "ddd");
           }}
         />
@@ -42,7 +43,7 @@ function BoardRequestContentElement(props) {
           onChange={(e) => {
             console.log(keyin);
             setKeyin(e.target.value);
-            changeReturn(detailRow.stuff, e.target.value, index, false);
+            changeReturn(card.board, e.target.value, index, false);
           }}
         />
 
@@ -53,7 +54,7 @@ function BoardRequestContentElement(props) {
           onClick={() => {
             console.log(keyin);
             setKeyin(-1);
-            changeReturn(detailRow.stuff, 1, index, true);
+            changeReturn(card.board, 1, index, true);
           }}
           sx={{ m: 1 }}
         />

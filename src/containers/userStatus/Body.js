@@ -204,8 +204,8 @@ function Body() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows3.map((row) => (
-                    <GroupStatus key={row.group} row={row} />
+                  {rows2.map((row) => (
+                    <BoardRequest key={row.group} row={row} />
                   ))}
                 </TableBody>
               </Table>
