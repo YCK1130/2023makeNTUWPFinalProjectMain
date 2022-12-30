@@ -10,7 +10,7 @@ const wsConnect = require("./wsConnect");
 // ========================================
 
 const port = process.env.PORT || 8000;
-const PORT = 4000
+const PORT = 4000;
 
 if (process.env.NODE_ENV === "development") {
   console.log("NODE_ENV = development");
@@ -21,10 +21,10 @@ if (process.env.NODE_ENV === "development") {
 
 const db = model.conn;
 db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
+db.once("open", async () => {
   console.log("Successfully connect to MongoDB!");
   console.log(`dbName = "${process.env.MONGO_DBNAME}"`);
-
+  await model.BoardModel.deleteMany({});
   const app = express();
   const server = http.createServer(app);
   const wss = new ws.WebSocketServer({ server });
@@ -35,9 +35,9 @@ db.once("open", () => {
   }
 
   wss.on("connection", (ws) => {
-		ws.box = "";
-		ws.onmessage = wsConnect.onMessage(ws); //當ws有message時，執行後面的把丟入method
-	});
+    ws.box = "";
+    ws.onmessage = wsConnect.onMessage(ws); //當ws有message時，執行後面的把丟入method
+  });
 
   app.use(logger("dev"));
   app.use(express.static("build"));
@@ -50,5 +50,5 @@ db.once("open", () => {
 
   server.listen(PORT, () => {
     console.log(`WS listening on ${PORT}`);
-  })
+  });
 });

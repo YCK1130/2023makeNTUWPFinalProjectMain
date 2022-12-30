@@ -144,7 +144,7 @@ export default function StatusConsole() {
           width: "100%",
           height: "100%",
           backgroundColor: "rgba(255,255,255,0.6)",
-          overflowY: "scroll",
+          overflowX: "hidden",
           borderRadius: "5px",
           display: "flex",
           flexWrap: "wrap",

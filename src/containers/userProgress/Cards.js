@@ -47,7 +47,7 @@ export default function Card(props) {
             {/* 這裡是放照片的 */}
           </ButtonBase>
         </Grid>
-        <Grid item xs={{ minWidth: 150, minHeight: 160 }} sm container>
+        <Grid item sx={{ minWidth: 150, minHeight: 160 }} sm container>
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div">

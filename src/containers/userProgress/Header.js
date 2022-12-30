@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "@mui/material/Button";
 import SearchBar from "./Components/SearchBar";
 
-import { useMakeNTU } from "../hooks/useMakeNTU";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 const HeaderContainer = styled.div`
   width: 100%;

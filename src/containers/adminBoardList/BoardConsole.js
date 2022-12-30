@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Element } from "react-scroll";
 import { makeStyles } from "@mui/styles";
-import { Button, Grid, Paper, Typography, Box } from "@mui/material/";
+import { Box } from "@mui/material/";
 import { Link, useHistory } from "react-router-dom";
 import { selectSession } from "../../slices/sessionSlice";
 import AdminCard from "../../components/adminCard";
 import styled from "styled-components";
 import TemplateCard from "../../components/templateCard";
 import { v4 as uuidv4 } from "uuid";
-
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 /**
  * This is Main Page
  */
@@ -25,80 +25,13 @@ const Wrapper = styled.div`
   justify-content: center;
   // overflow-y: scroll;
 `;
-const someCards = [
-  {
-    id: 1,
-    name: "aaa",
-    limit: 5,
-    totalNum: 10,
-    remain: 3,
-    image: "",
-  },
-  {
-    id: 2,
-    name: "bbb",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 3,
-    name: "ccc",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 4,
-    name: "ddd",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 11,
-    name: "a",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 21,
-    name: "b",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 31,
-    name: "c",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 41,
-    name: "d",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-];
-export default function BoardConsole({ keyWord }) {
+
+export default function BoardConsole({
+  keyWord,
+  saving,
+  setAbleSave,
+  setSaving,
+}) {
   const history = useHistory();
   const [cards, setCards] = useState([]);
   const [addCardData, setAddCardData] = useState({});
@@ -128,42 +61,86 @@ export default function BoardConsole({ keyWord }) {
       fontWeight: "400",
     },
   }));
+
+  const {
+    addBoard,
+    deleteBoard,
+    updateBoards,
+    getBoards,
+    addBoardData,
+    getBoardData,
+    updateBoardStatus,
+    showAlert,
+  } = useMakeNTU();
+
   useEffect(() => {
-    setCards(someCards);
+    getBoards();
   }, []);
 
-  const updateData = () => {
-    console.log("updating");
-  };
   useEffect(() => {
-    console.log(changedData);
+    if (changedData.length === 0) return;
+    updateData();
+    setSaving(false);
+  }, [saving]);
+
+  useEffect(() => {
+    // // console.log("hi", changedData);
+    if (changedData.length !== 0) setAbleSave(true);
+    else setAbleSave(false);
   }, [changedData]);
 
   useEffect(() => {
-    const exist = cards.filter((card) => card.name === addCardData.name);
-    if (exist.length !== 0 || addCardData.name === undefined) {
-      console.log("existed");
+    if (updateBoardStatus === "success") {
+      setChangedData([]);
+      // getBoards();
       return;
     }
-    console.log("handling", addCardData);
-    setCards([
-      {
-        ...addCardData,
-        id: uuidv4(),
-        remain: 3,
-        image: "",
-      },
-      ...cards,
-    ]);
+  }, [updateBoardStatus]);
+
+  const updateData = () => {
+    // // console.log("updating");
+    // console.log("updating", changedData);
+    updateBoards(changedData);
+  };
+
+  useEffect(() => {
+    if (addCardData.name === undefined) return;
+    const exist = cards.filter((card) => card.name === addCardData.name.trim());
+    if (exist.length !== 0) {
+      showAlert("error", `${addCardData.name.trim()} already exist!`);
+      // // console.log("existed");
+      return;
+    }
+    // console.log("handling", addCardData);
+    const newCard = {
+      ...addCardData,
+      id: uuidv4(),
+      remain: addCardData.totalNum,
+      image: "",
+    };
+    addBoard(newCard);
     setAddCardData({});
   }, [addCardData]);
 
   useEffect(() => {
+    if (Object.keys(addBoardData).length === 0) return;
+    // console.log(addBoardData);
+    setCards([addBoardData, ...cards]);
+  }, [addBoardData]);
+
+  useEffect(() => {
+    setCards(getBoardData);
+  }, [getBoardData]);
+
+  useEffect(() => {
     if (cards.length === 0) return;
-    const exist = cards.filter((card) => card.id === delCardID);
+    // const exist = cards.filter((card) => card.id === delCardID);
+    // console.log(delCardID);
+    deleteBoard(delCardID); // talk to server
     const remainCards = cards.filter((card) => card.id !== delCardID);
 
-    console.log("deleting", exist);
+    setChangedData(changedData.filter((card) => card.id !== delCardID));
+    // // console.log("deleting", exist);
     setCards(remainCards);
   }, [delCardID]);
 
@@ -185,17 +162,21 @@ export default function BoardConsole({ keyWord }) {
         }}
       >
         {<TemplateCard setAddCardData={setAddCardData} />}
-        {cards.map((card) => {
-          return (
-            <AdminCard
-              key={card?.name + card?.id}
-              data={card}
-              handleDeleteCard={setDelCardID}
-              changedData={changedData}
-              setChangedData={setChangedData}
-            ></AdminCard>
-          );
-        })}
+        {cards
+          .filter((card) => {
+            return card.name.indexOf(keyWord) !== -1;
+          })
+          .map((card) => {
+            return (
+              <AdminCard
+                key={card?.name + card?.id}
+                data={card}
+                handleDeleteCard={setDelCardID}
+                changedData={changedData}
+                setChangedData={setChangedData}
+              ></AdminCard>
+            );
+          })}
       </Box>
     </Wrapper>
   );

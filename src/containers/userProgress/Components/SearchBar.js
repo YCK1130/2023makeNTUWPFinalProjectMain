@@ -4,20 +4,17 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-
-
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
 
 import PropTypes from "prop-types";
 
-function SearchBar({visibility, handleCheck, handleChange, searchMethod }) {
-
-  const handleClick = (e) =>{
+function SearchBar({ visibility, handleCheck, handleChange, searchMethod }) {
+  const handleClick = (e) => {
     handleCheck(e.target.value);
-  }
+  };
 
   return (
     <Paper
@@ -30,7 +27,7 @@ function SearchBar({visibility, handleCheck, handleChange, searchMethod }) {
         width: "75%",
         borderRadius: "10px",
         backgroundColor: "rgba(255,255,255,0.1)",
-        visibility:{visibility}||1
+        visibility: { visibility } || 1,
       }}
     >
       <FormControl>
@@ -45,7 +42,6 @@ function SearchBar({visibility, handleCheck, handleChange, searchMethod }) {
           <FormControlLabel value="Tag" control={<Radio />} label="by Tag" />
         </RadioGroup>
       </FormControl>
-
 
       <InputBase
         sx={{ ml: 1, flex: 1 }}
@@ -62,18 +58,13 @@ function SearchBar({visibility, handleCheck, handleChange, searchMethod }) {
         // inputProps={{ "aria-label": "search google maps" }}
       />
 
-      <IconButton
-        type="button"
-        sx={{ p: "10px" }}
-        aria-label="search"
-      >
+      <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
         <SearchIcon />
       </IconButton>
     </Paper>
   );
 }
 SearchBar.propTypes = {
-  handleSearch: PropTypes.func.isRequired,
-  handleChage: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
 };
 export default SearchBar;

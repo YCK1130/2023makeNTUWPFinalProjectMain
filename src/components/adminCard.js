@@ -53,27 +53,36 @@ export default function ComplexGrid({
   const [values, setValues] = useState({});
   useEffect(() => {
     setValues({ limit: data.limit, totalNum: data.totalNum });
+    // console.log(data);
   }, []);
 
   const handleChange = (event) => {
+    const { name, value } = event.target;
+    const changingValue = parseInt(value);
+
     setValues({
       ...values,
-      [event.target.name]: event.target.value,
+      [name]: changingValue,
     });
 
-    const existing = changedData.filter((item) => item.id === data.id);
-    if (existing.length > 0) {
-      setChangedData(
-        changedData.map((item) => {
-          if (item.id !== data.id) return item;
-          return { ...data, [event.target.name]: event.target.value };
-        })
-      );
-    } else {
+    const existing = changedData.filter((item) => item.id !== data.id);
+    if (
+      JSON.stringify({
+        limit: values.limit,
+        totalNum: values.totalNum,
+        [name]: changingValue,
+      }) !==
+      JSON.stringify({
+        limit: data.limit,
+        totalNum: data.totalNum,
+      })
+    ) {
       setChangedData([
-        ...changedData,
-        { ...data, [event.target.name]: event.target.value },
+        ...existing,
+        { ...data, ...values, [name]: changingValue },
       ]);
+    } else {
+      setChangedData(existing);
     }
   };
   return (
@@ -88,7 +97,6 @@ export default function ComplexGrid({
         minWidth: 150,
         flexGrow: 1,
         position: "relative",
-
         backgroundColor: (theme) =>
           theme.palette.mode === "dark" ? "#1A2027" : "#fff",
       }}
@@ -109,6 +117,7 @@ export default function ComplexGrid({
             gutterBottom
             variant="subtitle1"
             component="div"
+            autoComplete="off"
             sx={{
               width: "100%",
               padding: "2px",
@@ -148,6 +157,7 @@ export default function ComplexGrid({
             }}
             variant="standard"
             sx={{ width: "50%" }}
+            autoComplete="off"
           />
         </Grid>
         <Grid
@@ -170,6 +180,7 @@ export default function ComplexGrid({
             }}
             variant="standard"
             sx={{ width: "50%" }}
+            autoComplete="off"
           />
         </Grid>
       </Grid>
