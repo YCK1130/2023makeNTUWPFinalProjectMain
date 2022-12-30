@@ -6,10 +6,13 @@ const client = new WebSocket("ws://localhost:4000"); //step 2
 
 const MakeNTUContext = React.createContext({
   sendMessage: () => {},
+  sendData: () => {},
+  cardData: [],
   addBoard: () => {},
   deleteBoard: () => {},
   updateBoards: () => {},
   getBoards: () => {},
+  setUpdateBoardStatus: () => {},
   alert: {},
   addBoardData: {},
   getBoardData: [],
@@ -23,6 +26,9 @@ const MakeNTUProvider = (props) => {
   const [addBoardData, setAddBoardData] = React.useState({});
   const [getBoardData, setGetBoardData] = React.useState([]);
   const [updateBoardStatus, setUpdateBoardStatus] = React.useState("");
+
+  const [cardData, setCardData] = React.useState([]);
+
   client.onmessage = async (byteString) => {
     //收回傳訊息
     const { data } = byteString;
@@ -30,9 +36,9 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
-      case "init": {
-        //console.log(payload);
-        //setMessages(payload);
+      case "INITUSER": {
+        setCardData(payload);
+        console.log(payload);
         break;
       }
       case "output": {
@@ -103,12 +109,15 @@ const MakeNTUProvider = (props) => {
         deleteBoard,
         updateBoards,
         getBoards,
+        setUpdateBoardStatus,
         alert,
         addBoardData,
         getBoardData,
         updateBoardStatus,
         showAlert,
         setAlert,
+        sendData,
+        cardData,
       }}
       {...props}
     />

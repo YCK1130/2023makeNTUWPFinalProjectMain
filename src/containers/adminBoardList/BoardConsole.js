@@ -71,6 +71,7 @@ export default function BoardConsole({
     getBoardData,
     updateBoardStatus,
     showAlert,
+    setUpdateBoardStatus,
   } = useMakeNTU();
 
   useEffect(() => {
@@ -87,11 +88,13 @@ export default function BoardConsole({
     // // console.log("hi", changedData);
     if (changedData.length !== 0) setAbleSave(true);
     else setAbleSave(false);
+    // console.log("change", changedData);
   }, [changedData]);
 
   useEffect(() => {
     if (updateBoardStatus === "success") {
       setChangedData([]);
+      setUpdateBoardStatus("");
       // getBoards();
       return;
     }
