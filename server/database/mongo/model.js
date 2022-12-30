@@ -43,12 +43,10 @@ const teamSchema = new mongoose.Schema({
   },
   // selections,
   //image 頭像
-  myCards: [
-    {
-      board: { type: mongoose.Types.ObjectId, ref: "Board" },
-      quantity: { type: Number },
-    },
-  ],
+  myCards: { 
+    type: Map,
+    of: Number
+  },
   requests: [{ type: mongoose.Types.ObjectId, ref: "Request" }],
 });
 
@@ -62,7 +60,7 @@ const requestSchema = new mongoose.Schema({
   },
   borrower: {
     //租借者，以team為單位
-    type: String, //mongoose.Types.ObjectId, ref: "Team",
+    type: mongoose.Types.ObjectId, ref: "Team",
     required: true,
   },
   sendingTime: {

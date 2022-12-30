@@ -47,11 +47,11 @@ function Body() {
     setSearchMethod(m);
   };
 
-  const addNeedList = (id, quantity) => {
+  const addNeedList = (name, quantity) => {
     if (quantity === 0) {
       needList.delete(id, needList.get(id));
     } else {
-      needList.set(id, quantity);
+      needList.set(name, quantity);
     }
     //console.log([...needList]);
   };
@@ -89,7 +89,7 @@ function Body() {
   const order = () => {
     let a = [];
     for (var [key, value] of needList.entries()) {
-      a.push("板子ID:" + key + "  申請" + value + "個");
+      a.push("板子 : " + key + "  申請" + value + "個");
     }
     //console.log(a);
 
@@ -104,7 +104,7 @@ function Body() {
   const renderCard = () => {
     let newBoard = cardData.map((e) => {
       if (activeStep === steps.length - 2) {
-        if (needList.has(e.ID)) {
+        if (needList.has(e.name)) {
           return (
             <Card
               key={e.name + e.ID}

@@ -15,7 +15,7 @@ export default function Selector(props) {
   }
 
   const handleChange = (event) => {
-    props.addNeedList(props.id, event.target.value);
+    props.addNeedList(props.name, event.target.value);
     setQ(event.target.value);
   };
 
