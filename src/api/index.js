@@ -30,6 +30,8 @@ export const StudentDataAPI = {
         params: {
           teamName: 1,
           authority: 1,
+          myCards: 1,
+          requests: 1,
         },
       })
       .catch((error) => errorHandling(error)),

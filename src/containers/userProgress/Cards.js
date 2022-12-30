@@ -57,7 +57,7 @@ export default function Card(props) {
                 {props.tag}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                ID: 1030114
+                ID: ILOVEMAKENTU
               </Typography>
             </Grid>
             <Grid item>

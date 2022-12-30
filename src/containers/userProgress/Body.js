@@ -40,9 +40,9 @@ function Body() {
   const [searchWord, setSearchWord] = React.useState("");
   const [searchMethod, setSearchMethod] = React.useState("Name");
 
-  const { sendData, cardData } = useMakeNTU();
+  const { userBoardINIT, sendData, cardData } = useMakeNTU();
   const { userID } = useSelector(selectSession);
-
+  console.log("page", cardData);
   const handleCheck = (m) => {
     setSearchMethod(m);
   };
@@ -107,13 +107,13 @@ function Body() {
         if (needList.has(e.name)) {
           return (
             <Card
-              key={e.name + e.ID}
+              key={e.name + e.id}
               name={e.name}
-              tag={e.tag}
-              left={e.left}
-              limit={3}
-              v={e.v}
-              id={e.ID}
+              tag={e.category}
+              left={e.remain}
+              limit={e.limit}
+              v={true}
+              id={e.id}
               needList={needList}
               addNeedList={addNeedList}
             />
@@ -124,17 +124,17 @@ function Body() {
 
         if (
           (searchMethod === "Name" && e.name.indexOf(searchWord) !== -1) ||
-          (searchMethod === "Tag" && e.tag.indexOf(searchWord) !== -1)
+          (searchMethod === "Tag" && e.category.indexOf(searchWord) !== -1)
         ) {
           return (
             <Card
-              key={e.name + e.ID}
+              key={e.name + e.id}
               name={e.name}
-              tag={e.tag}
-              left={e.left}
-              limit={3}
-              v={e.v}
-              id={e.ID}
+              tag={e.category}
+              left={e.remain}
+              limit={e.limit}
+              v={true}
+              id={e.id}
               needList={needList}
               addNeedList={addNeedList}
               rerender={rerender}
@@ -153,7 +153,7 @@ function Body() {
 
   useEffect(() => {
     let payload = 0;
-    sendData(["TEST", payload]);
+    userBoardINIT(payload);
   }, [rerender]);
 
   return (
@@ -181,7 +181,7 @@ function Body() {
               <List dense={false}>
                 {showNeedList.map((e) => {
                   return (
-                    <ListItem>
+                    <ListItem key={e}>
                       <ListItemText primary={e} />
                     </ListItem>
                   );

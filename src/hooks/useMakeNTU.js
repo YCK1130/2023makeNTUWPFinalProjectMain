@@ -5,7 +5,7 @@ const React = require("react");
 const client = new WebSocket("ws://localhost:4000"); //step 2
 
 const MakeNTUContext = React.createContext({
-  sendMessage: () => {},
+  userBoardINIT: () => {},
   sendData: () => {},
   cardData: [],
   addBoard: () => {},
@@ -42,7 +42,7 @@ const MakeNTUProvider = (props) => {
         setUserData(payload);
         break;
       }
-      case "INITUSER": {
+      case "INITUSERCARD": {
         setCardData(payload);
         console.log(payload);
         break;
@@ -90,8 +90,8 @@ const MakeNTUProvider = (props) => {
     //success,error
     setAlert({ open: true, severity, msg });
   };
-  const sendMessage = (payload) => {
-    sendData(["TEST", payload]);
+  const userBoardINIT = (payload) => {
+    sendData(["INITUSERCARD", payload]);
   };
   const addBoard = (payload) => {
     console.log("adding");
@@ -113,7 +113,7 @@ const MakeNTUProvider = (props) => {
   return (
     <MakeNTUContext.Provider
       value={{
-        sendMessage,
+        userBoardINIT,
         addBoard,
         deleteBoard,
         updateBoards,
