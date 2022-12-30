@@ -43,7 +43,7 @@ export default function Selector(props) {
         defaultValue={props.defaultValue||0}
       >
         {a.map((e) => {
-            return <MenuItem value={e}>{e}</MenuItem>
+            return <MenuItem key={props.id+"_"+ e} value={e}>{e}</MenuItem>
         })}
       </Select>
     </FormControl>

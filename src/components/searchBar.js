@@ -1,21 +1,14 @@
 import React from "react";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
+import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 
 import PropTypes from "prop-types";
 
-function SearchBar({ visibility, handleCheck, handleChange, searchMethod }) {
-  const handleClick = (e) => {
-    handleCheck(e.target.value);
-  };
-
+function SearchBar({ handleChange }) {
   return (
     <Paper
       component="form"
@@ -27,21 +20,11 @@ function SearchBar({ visibility, handleCheck, handleChange, searchMethod }) {
         width: "75%",
         borderRadius: "10px",
         backgroundColor: "rgba(255,255,255,0.1)",
-        visibility: { visibility } || 1,
       }}
     >
-      <FormControl>
-        <RadioGroup
-          row
-          aria-labelledby="demo-controlled-radio-buttons-group"
-          name="controlled-radio-buttons-group"
-          value={searchMethod}
-          onChange={handleClick}
-        >
-          <FormControlLabel value="Name" control={<Radio />} label="by Name" />
-          <FormControlLabel value="Tag" control={<Radio />} label="by Tag" />
-        </RadioGroup>
-      </FormControl>
+      <IconButton sx={{ p: "10px" }} aria-label="menu">
+        <MenuIcon />
+      </IconButton>
 
       <InputBase
         sx={{ ml: 1, flex: 1 }}
@@ -58,7 +41,12 @@ function SearchBar({ visibility, handleCheck, handleChange, searchMethod }) {
         // inputProps={{ "aria-label": "search google maps" }}
       />
 
-      <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+      <IconButton
+        type="button"
+        sx={{ p: "10px" }}
+        aria-label="search"
+        onClick={(e) => handleChange(e.target.value)}
+      >
         <SearchIcon />
       </IconButton>
     </Paper>

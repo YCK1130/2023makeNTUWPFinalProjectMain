@@ -15,7 +15,7 @@ export default function Top() {
     root: {
       flexGrow: 1,
       width: "100%",
-      height: "100vh",
+      height: `calc(80vh - 64px)`,
       overflow: "auto",
     },
     paper: {
@@ -49,7 +49,7 @@ export default function Top() {
             padding: "10px",
             margin: "auto",
             marginTop: "5%",
-            marginLeft: "30%",
+            // marginLeft: "30%",
             width: "90%",
             maxWidth: "500px",
             maxHeight: "500px",
@@ -66,7 +66,7 @@ export default function Top() {
                 MakeNTU
               </Typography>
               <Typography
-                variant="h3"
+                variant="h4"
                 className={classes.text}
                 style={{ marginBottom: "18px" }}
               >
@@ -79,7 +79,7 @@ export default function Top() {
                   width: "70%",
                   display: "flex",
                   margin: "auto",
-                  marginTop: "15%",
+                  marginTop: "5%",
                   marginBottom: "3%",
                 }}
                 variant="outlined"

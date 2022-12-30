@@ -1,4 +1,3 @@
-import Footer from './Header';
 import Body from './Body';
 import styled from 'styled-components';
 import Paper from '@mui/material/Paper';
@@ -20,7 +19,6 @@ function App() {
   return (
     <div>
       <Body />
-      <Footer />
     </div>
   );
 }

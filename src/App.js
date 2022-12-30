@@ -17,6 +17,8 @@ import Login from "./containers/login";
 import UserProgress from "./containers/userProgress";
 import UserStatus from "./containers/userStatus";
 import StudentData from "./containers/studentData";
+import AdminBoardList from "./containers/adminBoardList";
+import RequestStatus from "./containers/requestStatus";
 import theme from "./theme";
 // compononets
 import Loading from "./components/loading";
@@ -42,12 +44,18 @@ const Routes = () => {
       <PrivateRoute exact path="/studentdata">
         <StudentData />
       </PrivateRoute>
+      <PrivateRoute exact path="/boardlist">
+        <AdminBoardList />
+      </PrivateRoute>
       <UserRoute exact path="/user">
         <UserProgress />
       </UserRoute>
       <UserRoute exact path="/user/status">
         <UserStatus />
       </UserRoute>
+      <PrivateRoute exact path="/requestStatus">
+        <RequestStatus />
+      </PrivateRoute>
       <Redirect to="/login" />
     </Switch>
   );

@@ -17,6 +17,8 @@ import {
   ListItemText,
   ListItemIcon,
   IconButton,
+  Alert,
+  Snackbar,
 } from "@mui/material/";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -25,9 +27,12 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import HomeIcon from "@mui/icons-material/Home"; // Main
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"; // Login, Logout
 import PeopleIcon from "@mui/icons-material/People"; // Student Data
-
+import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard"; //boardList
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; //租借開發版
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 import { Redirect } from "react-router";
 import { selectSession, logout } from "../../slices/sessionSlice";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 // route
 
 const drawerWidth = 200;
@@ -38,6 +43,8 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
+    position: "relative",
+    zIndex: theme.zIndex.drawer - 1000,
   },
   root: {
     //  display: "flex",
@@ -46,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
     color: "#fff",
     boxShadow: "none",
-    backgroundColor: "rgb(25,34,49,.7)",
+    // backgroundColor: "rgb(25,34,49,.7)",
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -135,9 +142,9 @@ const Drawer = ({ children }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-
+  const { alert, setAlert } = useMakeNTU();
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setOpen(() => !open);
   };
 
   const handleDrawerClose = () => {
@@ -157,6 +164,25 @@ const Drawer = ({ children }) => {
             text: "Student Data",
             to: "/studentdata",
             icon: <PeopleIcon />,
+          },
+          {
+            text: "Board List",
+            to: "/boardlist",
+            icon: <DeveloperBoardIcon />,
+          },
+          {
+            text: "Request Status",
+            to: "/requestStatus",
+            icon: <FactCheckIcon />,
+          },
+        ],
+        0: [
+          //user區
+          { text: "Main", to: "/", icon: <HomeIcon /> },
+          {
+            text: "租借開發版",
+            to: "/user",
+            icon: <ShoppingCartIcon />,
           },
         ],
         0: [
@@ -184,6 +210,7 @@ const Drawer = ({ children }) => {
           [classes.appBarShift]: open,
         })}
         position="fixed"
+        sx={{ backgroundColor: "rgb(15,15,15)" }}
       >
         <Toolbar>
           <IconButton
@@ -257,13 +284,13 @@ const Drawer = ({ children }) => {
         }}
       >
         <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <KeyboardArrowUpIcon />
             ) : (
               <ChevronLeftIcon />
             )}
-          </IconButton>
+          </IconButton> */}
         </div>
 
         <List>
@@ -291,6 +318,16 @@ const Drawer = ({ children }) => {
       >
         {children}
       </div>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={alert?.open}
+        autoHideDuration={1000}
+        onClose={() => setAlert({ ...alert, open: false })}
+      >
+        <Alert variant="filled" severity={alert?.severity}>
+          {alert?.msg}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

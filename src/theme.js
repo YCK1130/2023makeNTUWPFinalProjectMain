@@ -19,7 +19,7 @@ const theme = createTheme({
       contrastText: "#000",
     },
     background: {
-      paper: "rgba(0, 0, 0, 0.1)",
+      paper: "rgba(0, 0, 0, 1)",
     },
   },
   breakpoints: {

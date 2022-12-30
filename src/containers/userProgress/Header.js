@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@mui/material/Button';
-import SearchBar from './Components/SearchBar'
+import { useState } from "react";
+import styled from "styled-components";
+import Button from "@mui/material/Button";
+import SearchBar from "./Components/SearchBar";
+
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -13,15 +15,18 @@ const HeaderContainer = styled.div`
 `;
 
 const handleExit = async () => {
-  window.close()
+  window.close();
   //console.log("Exit借用板塊")
 };
 export default function Header({ setKeyWord }) {
   const [searchWord, setSearchWord] = useState("");
 
+  const { sendMessage } = useMakeNTU();
+
   const handleSearch = () => {
-    console.log(searchWord);
-    setKeyWord(searchWord);
+    //console.log(searchWord);
+    //setKeyWord(searchWord);
+    sendMessage("123");
     // setSearchWord(e.target.value);
   };
   return (
