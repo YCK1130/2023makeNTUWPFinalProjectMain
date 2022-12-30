@@ -168,7 +168,7 @@ const Drawer = ({ children }) => {
           },
           {
             text: "借用狀況",
-            to: "/user/state",
+            to: "/user/status",
             icon: <PeopleIcon />,
           },
         ],

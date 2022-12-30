@@ -1,55 +1,35 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import RowContent from "./UserRowContent";
-import Table from "@mui/material/Table";
-function Row(props) {
+import GroupStatusContent from "./GroupStatusContent";
+function GroupStatus(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
-  const [state, setState] = React.useState(false);
+
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
+        <TableCell align="left">第 {row.group} 組</TableCell>
+        <TableCell align="center">{row.timing}</TableCell>
         <TableCell align="left">
-          {row.state === "pending" ? "申請中" : "請來拿"}
+          {row.status === "pending" ? "申請中" : "呼叫中"}
         </TableCell>
 
-        <TableCell align="right">{row.timing}</TableCell>
         <TableCell align="right">
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => {
-              setOpen(!open);
-              setState(row.state === "pending");
-            }}
+            onClick={() => setOpen(!open)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <RowContent row={row} state={state} />
-              {state ? (
-                <Table size="small" sx={{ alignItems: "right" }}>
-                  <button size="small" variant="outlined">
-                    cancel
-                  </button>
-                </Table>
-              ) : (
-                <></>
-              )}
-            </Box>
-          </Collapse>
-        </TableCell>
+        <GroupStatusContent row={row} open={open} />
       </TableRow>
     </React.Fragment>
   );
@@ -73,4 +53,4 @@ Row.propTypes = {
   }).isRequired,
 };
 */
-export default Row;
+export default GroupStatus;
