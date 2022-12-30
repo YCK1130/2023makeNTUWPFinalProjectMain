@@ -13,12 +13,12 @@ import Card from "./Cards";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
-import { useEffect } from "react";
-function createData(id, status, timing) {
+import { useEffect, useState } from "react";
+function createData(_id, status, sendingTime) {
   return {
-    id,
+    _id,
     status,
-    timing,
+    sendingTime,
     details: [
       { stuff: "開發板1", amount: "3個" },
       { stuff: "開發板7", amount: "8個" },
@@ -34,7 +34,7 @@ function createData(id, status, timing) {
   };
 }
 
-const rows = [
+const rows2 = [
   createData(1, "pending", "timing"),
   createData(2, "pending", "timing"),
   createData(3, "canTake", "timing"),
@@ -56,13 +56,14 @@ const Wrapper = styled.div`
 function Body() {
   const { userData, getUser } = useMakeNTU();
   const { userID } = useSelector(selectSession);
+  const [rows, setRows] = useState([]);
+  console.log("page"); //typeof userData[0].sendingTime);
 
-  const renderPage = (id) => {
-    getUser(id);
-  };
   useEffect(() => {
-    renderPage(userID);
+    getUser(userID);
+    console.log(userData);
   }, []);
+
   return (
     <Wrapper>
       <Box
@@ -117,8 +118,8 @@ function Body() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
-                  <Row key={row.id} row={row} />
+                {userData.map((row) => (
+                  <Row key={row._id} row={row} />
                 ))}
               </TableBody>
             </Table>

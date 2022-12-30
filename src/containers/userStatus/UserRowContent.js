@@ -24,19 +24,19 @@ const rowContent = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {row.details.map((detailRow) => (
-                <TableRow key={detailRow.Amout}>
+              {row.requestBody.map((detailRow) => (
+                <TableRow key={detailRow._id}>
                   <TableCell component="th" scope="row">
-                    {detailRow.stuff}
+                    {detailRow.board}
                   </TableCell>
-                  <TableCell>{detailRow.amount}</TableCell>
+                  <TableCell>{detailRow.quantity}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </Box>
         <Box sx={{ margin: 1, display: "flex", flexDirection: "row-reverse" }}>
-          {row.status === "pending" ? (
+          {row.status === "unsolved" ? (
             <Chip label="Cancel" variant="outlined" onClick={handleClick} />
           ) : (
             <></>

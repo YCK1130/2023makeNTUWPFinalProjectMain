@@ -48,10 +48,10 @@ module.exports = {
     switch (task) {
       case "GETUSER": {
         let userData = await model.TeamModel.findOne({ teamID: payload });
-        userData = await userData.populate("requests").execPopulate();
-        console.log(userData);
-        sendData(["GETUSER", userData], ws);
-        sendStatus(["success", "Get successfully"], ws);
+        await userData.populate("requests").execPopulate();
+        console.log(userData.requests);
+        sendData(["GETUSER", userData.requests], ws);
+        // sendStatus(["success", "Get successfully"], ws);
         break;
       }
 
@@ -143,7 +143,7 @@ module.exports = {
         const request = new model.RequestModel({
           requestID: "Group" + group + "_request" + (count + 1),
           borrower: gp,
-          sendingTime: new Date(),
+          sendingTime: new Date().getTime(),
           status: "unsolved",
           requestBody: body,
         });

@@ -66,7 +66,7 @@ const requestSchema = new mongoose.Schema({
   },
   sendingTime: {
     //發送要求時間
-    type: Date,
+    type: Number,
     required: true,
   },
   status: {
