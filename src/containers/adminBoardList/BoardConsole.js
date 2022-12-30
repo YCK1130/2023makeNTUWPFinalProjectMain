@@ -26,7 +26,12 @@ const Wrapper = styled.div`
   // overflow-y: scroll;
 `;
 
-export default function BoardConsole({ keyWord, saving }) {
+export default function BoardConsole({
+  keyWord,
+  saving,
+  setAbleSave,
+  setSaving,
+}) {
   const history = useHistory();
   const [cards, setCards] = useState([]);
   const [addCardData, setAddCardData] = useState({});
@@ -75,16 +80,26 @@ export default function BoardConsole({ keyWord, saving }) {
   useEffect(() => {
     if (changedData.length === 0) return;
     updateData();
+    setSaving(false);
   }, [saving]);
 
   useEffect(() => {
-    if (updateBoardStatus === "success") return;
-    getBoards();
+    // // console.log("hi", changedData);
+    if (changedData.length !== 0) setAbleSave(true);
+    else setAbleSave(false);
+  }, [changedData]);
+
+  useEffect(() => {
+    if (updateBoardStatus === "success") {
+      setChangedData([]);
+      // getBoards();
+      return;
+    }
   }, [updateBoardStatus]);
 
   const updateData = () => {
-    // console.log("updating");
-    console.log("updating", changedData);
+    // // console.log("updating");
+    // console.log("updating", changedData);
     updateBoards(changedData);
   };
 
@@ -93,10 +108,10 @@ export default function BoardConsole({ keyWord, saving }) {
     const exist = cards.filter((card) => card.name === addCardData.name.trim());
     if (exist.length !== 0) {
       showAlert("error", `${addCardData.name.trim()} already exist!`);
-      // console.log("existed");
+      // // console.log("existed");
       return;
     }
-    console.log("handling", addCardData);
+    // console.log("handling", addCardData);
     const newCard = {
       ...addCardData,
       id: uuidv4(),
@@ -109,7 +124,7 @@ export default function BoardConsole({ keyWord, saving }) {
 
   useEffect(() => {
     if (Object.keys(addBoardData).length === 0) return;
-    console.log(addBoardData);
+    // console.log(addBoardData);
     setCards([addBoardData, ...cards]);
   }, [addBoardData]);
 
@@ -120,12 +135,12 @@ export default function BoardConsole({ keyWord, saving }) {
   useEffect(() => {
     if (cards.length === 0) return;
     // const exist = cards.filter((card) => card.id === delCardID);
-    console.log(delCardID);
+    // console.log(delCardID);
     deleteBoard(delCardID); // talk to server
     const remainCards = cards.filter((card) => card.id !== delCardID);
 
     setChangedData(changedData.filter((card) => card.id !== delCardID));
-    // console.log("deleting", exist);
+    // // console.log("deleting", exist);
     setCards(remainCards);
   }, [delCardID]);
 

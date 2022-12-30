@@ -59,14 +59,18 @@ const MakeNTUProvider = (props) => {
         break;
       }
       case "UpdateBoard": {
-        setUpdateBoardStatus(payload);
+        // console.log(payload);
+        setUpdateBoardStatus(payload.status);
+        if (payload.status === "success") setGetBoardData(payload.data);
         break;
       }
       default:
         break;
     }
   };
-
+  client.onclose = () => {
+    showAlert("error", "Connection Error. Please Refresh Later!");
+  };
   const sendData = (data) => {
     client.send(JSON.stringify(data));
   };

@@ -29,7 +29,7 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-export default function Header({ setSaving }) {
+export default function Header({ setSaving, ableSave }) {
   const [importOpen, setImportOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const handleCloseImport = () => {
@@ -131,7 +131,12 @@ export default function Header({ setSaving }) {
             </Grid>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" onClick={handleSave}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSave}
+              disabled={!ableSave}
+            >
               Save
             </Button>
           </Grid>

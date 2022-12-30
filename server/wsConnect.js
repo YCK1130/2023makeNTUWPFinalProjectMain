@@ -61,7 +61,8 @@ module.exports = {
             )
           );
           sendStatus(["success", "Update successfully"], ws);
-          sendData(["UpdateBoard", "success"], ws);
+          const boards = await model.BoardModel.find({});
+          sendData(["UpdateBoard", { status: "success", data: boards }], ws);
         } catch (e) {
           throw new Error("Message DB update error: " + e);
         }

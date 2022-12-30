@@ -53,6 +53,7 @@ export default function ComplexGrid({
   const [values, setValues] = useState({});
   useEffect(() => {
     setValues({ limit: data.limit, totalNum: data.totalNum });
+    // console.log(data);
   }, []);
 
   const handleChange = (event) => {
@@ -64,24 +65,24 @@ export default function ComplexGrid({
       [name]: changingValue,
     });
 
-    const existing = changedData.filter((item) => item.id === data.id);
-    if (existing.length > 0) {
-      console.log("changing: ", changedData);
-      setChangedData(
-        changedData.map((item) => {
-          if (item.id !== data.id) return item;
-          return {
-            ...data,
-            ...values,
-            [name]: changingValue,
-          };
-        })
-      );
-    } else {
+    const existing = changedData.filter((item) => item.id !== data.id);
+    if (
+      JSON.stringify({
+        limit: values.limit,
+        totalNum: values.totalNum,
+        [name]: changingValue,
+      }) !==
+      JSON.stringify({
+        limit: data.limit,
+        totalNum: data.totalNum,
+      })
+    ) {
       setChangedData([
-        ...changedData,
+        ...existing,
         { ...data, ...values, [name]: changingValue },
       ]);
+    } else {
+      setChangedData(existing);
     }
   };
   return (
@@ -96,7 +97,6 @@ export default function ComplexGrid({
         minWidth: 150,
         flexGrow: 1,
         position: "relative",
-
         backgroundColor: (theme) =>
           theme.palette.mode === "dark" ? "#1A2027" : "#fff",
       }}

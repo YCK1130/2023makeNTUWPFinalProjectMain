@@ -11,6 +11,7 @@ import {
 import PropTypes from "prop-types";
 import { NumericFormat } from "react-number-format";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { useRef } from "react";
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, ...other } = props;
 
@@ -52,6 +53,7 @@ export default function ComplexGrid({ setAddCardData }) {
     limit: 1,
     totalNum: 5,
   });
+  // const nameInputRef = useRef(null);
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -63,18 +65,22 @@ export default function ComplexGrid({ setAddCardData }) {
   };
   const handleKeyDown = (event) => {
     if (event.key !== "Enter") {
-      // console.log(event.key);
+      // // console.log(event.key);
       return;
     }
     let { name, limit, totalNum } = values;
     if (name && limit && totalNum) {
       setAddCardData(values);
-      event.target.value = "";
+      if (event.target.name === "name") event.target.value = "";
+      setValues({
+        ...values,
+        name: "",
+      });
     } else {
-      console.log("something missing: ", name, limit, totalNum);
+      // console.log("something missing: ", name, limit, totalNum);
     }
   };
-  // console.log(values);
+  // // console.log(values);
   return (
     <Paper
       sx={{
@@ -136,6 +142,7 @@ export default function ComplexGrid({ setAddCardData }) {
               display: "flex",
               justifyContent: "center",
             }}
+            // ref={nameInputRef}
           />
         </Grid>
         <Grid item>
@@ -209,8 +216,9 @@ export default function ComplexGrid({ setAddCardData }) {
           let { name, limit, totalNum } = values;
           if (name && limit && totalNum) {
             setAddCardData(values);
+            // nameInputRef.current.value = "";
           } else {
-            console.log("something missing: ", name, limit, totalNum);
+            // console.log("something missing: ", name, limit, totalNum);
           }
         }}
       >
