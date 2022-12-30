@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  Tabs,
+  Tab,
+  Typography,
+  Box,
+  Paper,
+} from "@mui/material";
 import styled from "styled-components";
 import Request from "../../components/request";
-
+import GroupStatus from "./components/GroupStatus";
 const Wrapper = styled.div`
-  width: 45%;
+  width: 49%;
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -106,34 +115,52 @@ export default function RequestConsole() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        {requests
-          .filter(
-            (request) =>
-              request?.status?.toUpperCase() === "unSolved".toUpperCase()
-          )
-          .map((request) => {
-            return (
-              <Request
-                key={request?.name + request?.id}
-                data={request}
-              ></Request>
-            );
-          })}
+        <TableContainer
+          component={Paper}
+          sx={{ overflowX: "hidden", overflowY: "auto" }}
+        >
+          <Table aria-label="collapsible table">
+            <TableBody>
+              {requests
+                .filter(
+                  (request) =>
+                    request?.status?.toUpperCase() !== "solved".toUpperCase()
+                )
+                .map((request) => {
+                  return (
+                    <GroupStatus
+                      key={request?.name + request?.id}
+                      data={request}
+                    ></GroupStatus>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {requests
-          .filter(
-            (request) =>
-              request?.status?.toUpperCase() === "solved".toUpperCase()
-          )
-          .map((request) => {
-            return (
-              <Request
-                key={request?.name + request?.id}
-                data={request}
-              ></Request>
-            );
-          })}
+        <TableContainer
+          component={Paper}
+          sx={{ overflowX: "hidden", overflowY: "auto" }}
+        >
+          <Table aria-label="collapsible table">
+            <TableBody>
+              {requests
+                .filter(
+                  (request) =>
+                    request?.status?.toUpperCase() === "solved".toUpperCase()
+                )
+                .map((request) => {
+                  return (
+                    <GroupStatus
+                      key={request?.name + request?.id}
+                      data={request}
+                    ></GroupStatus>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </TabPanel>
     </Wrapper>
   );
