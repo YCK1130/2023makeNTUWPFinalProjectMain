@@ -3,28 +3,20 @@ const model = require("./database/mongo/model");
 
 //import { TeamModel, RequestModel, BoardModel} from "./database/mongo/model";
 const board = [
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "1" },
-  { name: "Afuayy", tag: "Arduino", left: "5", v: true, ID: "2" },
-  { name: "Buatsnd", tag: "Arduino", left: "1", v: true, ID: "3" },
-  { name: "Busaihsd", tag: "Arduino", left: "5", v: true, ID: "4" },
-  { name: "CAHDAOEIH", tag: "Arduino", left: "2", v: true, ID: "5" },
-  { name: "alh kuehru", tag: "Arduino", left: "0", v: true, ID: "6" },
-  { name: "Buatsnd2", tag: "Arduino", left: "5", v: true, ID: "7" },
-  { name: "Buatsnd3", tag: "Arduino", left: "1", v: true, ID: "8" },
-  { name: "Buatsnd4", tag: "Arduino", left: "3", v: true, ID: "9" },
-  { name: "Afuayy2", tag: "Arduino", left: "5", v: true, ID: "10" },
-  { name: "Afuayy3", tag: "Arduino", left: "2", v: true, ID: "11" },
-  { name: "Afuayy4", tag: "Arduino", left: "2", v: true, ID: "13" },
-  { name: "Afuayy5", tag: "Arduino", left: "5", v: true, ID: "14" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "1", v: true, ID: "15" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "16" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "17" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "0", v: true, ID: "18" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "19" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "1", v: true, ID: "20" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "3", v: true, ID: "21" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: true, ID: "22" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "2", v: true, ID: "23" },
+  { name: "A", tag: "Arduino", left: "2", v: true, ID: "1" },
+  { name: "B", tag: "Arduino", left: "5", v: true, ID: "2" },
+  { name: "C", tag: "Rpi", left: "1", v: true, ID: "3" },
+  { name: "D", tag: "Rpi", left: "5", v: true, ID: "4" },
+  { name: "E", tag: "Rpi", left: "2", v: true, ID: "5" },
+  { name: "F", tag: "Arduino", left: "10", v: true, ID: "6" },
+  { name: "G", tag: "Rpi", left: "5", v: true, ID: "7" },
+  { name: "H", tag: "Arduino", left: "1", v: true, ID: "8" },
+  { name: "I", tag: "Rpi", left: "3", v: true, ID: "9" },
+  { name: "J", tag: "Arduino", left: "150", v: true, ID: "10" },
+  { name: "K", tag: "Rpi", left: "2", v: true, ID: "11" },
+  { name: "L", tag: "Arduino", left: "2", v: true, ID: "13" },
+  { name: "M", tag: "Rpi", left: "5", v: true, ID: "14" },
+  { name: "N", tag: "Arduino", left: "1", v: true, ID: "15" },
   { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: false, ID: "24" },
 ];
 const sendData = (data, ws) => {
@@ -33,6 +25,16 @@ const sendData = (data, ws) => {
 
 const sendStatus = (payload, ws) => {
   sendData(["status", payload], ws);
+};
+
+const updateMyCards = async (group, request) => {
+    let gp = await model.TeamModel.findOne({teamID: group});
+
+    request.map((e)=>{
+        gp.myCards.has(e[0]) ? gp.myCards.set(e[0], gp.myCards.get(e[0]) + e[1]):gp.myCards.set(e[0], e[1])
+    })
+    await gp.save();
+    console.log(gp.myCards)
 };
 
 module.exports = {
@@ -120,17 +122,20 @@ module.exports = {
         let { group, requestBody } = payload;
         // console.log(group);
         // console.log(requestBody);
+        
+        let gp = await model.TeamModel.findOne({teamID: group});
+        
         let count = await model.RequestModel.find({
-          borrower: group,
+          borrower: gp,
         }).count();
 
         let body = requestBody.map((e) => {
           return { board: e[0], quantity: e[1] };
         });
-
+        
         const request = new model.RequestModel({
           requestID: "Group" + group + "_request" + (count + 1),
-          borrower: group,
+          borrower: gp,
           sendingTime: new Date(),
           status: "unsolved",
           requestBody: body,
@@ -142,7 +147,14 @@ module.exports = {
           throw new Error("Message DB save error: " + e);
         }
 
-        // let c = await model.RequestModel.find({})
+        await model.TeamModel.updateMany(
+            { teamID: group },
+            { $push: { requests: request } }
+        );
+
+        updateMyCards(group, requestBody);
+
+        // let c = await model.TeamModel.findOne({teamID: group});
         // console.log(c);
         break;
       }
