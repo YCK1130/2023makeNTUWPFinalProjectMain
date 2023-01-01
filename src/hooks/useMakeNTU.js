@@ -38,6 +38,10 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
+      case "CANCELREQUEST": {
+        //im not sure what to do
+        break;
+      }
       case "GETUSER": {
         setUserData(payload);
         break;
@@ -109,6 +113,9 @@ const MakeNTUProvider = (props) => {
   const getUser = (payload) => {
     sendData(["GETUSER", payload]);
   };
+  const cancelRequest = (payload) => {
+    sendData(["CANCELREQUEST", payload]);
+  };
 
   return (
     <MakeNTUContext.Provider
@@ -129,6 +136,7 @@ const MakeNTUProvider = (props) => {
         cardData,
         getUser,
         userData,
+        cancelRequest,
       }}
       {...props}
     />

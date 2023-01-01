@@ -46,6 +46,15 @@ module.exports = {
     const [task, payload] = JSON.parse(data);
     console.log(task, payload);
     switch (task) {
+      case "CANCELREQUEST": {
+        let userData = await model.TeamModel.findOne({ teamID: payload[0] });
+        await model.RequestModel.updateOne(
+          { requestID: payload[1] },
+          { $set: { status: "cancel" } }
+        );
+
+        break;
+      }
       case "GETUSER": {
         let userData = await model.TeamModel.findOne({ teamID: payload });
         await userData.populate("requests").execPopulate();
