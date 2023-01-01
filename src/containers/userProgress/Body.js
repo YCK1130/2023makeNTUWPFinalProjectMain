@@ -49,7 +49,7 @@ function Body() {
 
   const addNeedList = (name, quantity) => {
     if (quantity === 0) {
-      needList.delete(id, needList.get(id));
+      needList.delete(name, needList.get(name));
     } else {
       needList.set(name, quantity);
     }
@@ -123,8 +123,8 @@ function Body() {
         //這裡要filter
 
         if (
-          (searchMethod === "Name" && e.name.indexOf(searchWord) !== -1) ||
-          (searchMethod === "Tag" && e.category.indexOf(searchWord) !== -1)
+          (searchMethod === "Name" && e.name.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1) ||
+          (searchMethod === "Tag" && e.category.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1)
         ) {
           return (
             <Card
