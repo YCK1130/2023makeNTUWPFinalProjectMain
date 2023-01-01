@@ -15,7 +15,7 @@ function BoardRequestContentElement(props) {
     changeReturn(card.board, 0, true);
   }, []);
   return (
-    <TableRow key={card}>
+    <TableRow key={`${card}`}>
       <TableCell component="th" scope="row">
         {card.board}
       </TableCell>

@@ -8,13 +8,45 @@ import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
 
 import Box from "@mui/material/Box";
-
+import { useMakeNTU } from "../../../hooks/useMakeNTU";
 const GroupStatusContent = (props) => {
   const { data, open } = props;
-  const handleAsk = () => {};
-  const handleCancel = () => {};
-  const handleTook = () => {};
-
+  const { updateReq } = useMakeNTU();
+  const handleAsk = () => {
+    if (!data?._id) {
+      console.log("missing requestID: ", data?._id);
+      return;
+    }
+    updateReq({ requestID: data?._id, requestStatus: "ready" });
+  };
+  const handleDenied = () => {
+    if (!data?._id) {
+      console.log("missing requestID: ", data?._id);
+      return;
+    }
+    updateReq({ requestID: data?._id, requestStatus: "denied" });
+  };
+  const handleCancel = () => {
+    if (!data?._id) {
+      console.log("missing requestID: ", data?._id);
+      return;
+    }
+    updateReq({ requestID: data?._id, requestStatus: "cancel" });
+  };
+  const handleTook = () => {
+    if (!data?._id) {
+      console.log("missing requestID: ", data?._id);
+      return;
+    }
+    updateReq({ requestID: data?._id, requestStatus: "solved" });
+  };
+  const handleRecover = () => {
+    if (!data?._id) {
+      console.log("missing requestID: ", data?._id);
+      return;
+    }
+    updateReq({ requestID: data?._id, requestStatus: "pending" });
+  };
   return (
     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -28,7 +60,7 @@ const GroupStatusContent = (props) => {
             </TableHead>
             <TableBody>
               {data?.requestBody?.map((detail) => (
-                <TableRow key={detail}>
+                <TableRow key={`${data?._id}${detail?.board}`}>
                   <TableCell component="th" scope="row">
                     {detail?.board}
                   </TableCell>
@@ -40,27 +72,46 @@ const GroupStatusContent = (props) => {
         </Box>
         <Box sx={{ margin: 1, display: "flex", flexDirection: "row-reverse" }}>
           {data?.status === "pending" ? (
-            <Chip
-              label="呼叫"
-              variant="outlined"
-              onClick={handleAsk}
-              sx={{ ml: 1 }}
-            />
-          ) : (
             <>
               <Chip
-                label="取消"
+                label="呼叫"
                 variant="outlined"
-                onClick={handleCancel}
+                onClick={handleAsk}
                 sx={{ ml: 1 }}
               />
+              <Chip
+                label="拒絕"
+                variant="outlined"
+                onClick={handleDenied}
+                sx={{ ml: 1 }}
+              />
+            </>
+          ) : data?.status === "ready" ? (
+            <>
               <Chip
                 label="已領取"
                 variant="outlined"
                 onClick={handleTook}
                 sx={{ ml: 1 }}
               />
+              <Chip
+                label="取消"
+                variant="outlined"
+                onClick={handleCancel}
+                sx={{ ml: 1 }}
+              />
             </>
+          ) : data?.status === "denied" ? (
+            <>
+              <Chip
+                label="恢復"
+                variant="outlined"
+                onClick={handleRecover}
+                sx={{ ml: 1 }}
+              />
+            </>
+          ) : (
+            <></>
           )}
         </Box>
       </Collapse>

@@ -63,7 +63,7 @@ function BoardRequestContent(props) {
             <React.Fragment>
               {boards.map((card, index) => (
                 <BoardRequestContentElement
-                  key={card + index}
+                  key={`${card}+${index}`}
                   changeReturn={changeReturn}
                   card={card}
                   numReturn={numReturn}

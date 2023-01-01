@@ -68,7 +68,7 @@ function Body() {
       for (var [key, value] of needList.entries()) {
         requestBody.push([key, value]);
       }
-
+      // console.log({ group, requestBody });
       sendData(["REQUEST", { group, requestBody }]);
     }
 

@@ -10,7 +10,13 @@ function GroupStatus(props) {
   const { data } = props;
   console.log(data);
   const [open, setOpen] = React.useState(false);
-  const statusTEXT = { pending: "申請中", solved: "已領取", ready: "呼叫中" };
+  const statusTEXT = {
+    pending: "申請中",
+    solved: "已領取",
+    ready: "呼叫中",
+    denied: "已拒絕",
+    cancel: "已取消",
+  };
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>

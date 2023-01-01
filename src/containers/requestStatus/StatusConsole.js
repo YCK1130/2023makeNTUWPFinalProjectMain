@@ -25,6 +25,7 @@ import { v4 as uuidv4 } from "uuid";
 import BoardRequest from "./components/BoardRequest";
 import GroupStatus from "./components/GroupStatus";
 import { StudentDataAPI } from "../../api";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 /**
  * This is Main Page
@@ -140,13 +141,14 @@ export default function StatusConsole() {
       fontWeight: "400",
     },
   }));
+  const { requestData } = useMakeNTU();
   useEffect(async () => {
     //獲取user資料
     console.log("fetching data...");
     const { data: userData } = await StudentDataAPI.getStudentData();
     console.log(userData);
     setUserStatus(userData);
-  }, []);
+  }, [requestData]);
 
   useEffect(() => {
     console.log(changedData);
@@ -195,7 +197,7 @@ export default function StatusConsole() {
               {userStatus?.map((team) => {
                 return (
                   <BoardRequest
-                    key={team?.name + team?.id}
+                    key={`${team?.name}+ ${team?.id}`}
                     team={team}
                   ></BoardRequest>
                 );

@@ -12,6 +12,7 @@ import {
   Grid,
   Box,
 } from "@mui/material";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -32,10 +33,12 @@ const ButtonContainer = styled.div`
 export default function Header({ setSaving, ableSave }) {
   const [importOpen, setImportOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const { dataINIT } = useMakeNTU();
   const handleCloseImport = () => {
     setImportOpen(false);
   };
   const handleImport = () => {
+    dataINIT();
     handleCloseImport();
   };
   const handleOpenImport = () => {

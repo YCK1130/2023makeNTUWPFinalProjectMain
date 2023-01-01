@@ -30,11 +30,13 @@ const sendStatus = (payload, ws) => {
 const updateMyCards = async (group, request) => {
   let gp = await model.TeamModel.findOne({ teamID: group });
 
-  request.map((e) => {
-    gp.myCards.has(e[0])
-      ? gp.myCards.set(e[0], gp.myCards.get(e[0]) + e[1])
-      : gp.myCards.set(e[0], e[1]);
-  });
+  await Promise.all(
+    request.map(async (e) => {
+      (await gp.myCards.has(e[0]))
+        ? await gp.myCards.set(e[0], gp.myCards.get(e[0]) + e[1])
+        : await gp.myCards.set(e[0], e[1]);
+    })
+  );
   await gp.save();
   console.log(gp.myCards);
   //console.log(gp, "hi");
@@ -115,20 +117,22 @@ module.exports = {
         const existing = await model.BoardModel.deleteOne({
           id: newDataID,
         });
-        console.log(existing);
+        // console.log(existing);
         sendStatus(["success", "Delete successfully"], ws);
         break;
       }
       case "GETBOARD": {
         const boards = await model.BoardModel.find({});
+        // console.log(boards);
         sendData(["GETBOARD", boards], ws);
         sendStatus(["success", "Get successfully"], ws);
         break;
       }
       case "GETREQUEST": {
         //need populate
-        const requests = await model.RequestModel.find({});
-        console.log(requests);
+        const requests = await model.RequestModel.find().populate(["borrower"]);
+        // await requests..execPopulate();
+        // console.log(requests);
         sendData(["GETREQUEST", requests], ws);
         sendStatus(["success", "Get successfully"], ws);
         break;
@@ -152,7 +156,7 @@ module.exports = {
           requestID: "Group" + group + "_request" + (count + 1),
           borrower: gp,
           sendingTime: new Date().getTime(),
-          status: "unsolved",
+          status: "pending",
           requestBody: body,
         });
 
@@ -167,10 +171,79 @@ module.exports = {
           { $push: { requests: request } }
         );
 
-        updateMyCards(group, requestBody);
+        // updateMyCards(group, requestBody);
 
         // let c = await model.TeamModel.findOne({teamID: group});
         // console.log(c);
+        break;
+      }
+      case "UPDATEREQ": {
+        const { requestID, requestStatus } = payload;
+        await model.RequestModel.updateOne(
+          { _id: requestID },
+          { $set: { status: requestStatus } }
+        );
+        const newReq = await model.RequestModel.findOne({
+          _id: requestID,
+        }).populate(["borrower"]);
+        // console.log(newReq);
+        if (requestStatus === "solved") {
+          let body = newReq.requestBody.map((e) => {
+            return [e.board, e.quantity];
+          });
+          await updateMyCards(newReq.borrower.teamID, body);
+          let gp = await model.TeamModel.findOne({
+            teamID: newReq.borrower.teamID,
+          });
+          // await Promise.all(
+          //   newReq.requestBody.map(async (board) => {
+          //     await model.BoardModel.updateOne(
+          //       { name: board.board },
+          //       { $inc: { remain: -board.quantity } }
+          //     );
+          //   })
+          // );
+          await Promise.all(
+            newReq.requestBody.map(async (board) => {
+              const myboard = await model.BoardModel.findOne({
+                name: board.board,
+              });
+              let found = false;
+              let newInvoice = myboard.invoice.map((item) => {
+                // console.log(
+                //   "newInvoice",
+                //   newReq.borrower._id,
+                //   item.group,
+                //   String(newReq.borrower._id) === String(item.group)
+                // );
+                if (String(newReq.borrower._id) === String(item.group)) {
+                  found = true;
+                  return {
+                    group: item.group,
+                    number: item.number + board.quantity,
+                  };
+                } else {
+                  return item;
+                }
+              });
+              if (!found) {
+                newInvoice = [
+                  ...myboard.invoice,
+                  { group: newReq.borrower._id, number: board.quantity },
+                ];
+              }
+              // console.log("newInvoice: ", board, newInvoice);
+              myboard.invoice = newInvoice;
+              myboard.remain -= board.quantity;
+              await myboard.save();
+            })
+          );
+          const boards = await model.BoardModel.find({});
+          console.log(boards);
+        }
+        const requests = await model.RequestModel.find().populate(["borrower"]);
+        sendData(["UPDATEREQUEST", requests], ws);
+        sendStatus(["success", "Update successfully"], ws);
         break;
       }
     }

@@ -1,10 +1,12 @@
-const React = require("react");
+// const React = require("react");
 
 //import { useState, createContext, useContext, useEffect } from "react";
-
+import React from "react";
+import { v4 as uuidv4 } from "uuid";
 const client = new WebSocket("ws://localhost:4000"); //step 2
 
 const MakeNTUContext = React.createContext({
+  dataINIT: () => {},
   userBoardINIT: () => {},
   sendData: () => {},
   cardData: [],
@@ -23,6 +25,7 @@ const MakeNTUContext = React.createContext({
   getUser: () => {},
   requestData: [],
   getRequest: () => {},
+  updateReq: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -83,12 +86,59 @@ const MakeNTUProvider = (props) => {
         if (payload.status === "success") setGetBoardData(payload.data);
         break;
       }
+      case "UPDATEREQUEST": {
+        setRequestData(payload);
+        break;
+      }
       default:
         break;
     }
   };
   client.onclose = () => {
     showAlert("error", "Connection Error. Please Refresh Later!");
+  };
+  const dataINIT = () => {
+    const newCard = {
+      limit: 5,
+      totalNum: 50,
+      remain: 50,
+      image: "",
+    };
+    addBoard({ ...newCard, name: "board 1", id: uuidv4() });
+    addBoard({ ...newCard, name: "board 2", id: uuidv4() });
+    addBoard({ ...newCard, name: "board 3", id: uuidv4() });
+    addBoard({ ...newCard, name: "board 4", id: uuidv4() });
+    addBoard({ ...newCard, name: "board 5", id: uuidv4() });
+    sendData([
+      "REQUEST",
+      {
+        group: "1",
+        requestBody: [
+          ["board 1", 2],
+          ["board 2", 3],
+        ],
+      },
+    ]);
+    sendData([
+      "REQUEST",
+      {
+        group: "1",
+        requestBody: [
+          ["board 1", 2],
+          ["board 3", 3],
+        ],
+      },
+    ]);
+    sendData([
+      "REQUEST",
+      {
+        group: "3",
+        requestBody: [
+          ["board 3", 2],
+          ["board 1", 1],
+        ],
+      },
+    ]);
   };
   const sendData = (data) => {
     client.send(JSON.stringify(data));
@@ -110,6 +160,10 @@ const MakeNTUProvider = (props) => {
   const updateBoards = (payload) => {
     sendData(["UPDATEBOARDS", payload]); //[Board data]
   };
+  const updateReq = (payload) => {
+    //{ requestID, requestStatus }
+    sendData(["UPDATEREQ", payload]);
+  };
   const getBoards = () => {
     sendData(["GETBOARD"]);
   };
@@ -123,6 +177,7 @@ const MakeNTUProvider = (props) => {
   return (
     <MakeNTUContext.Provider
       value={{
+        dataINIT,
         userBoardINIT,
         addBoard,
         deleteBoard,
@@ -141,6 +196,7 @@ const MakeNTUProvider = (props) => {
         userData,
         requestData,
         getRequest,
+        updateReq,
       }}
       {...props}
     />

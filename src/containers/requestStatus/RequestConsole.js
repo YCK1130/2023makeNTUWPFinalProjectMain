@@ -116,6 +116,8 @@ export default function RequestConsole() {
         >
           <Tab label="未完成" {...a11yProps(0)} />
           <Tab label="已完成" {...a11yProps(1)} />
+          <Tab label="已拒絕" {...a11yProps(2)} />
+          <Tab label="已取消" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -128,12 +130,14 @@ export default function RequestConsole() {
               {requests
                 .filter(
                   (request) =>
-                    request?.status?.toUpperCase() !== "solved".toUpperCase()
+                    request?.status?.toUpperCase() !== "solved".toUpperCase() &&
+                    request?.status?.toUpperCase() !== "denied".toUpperCase() &&
+                    request?.status?.toUpperCase() !== "cancel".toUpperCase()
                 )
                 .map((request) => {
                   return (
                     <GroupStatus
-                      key={request?.name + request?.id}
+                      key={`${request?.sendingTime}+ ${request?.requestID}`}
                       data={request}
                     ></GroupStatus>
                   );
@@ -157,7 +161,55 @@ export default function RequestConsole() {
                 .map((request) => {
                   return (
                     <GroupStatus
-                      key={request?.name + request?.id}
+                      key={`${request?.sendingTime}+ ${request?.requestID}`}
+                      data={request}
+                    ></GroupStatus>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <TableContainer
+          component={Paper}
+          sx={{ overflowX: "hidden", overflowY: "auto" }}
+        >
+          <Table aria-label="collapsible table">
+            <TableBody>
+              {requests
+                .filter(
+                  (request) =>
+                    request?.status?.toUpperCase() === "denied".toUpperCase()
+                )
+                .map((request) => {
+                  return (
+                    <GroupStatus
+                      key={`${request?.sendingTime}+ ${request?.requestID}`}
+                      data={request}
+                    ></GroupStatus>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <TableContainer
+          component={Paper}
+          sx={{ overflowX: "hidden", overflowY: "auto" }}
+        >
+          <Table aria-label="collapsible table">
+            <TableBody>
+              {requests
+                .filter(
+                  (request) =>
+                    request?.status?.toUpperCase() === "cancel".toUpperCase()
+                )
+                .map((request) => {
+                  return (
+                    <GroupStatus
+                      key={`${request?.sendingTime}+ ${request?.requestID}`}
                       data={request}
                     ></GroupStatus>
                   );
