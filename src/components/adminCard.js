@@ -132,6 +132,26 @@ export default function ComplexGrid({
             {data?.name || "Untitled"}
           </Typography>
         </Grid>
+        <Grid
+          item
+          sx={{
+            width: "100%",
+          }}
+        >
+          <Typography
+            gutterBottom
+            variant="subtitle1"
+            component="div"
+            autoComplete="off"
+            sx={{
+              width: "100%",
+              fontSize: "0.2rem",
+              color: "rgba(255,255,255,0.8)",
+            }}
+          >
+            {`category${" : "}${data?.category || "Untitled"}`}
+          </Typography>
+        </Grid>
         <Grid item>
           <ButtonBase sx={{ width: 128, height: 128 }}>
             <Img alt="no img" src="/static/images/grid/complex.jpg" />

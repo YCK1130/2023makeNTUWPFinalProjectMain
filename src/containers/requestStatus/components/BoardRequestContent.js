@@ -13,18 +13,10 @@ function BoardRequestContent(props) {
   const { team, open } = props;
   const [numReturn, setNumReturn] = React.useState({});
   const [boards, setBoards] = React.useState([]);
-  const handleClick = () => {};
-  /*
-  var editStuff = [];
-  row.details.map((detail) => {
-    editStuff.push({
-      stuff: detail.stuff,
-      numReturn: 0,
-      numMax: detail.amount,
-    });
-  });
-  const [editt, setEditt] = React.useState(editStuff);
-*/
+  const handleEdit = () => {
+    console.log(team, numReturn);
+  };
+
   React.useEffect(() => {
     // let newBoards = [];
     if (!team?.myCards) return;
@@ -78,7 +70,7 @@ function BoardRequestContent(props) {
           <Chip
             label="Edit"
             variant="outlined"
-            onClick={handleClick}
+            onClick={handleEdit}
             sx={{ fontSize: 17 }}
           />
         </Box>

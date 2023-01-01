@@ -100,6 +100,7 @@ const MakeNTUProvider = (props) => {
   const dataINIT = () => {
     const newCard = {
       limit: 5,
+      category: "arduino",
       totalNum: 50,
       remain: 50,
       image: "",
@@ -173,7 +174,9 @@ const MakeNTUProvider = (props) => {
   const getRequest = (payload) => {
     sendData(["GETREQUEST", payload]);
   };
-
+  const updateReturn = (payload) => {
+    sendData(["UPDATERETURN", payload]);
+  };
   return (
     <MakeNTUContext.Provider
       value={{

@@ -49,16 +49,18 @@ ComplexGrid.propTypes = {
 };
 export default function ComplexGrid({ setAddCardData }) {
   const [values, setValues] = useState({
-    name: "Untitled",
+    name: "",
+    category: "",
     limit: 1,
     totalNum: 5,
   });
+  const [hasFocus, setHasFocus] = useState({ name: false, category: false });
   // const nameInputRef = useRef(null);
   const handleChange = (event) => {
     setValues({
       ...values,
       [event.target.name]:
-        event.target.name === "name"
+        event.target.name === "name" || event.target.name === "category"
           ? event.target.value
           : parseInt(event.target.value),
     });
@@ -68,8 +70,11 @@ export default function ComplexGrid({ setAddCardData }) {
       // // console.log(event.key);
       return;
     }
-    let { name, limit, totalNum } = values;
-    if (name && limit && totalNum) {
+    setHasFocus(() => {
+      return { name: true, category: true };
+    });
+    let { name, limit, totalNum, category } = values;
+    if (name && limit && totalNum && category) {
       setAddCardData(values);
       if (event.target.name === "name") event.target.value = "";
       setValues({
@@ -114,10 +119,10 @@ export default function ComplexGrid({ setAddCardData }) {
             id="input-name"
             label="Name"
             name="name"
-            // value={values.name}
+            value={values.name}
             // defaultValue={"Enter Board Name"}
-            error={!values.name}
-            helperText={!values.name ? "Required!" : ""}
+            error={hasFocus.name && !values.name}
+            helperText={hasFocus.name && !values.name ? "Required!" : ""}
             autoComplete="off"
             onChange={handleChange}
             onFocus={(event) => {
@@ -127,6 +132,9 @@ export default function ComplexGrid({ setAddCardData }) {
                   name: "",
                 });
               }
+              setHasFocus(() => {
+                return { ...hasFocus, name: true };
+              });
               event.target.select();
             }}
             onKeyDown={handleKeyDown}
@@ -136,6 +144,52 @@ export default function ComplexGrid({ setAddCardData }) {
               width: "100%",
               padding: "2px",
               backgroundColor: "rgba(255,255,255,0.3)",
+              // marginTop: "5px",
+              borderRadius: "10px",
+              borderWidth: "1rem",
+              borderColor: "#1d1d1d",
+              display: "flex",
+              justifyContent: "center",
+            }}
+            // ref={nameInputRef}
+          />
+        </Grid>
+        <Grid
+          item
+          sx={{
+            width: "100%",
+          }}
+        >
+          <TextField
+            id="input-category"
+            label="category"
+            name="category"
+            error={hasFocus.category && !values.category}
+            helperText={
+              hasFocus.category && !values.category ? "Required!" : ""
+            }
+            autoComplete="off"
+            onChange={handleChange}
+            onFocus={(event) => {
+              if (!event.target.value) {
+                setValues({
+                  ...values,
+                  category: "",
+                });
+              }
+              setHasFocus(() => {
+                return { ...hasFocus, category: true };
+              });
+              event.target.select();
+            }}
+            onKeyDown={handleKeyDown}
+            component="div"
+            size="small"
+            sx={{
+              width: "100%",
+              padding: "2px",
+              backgroundColor: "rgba(255,255,255,0.3)",
+              marginTop: "5px",
               borderRadius: "10px",
               borderWidth: "1rem",
               borderColor: "#1d1d1d",
@@ -146,7 +200,7 @@ export default function ComplexGrid({ setAddCardData }) {
           />
         </Grid>
         <Grid item>
-          <ButtonBase sx={{ width: 128, height: 128 }}>
+          <ButtonBase sx={{ width: 100, height: 100 }}>
             <Img alt="no img" src="/static/images/grid/complex.jpg" />
           </ButtonBase>
         </Grid>
@@ -182,7 +236,17 @@ export default function ComplexGrid({ setAddCardData }) {
           justifyContent="space-around"
           alignItems="center"
         >
-          <Typography gutterBottom variant="subtitle1" component="div">
+          <Typography
+            gutterBottom
+            variant="subtitle1"
+            component="div"
+            visibility={
+              !(hasFocus.name && !values.name) &&
+              !(hasFocus.category && !values.category)
+                ? "visible"
+                : "hidden"
+            }
+          >
             {"庫存  :"}
           </Typography>
           <TextField
@@ -196,10 +260,18 @@ export default function ComplexGrid({ setAddCardData }) {
             }}
             onKeyDown={handleKeyDown}
             variant="standard"
-            sx={{ width: "50%" }}
+            sx={{
+              width: "50%",
+              display:
+                !(hasFocus.name && !values.name) &&
+                !(hasFocus.category && !values.category)
+                  ? "block"
+                  : "none",
+            }}
             autoComplete="off"
             error={!values.totalNum}
             helperText={!values.totalNum ? "Required!" : ""}
+            // visibility={!!values.name && !!values.category ? "visible" : "hidden"}
           />
         </Grid>
       </Grid>
