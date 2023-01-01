@@ -9,14 +9,18 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useEffect } from "react";
 function BoardRequestContentElement(props) {
-  const { card, changeReturn, numReturn } = props;
+  const { card, changeReturn, numReturn, breakpoints } = props;
   // const [num, setNum] = React.useState(0);
   useEffect(() => {
     changeReturn(card.board, 0, true);
   }, []);
   return (
     <TableRow key={`${card}`}>
-      <TableCell component="th" scope="row">
+      <TableCell
+        component="th"
+        scope="row"
+        sx={{ px: breakpoints?.isPhone ? "3px" : "9px" }}
+      >
         {card.board}
       </TableCell>
       <TableCell>{card.quantity} 個</TableCell>

@@ -9,20 +9,12 @@ import {
   TableHead,
   TableRow,
   TableCell,
-  Tabs,
-  Tab,
-  Typography,
   Box,
   Paper,
 } from "@mui/material/";
 import { Link, useHistory } from "react-router-dom";
 import { selectSession } from "../../slices/sessionSlice";
-import Request from "../../components/request";
-import AdminCard from "../../components/adminCard";
 import styled from "styled-components";
-import TemplateCard from "../../components/templateCard";
-import { v4 as uuidv4 } from "uuid";
-import BoardRequest from "./components/BoardRequest";
 import GroupStatus from "./components/GroupStatus";
 import { StudentDataAPI } from "../../api";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
@@ -31,15 +23,6 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
  * This is Main Page
  */
 
-const Wrapper = styled.div`
-  width: 45%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: start;
-  justify-content: center;
-`;
 const someCards = [
   {
     id: 1,
@@ -157,69 +140,67 @@ export default function StatusConsole() {
   const classes = useStyles();
   const { isLogin } = useSelector(selectSession);
   return (
-    <Wrapper>
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(255,255,255,0.6)",
-          overflowX: "hidden",
-          borderRadius: "5px",
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "space-around",
-        }}
-      >
-        <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
-            <TableHead>
-              <TableRow
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(255,255,255,0.6)",
+        overflowX: "hidden",
+        borderRadius: "5px",
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
+      }}
+    >
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow
+              sx={{
+                backgroundColor: "rgba(255,255,255,0.2)",
+                alignItems: "middle",
+                maxHeight: "10vh",
+              }}
+            >
+              <TableCell />
+              <TableCell
                 sx={{
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  alignItems: "middle",
-                  maxHeight: "10vh",
+                  fontWeight: "bold",
+                  fontSize: "h5.fontSize",
                 }}
+                align="center"
               >
-                <TableCell />
-                <TableCell
-                  sx={{
-                    fontWeight: "bold",
-                    fontSize: "h5.fontSize",
-                  }}
-                  align="center"
-                >
-                  TEAM STATE
-                </TableCell>
-                <TableCell />
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {userStatus
-                ?.filter((team) => team.authority !== 1)
-                .sort((teamA, teamB) => {
-                  const notReturned_A = teamA?.myCards
-                    ? Object.keys(teamA?.myCards).length
-                    : 0;
-                  const notReturned_B = teamB?.myCards
-                    ? Object.keys(teamB?.myCards).length
-                    : 0;
+                TEAM STATE
+              </TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {userStatus
+              ?.filter((team) => team.authority !== 1)
+              .sort((teamA, teamB) => {
+                const notReturned_A = teamA?.myCards
+                  ? Object.keys(teamA?.myCards).length
+                  : 0;
+                const notReturned_B = teamB?.myCards
+                  ? Object.keys(teamB?.myCards).length
+                  : 0;
 
-                  return notReturned_A - notReturned_B === 0
-                    ? parseInt(teamA.id) - parseInt(teamB.id)
-                    : -(notReturned_A - notReturned_B);
-                })
-                .map((team) => {
-                  return (
-                    <BoardRequest
-                      key={`${team?.name}+ ${team?.id}`}
-                      team={team}
-                    ></BoardRequest>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </Wrapper>
+                return notReturned_A - notReturned_B === 0
+                  ? parseInt(teamA.id) - parseInt(teamB.id)
+                  : -(notReturned_A - notReturned_B);
+              })
+              .map((team) => {
+                return (
+                  <GroupStatus
+                    key={`${team?.name}+ ${team?.id}`}
+                    team={team}
+                  ></GroupStatus>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

@@ -4,39 +4,46 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import GroupStatusContent from "./GroupStatusContent";
-function GroupStatus(props) {
-  //every request
-  const { data } = props;
-  // console.log(data);
+import GroupContent from "./GroupContent";
+
+function BoardRequest(props) {
+  //every team
+  const { team, breakpoints } = props;
   const [open, setOpen] = React.useState(false);
-  const statusTEXT = {
-    pending: "申請中",
-    solved: "已領取",
-    ready: "呼叫中",
-    denied: "已拒絕",
-    cancel: "已取消",
-  };
+  // console.log(team?.myCards);
+  React.useEffect(() => {
+    const notReturned = team?.myCards ? Object.keys(team?.myCards).length : 0;
+
+    if (notReturned === 0) setOpen(false);
+  }, [team]);
+  const notReturned = team?.myCards ? Object.keys(team?.myCards).length : 0;
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
-        <TableCell align="left">
-          {data?.borrower?.teamName ?? "undefined"}
-        </TableCell>
-        <TableCell align="center">{data?.sendingTime ?? "undefined"}</TableCell>
-        <TableCell align="left">{statusTEXT[data?.status] ?? "未知"}</TableCell>
-        <TableCell align="right">
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
+        <TableCell align="left">{team?.teamName ?? "undefined"}</TableCell>
+
+        {notReturned === 0 ? (
+          <>
+            <TableCell align="center">已歸還</TableCell>
+            <TableCell align="right" />
+          </>
+        ) : (
+          <>
+            <TableCell align="center">{`${notReturned} 種未歸還`}</TableCell>
+            <TableCell align="right">
+              <IconButton
+                aria-label="expand row"
+                size="small"
+                onClick={() => setOpen(!open)}
+              >
+                {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconButton>
+            </TableCell>
+          </>
+        )}
       </TableRow>
       <TableRow>
-        <GroupStatusContent data={data} open={open} />
+        <GroupContent team={team} open={open} breakpoints={breakpoints} />
       </TableRow>
     </React.Fragment>
   );
@@ -60,4 +67,4 @@ Row.propTypes = {
   }).isRequired,
 };
 */
-export default GroupStatus;
+export default BoardRequest;

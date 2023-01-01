@@ -14,7 +14,8 @@ import {
   Paper,
 } from "@mui/material";
 import styled from "styled-components";
-import GroupStatus from "./components/GroupStatus";
+import RequestStatus from "./components/RequestStatus";
+import StatusConsole from "./StatusConsole";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
 const Wrapper = styled.div`
   width: 49%;
@@ -27,6 +28,9 @@ const Wrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.4);
   border-radius: 3px;
   border: 3px solid;
+  @media screen and (max-width: 700px) {
+    width: 100%;
+  } ;
 `;
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,7 +85,7 @@ const someReqs = [
     status: "unSolved",
   },
 ];
-export default function RequestConsole() {
+export default function RequestConsole({ breakpoints }) {
   const [value, setValue] = useState(0);
   const [requests, setRequests] = useState([]);
   const { requestData, getRequest } = useMakeNTU();
@@ -111,6 +115,8 @@ export default function RequestConsole() {
       >
         <Tabs
           value={value}
+          scrollButtons="auto"
+          variant="scrollable"
           onChange={handleChange}
           aria-label="basic tabs example"
         >
@@ -118,6 +124,13 @@ export default function RequestConsole() {
           <Tab label="已完成" {...a11yProps(1)} />
           <Tab label="已拒絕" {...a11yProps(2)} />
           <Tab label="已取消" {...a11yProps(3)} />
+          <Tab
+            label="各組租借"
+            {...a11yProps(4)}
+            sx={{
+              display: breakpoints.isSm || breakpoints.isXs ? "block" : "none",
+            }}
+          />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -136,10 +149,11 @@ export default function RequestConsole() {
                 )
                 .map((request) => {
                   return (
-                    <GroupStatus
+                    <RequestStatus
                       key={`${request?.sendingTime}+ ${request?.requestID}`}
                       data={request}
-                    ></GroupStatus>
+                      breakpoints={breakpoints}
+                    ></RequestStatus>
                   );
                 })}
             </TableBody>
@@ -160,10 +174,11 @@ export default function RequestConsole() {
                 )
                 .map((request) => {
                   return (
-                    <GroupStatus
+                    <RequestStatus
                       key={`${request?.sendingTime}+ ${request?.requestID}`}
                       data={request}
-                    ></GroupStatus>
+                      breakpoints={breakpoints}
+                    ></RequestStatus>
                   );
                 })}
             </TableBody>
@@ -184,10 +199,11 @@ export default function RequestConsole() {
                 )
                 .map((request) => {
                   return (
-                    <GroupStatus
+                    <RequestStatus
                       key={`${request?.sendingTime}+ ${request?.requestID}`}
                       data={request}
-                    ></GroupStatus>
+                      breakpoints={breakpoints}
+                    ></RequestStatus>
                   );
                 })}
             </TableBody>
@@ -208,15 +224,23 @@ export default function RequestConsole() {
                 )
                 .map((request) => {
                   return (
-                    <GroupStatus
+                    <RequestStatus
                       key={`${request?.sendingTime}+ ${request?.requestID}`}
                       data={request}
-                    ></GroupStatus>
+                      breakpoints={breakpoints}
+                    ></RequestStatus>
                   );
                 })}
             </TableBody>
           </Table>
         </TableContainer>
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        {breakpoints.isSm || breakpoints.isXs ? (
+          <StatusConsole breakpoints={breakpoints} />
+        ) : (
+          <></>
+        )}
       </TabPanel>
     </Wrapper>
   );

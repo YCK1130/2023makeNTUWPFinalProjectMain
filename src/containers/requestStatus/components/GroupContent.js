@@ -8,10 +8,10 @@ import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import BoardRequestContentElement from "./BoardRequestContentElement";
+import GroupContentElement from "./GroupContentElement";
 import { useMakeNTU } from "../../../hooks/useMakeNTU";
-function BoardRequestContent(props) {
-  const { team, open } = props;
+function GroupContent(props) {
+  const { team, open, breakpoints } = props;
   const [numReturn, setNumReturn] = React.useState({});
   const [boards, setBoards] = React.useState([]);
   const { updateReturn } = useMakeNTU();
@@ -57,12 +57,13 @@ function BoardRequestContent(props) {
           <TableBody>
             <React.Fragment>
               {boards.map((card, index) => (
-                <BoardRequestContentElement
+                <GroupContentElement
                   key={`${card}+${index}`}
                   changeReturn={changeReturn}
                   card={card}
                   numReturn={numReturn}
                   index={index}
+                  breakpoints={breakpoints}
                 />
               ))}
             </React.Fragment>
@@ -82,4 +83,4 @@ function BoardRequestContent(props) {
   );
 }
 
-export default BoardRequestContent;
+export default GroupContent;
