@@ -542,6 +542,7 @@ export default function StudentData() {
             password,
             teamName: newStudent.teamName,
             authority: Number(newStudent.authority),
+            myCards: {},
           },
         ]);
         setData(

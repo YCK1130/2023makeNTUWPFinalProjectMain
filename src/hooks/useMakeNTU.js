@@ -3,6 +3,7 @@
 //import { useState, createContext, useContext, useEffect } from "react";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
+import useBreakpoints from "./useBreakpoints";
 const client = new WebSocket("ws://localhost:4000"); //step 2
 
 const MakeNTUContext = React.createContext({
@@ -28,6 +29,7 @@ const MakeNTUContext = React.createContext({
   updateReq: () => {},
   updateReturn: () => {},
   teamReqUpdateDate: [],
+  breakpoints: {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -40,6 +42,8 @@ const MakeNTUProvider = (props) => {
   const [userData, setUserData] = React.useState([]);
   const [requestData, setRequestData] = React.useState([]);
   const [teamReqUpdateDate, setTeamReqUpdateDate] = React.useState([]);
+
+  const breakpoints = useBreakpoints();
   client.onmessage = async (byteString) => {
     //收回傳訊息
     const { data } = byteString;
@@ -209,6 +213,7 @@ const MakeNTUProvider = (props) => {
         updateReq,
         updateReturn,
         teamReqUpdateDate,
+        breakpoints,
       }}
       {...props}
     />

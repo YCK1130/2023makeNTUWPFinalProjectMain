@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Switch, BrowserRouter as Router } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
 
 // Route
 import { Redirect } from "react-router";
@@ -19,7 +18,7 @@ import UserStatus from "./containers/userStatus";
 import StudentData from "./containers/studentData";
 import AdminBoardList from "./containers/adminBoardList";
 import RequestStatus from "./containers/requestStatus";
-import theme from "./theme";
+
 // compononets
 import Loading from "./components/loading";
 // initialize, slices
@@ -64,13 +63,11 @@ const Routes = () => {
 export default function App() {
   return (
     <div>
-      <ThemeProvider theme={theme}>
-        <Router>
-          <Drawer>
-            <Routes />
-          </Drawer>
-        </Router>
-      </ThemeProvider>
+      <Router>
+        <Drawer>
+          <Routes />
+        </Drawer>
+      </Router>
     </div>
   );
 }
