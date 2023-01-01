@@ -9,12 +9,15 @@ import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import BoardRequestContentElement from "./BoardRequestContentElement";
+import { useMakeNTU } from "../../../hooks/useMakeNTU";
 function BoardRequestContent(props) {
   const { team, open } = props;
   const [numReturn, setNumReturn] = React.useState({});
   const [boards, setBoards] = React.useState([]);
+  const { updateReturn } = useMakeNTU();
   const handleEdit = () => {
     console.log(team, numReturn);
+    updateReturn({ id: team.id, returned: numReturn });
   };
 
   React.useEffect(() => {

@@ -11,6 +11,11 @@ function BoardRequest(props) {
   const { team } = props;
   const [open, setOpen] = React.useState(false);
   // console.log(team?.myCards);
+  React.useEffect(() => {
+    const notReturned = team?.myCards ? Object.keys(team?.myCards).length : 0;
+
+    if (notReturned === 0) setOpen(false);
+  }, [team]);
   const notReturned = team?.myCards ? Object.keys(team?.myCards).length : 0;
   return (
     <React.Fragment>

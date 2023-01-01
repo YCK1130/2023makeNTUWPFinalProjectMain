@@ -141,14 +141,14 @@ export default function StatusConsole() {
       fontWeight: "400",
     },
   }));
-  const { requestData } = useMakeNTU();
+  const { requestData, teamReqUpdateDate } = useMakeNTU();
   useEffect(async () => {
     //獲取user資料
     console.log("fetching data...");
     const { data: userData } = await StudentDataAPI.getStudentData();
     console.log(userData);
     setUserStatus(userData);
-  }, [requestData]);
+  }, [requestData, teamReqUpdateDate]);
 
   useEffect(() => {
     console.log(changedData);
@@ -194,14 +194,28 @@ export default function StatusConsole() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {userStatus?.map((team) => {
-                return (
-                  <BoardRequest
-                    key={`${team?.name}+ ${team?.id}`}
-                    team={team}
-                  ></BoardRequest>
-                );
-              })}
+              {userStatus
+                ?.filter((team) => team.authority !== 1)
+                .sort((teamA, teamB) => {
+                  const notReturned_A = teamA?.myCards
+                    ? Object.keys(teamA?.myCards).length
+                    : 0;
+                  const notReturned_B = teamB?.myCards
+                    ? Object.keys(teamB?.myCards).length
+                    : 0;
+
+                  return notReturned_A - notReturned_B === 0
+                    ? parseInt(teamA.id) - parseInt(teamB.id)
+                    : -(notReturned_A - notReturned_B);
+                })
+                .map((team) => {
+                  return (
+                    <BoardRequest
+                      key={`${team?.name}+ ${team?.id}`}
+                      team={team}
+                    ></BoardRequest>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>

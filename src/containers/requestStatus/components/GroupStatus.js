@@ -8,7 +8,7 @@ import GroupStatusContent from "./GroupStatusContent";
 function GroupStatus(props) {
   //every request
   const { data } = props;
-  console.log(data);
+  // console.log(data);
   const [open, setOpen] = React.useState(false);
   const statusTEXT = {
     pending: "申請中",

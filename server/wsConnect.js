@@ -246,6 +246,37 @@ module.exports = {
         sendStatus(["success", "Update successfully"], ws);
         break;
       }
+      case "UPDATERETURN": {
+        const { id, returned } = payload;
+        console.log(id, returned);
+        const team = await model.TeamModel.findOne({ teamID: id });
+        const teamsCard = JSON.parse(JSON.stringify(team.myCards));
+        console.log(teamsCard);
+        for (const [key, value] of Object.entries(returned)) {
+          teamsCard[key] -= value;
+          const myboard = await model.BoardModel.findOne({
+            name: key,
+          });
+          myboard.remain += value;
+          const newInvoice = myboard.invoice.map((item) => {
+            if (String(item.group) === String(team._id))
+              return { group: item.group, number: item.number - value };
+            else return item;
+          });
+          myboard.invoice = newInvoice.filter((item) => item.number > 0);
+          console.log(myboard.invoice);
+          await myboard.save();
+          console.log(myboard.invoice);
+          if (teamsCard[key] === 0) delete teamsCard[key];
+        }
+        team.myCards = teamsCard;
+        await team.save();
+        // console.log(team.myCards);
+        const teams = await model.TeamModel.find({});
+
+        sendData(["UPDATERETURN", teams], ws);
+        sendStatus(["success", "Update successfully"], ws);
+      }
     }
   },
 };

@@ -26,6 +26,8 @@ const MakeNTUContext = React.createContext({
   requestData: [],
   getRequest: () => {},
   updateReq: () => {},
+  updateReturn: () => {},
+  teamReqUpdateDate: [],
 });
 
 const MakeNTUProvider = (props) => {
@@ -37,6 +39,7 @@ const MakeNTUProvider = (props) => {
   const [cardData, setCardData] = React.useState([]);
   const [userData, setUserData] = React.useState([]);
   const [requestData, setRequestData] = React.useState([]);
+  const [teamReqUpdateDate, setTeamReqUpdateDate] = React.useState([]);
   client.onmessage = async (byteString) => {
     //收回傳訊息
     const { data } = byteString;
@@ -88,6 +91,10 @@ const MakeNTUProvider = (props) => {
       }
       case "UPDATEREQUEST": {
         setRequestData(payload);
+        break;
+      }
+      case "UPDATERETURN": {
+        setTeamReqUpdateDate(payload);
         break;
       }
       default:
@@ -200,6 +207,8 @@ const MakeNTUProvider = (props) => {
         requestData,
         getRequest,
         updateReq,
+        updateReturn,
+        teamReqUpdateDate,
       }}
       {...props}
     />
