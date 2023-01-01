@@ -14,8 +14,8 @@ import {
   Paper,
 } from "@mui/material";
 import styled from "styled-components";
-import Request from "../../components/request";
 import GroupStatus from "./components/GroupStatus";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 const Wrapper = styled.div`
   width: 49%;
   height: 100%;
@@ -84,15 +84,19 @@ const someReqs = [
 export default function RequestConsole() {
   const [value, setValue] = useState(0);
   const [requests, setRequests] = useState([]);
-
+  const { requestData, getRequest } = useMakeNTU();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   useEffect(() => {
     //獲取user資料
     console.log("fetching data...");
-    setRequests(someReqs);
+    getRequest();
   }, []);
+  useEffect(() => {
+    console.log("requestData", requestData);
+    setRequests(requestData);
+  }, [requestData]);
   return (
     <Wrapper>
       <Box

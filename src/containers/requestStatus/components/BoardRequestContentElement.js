@@ -1,4 +1,3 @@
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,13 +7,15 @@ import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import { useRef } from "react";
+import { useEffect } from "react";
 function BoardRequestContentElement(props) {
-  const { card, changeReturn, numReturn, index } = props;
-  const [keyin, setKeyin] = React.useState(-1);
-
+  const { card, changeReturn, numReturn } = props;
+  // const [num, setNum] = React.useState(0);
+  useEffect(() => {
+    changeReturn(card.board, 0, true);
+  }, []);
   return (
-    <TableRow key={card.stuff}>
+    <TableRow key={card}>
       <TableCell component="th" scope="row">
         {card.board}
       </TableCell>
@@ -26,24 +27,22 @@ function BoardRequestContentElement(props) {
           label="-"
           variant="outlined"
           onClick={() => {
-            console.log(keyin);
-            setKeyin(-1);
-            changeReturn(card.board, -1, index, true);
-            console.log(index, card.board);
-            //console.log(editt[index].numReturn.toString(), "ddd");
+            let newNum = parseInt(numReturn[card.board] - 1);
+            let valid = newNum <= card.quantity && newNum >= 0;
+            changeReturn(card.board, numReturn[card.board] - 1, valid);
           }}
         />
         <TextField
           id="outlined-name"
-          //onChange={handleChange}
-          value={keyin === -1 ? numReturn[index] : keyin} //"jo" //{editt[index].numReturn.toString() + "ddd"}
+          value={numReturn[card.board]}
           size="small"
           variant="standard"
           sx={{ width: "6vh", mt: 1 }}
           onChange={(e) => {
-            console.log(keyin);
-            setKeyin(e.target.value);
-            changeReturn(card.board, e.target.value, index, false);
+            // setNum(e.target.value);
+            let newNum = parseInt(e.target.value);
+            let valid = newNum <= card.quantity && newNum >= 0;
+            changeReturn(card.board, e.target.value, valid || !e.target.value);
           }}
         />
 
@@ -52,9 +51,9 @@ function BoardRequestContentElement(props) {
           label="+"
           variant="outlined"
           onClick={() => {
-            console.log(keyin);
-            setKeyin(-1);
-            changeReturn(card.board, 1, index, true);
+            let newNum = parseInt(numReturn[card.board] + 1);
+            let valid = newNum <= card.quantity && newNum >= 0;
+            changeReturn(card.board, numReturn[card.board] + 1, valid);
           }}
           sx={{ m: 1 }}
         />

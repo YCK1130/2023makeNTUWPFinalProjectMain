@@ -122,6 +122,14 @@ module.exports = {
         sendStatus(["success", "Get successfully"], ws);
         break;
       }
+      case "GETREQUEST": {
+        //need populate
+        const requests = await model.RequestModel.find({});
+        console.log(requests);
+        sendData(["GETREQUEST", requests], ws);
+        sendStatus(["success", "Get successfully"], ws);
+        break;
+      }
       case "REQUEST": {
         let { group, requestBody } = payload;
         // console.log(group);

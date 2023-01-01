@@ -9,10 +9,9 @@ import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import BoardRequestContentElement from "./BoardRequestContentElement";
-import { v4 as uuidv4 } from "uuid";
 function BoardRequestContent(props) {
   const { team, open } = props;
-  const [numReturn, setNumReturn] = React.useState([]);
+  const [numReturn, setNumReturn] = React.useState({});
   const [boards, setBoards] = React.useState([]);
   const handleClick = () => {};
   /*
@@ -30,53 +29,24 @@ function BoardRequestContent(props) {
     // let newBoards = [];
     if (!team?.myCards) return;
     if (Object.keys(team.myCards).length === 0) return;
-    console.log(Object.keys(team.myCards));
-    let newBoards = Object.keys(team.myCards).map((key) => ({
-      board: key,
-      quantity: team.myCards[key],
-    }));
-    console.log("team", newBoards);
+    // console.log(Object.keys(team.myCards));
+    let newReturn;
+    let newBoards = Object.keys(team.myCards).map((key) => {
+      newReturn = { ...newReturn, [key]: 0 };
+      return {
+        board: key,
+        quantity: team.myCards[key],
+      };
+    });
+    setNumReturn(newReturn);
+    // console.log("team", newBoards);
     setBoards(newBoards);
   }, [team]);
 
-  const changeReturn = (stuff, num, index, add) => {
+  const changeReturn = (name, num, valid) => {
     let a = JSON.parse(JSON.stringify(numReturn));
-    //var Ix = editStuff.findIndex((x) => x.stuff === stuff);
-    if (add) {
-      if (a[index] + num >= row.details[index].amount) {
-        a[index] = row.details[index].amount;
-        setNumReturn(a);
-        return;
-      }
-      if (a[index] + num <= 0) {
-        a[index] = 0;
-        setNumReturn(a);
-        return;
-      }
-      a[index] = a[index] + num;
-      setNumReturn(a);
-      /*editStuff = editt;
-      editStuff[Ix].numReturn = editStuff[Ix].numReturn + num;
-      setEditt(editStuff);
-      console.log(editt);
-    */
-    } else {
-      let number = parseInt(num);
-      if (num === "" || number <= 0) {
-        a[index] = 0;
-        setNumReturn(a);
-        return;
-      } else if (number > row.details[index].amount) {
-        a[index] = row.details[index].amount;
-        setNumReturn(a);
-        return;
-      }
-      a[index] = parseInt(num);
-      setNumReturn(a);
-      /*editStuff[Ix].numReturn = num;
-      setEditt(editStuff);
-    */
-    }
+    if (!valid) return;
+    setNumReturn({ ...a, [name]: num });
   };
   return (
     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

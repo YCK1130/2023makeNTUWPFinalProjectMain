@@ -10,9 +10,8 @@ function BoardRequest(props) {
   //every team
   const { team } = props;
   const [open, setOpen] = React.useState(false);
-  const notReturned = team?.requests?.filter(
-    (req) => req.status !== "solved"
-  )?.length;
+  // console.log(team?.myCards);
+  const notReturned = team?.myCards ? Object.keys(team?.myCards).length : 0;
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
