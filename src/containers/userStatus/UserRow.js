@@ -5,31 +5,34 @@ import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import RowContent from "./UserRowContent";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
-var intervalId;
+
 function Row(props) {
   const { row, userID } = props;
   const [open, setOpen] = useState(false);
   const [timer, setTimer] = useState(0);
-  const { deleteRequestFromUser } = useMakeNTU();
-
+  const { deleteRequestFromUser, requestExpired } = useMakeNTU();
+  let intervalId = useRef();
   //timer
   useEffect(() => {
     var d = new Date().getTime(); //number
-    var pretime = parseInt(15 * 60 - (d - row.sendingTime) / 1000, 10);
+    var pretime = parseInt(1 * 20 - (d - row.sendingTime) / 1000, 10);
     setTimer(pretime);
-    intervalId = setInterval(() => {
-      setTimer((t) => t - 1);
-    }, 1000);
-    console.log("break!");
-    return () => clearInterval(intervalId);
+    if (row.status === "pending" || row.status === "ready") {
+      intervalId.current = setInterval(() => {
+        setTimer((t) => t - 1);
+      }, 1000);
+      console.log("break!");
+      return () => clearInterval(intervalId.current);
+    }
   }, []);
 
   useEffect(() => {
     if (timer < 0) {
-      clearInterval(intervalId);
+      clearInterval(intervalId.current);
+      requestExpired([userID, row._id]);
     }
   }, [timer]);
 
@@ -37,7 +40,7 @@ function Row(props) {
     if (
       row.status === "denied" ||
       row.status === "cancel" ||
-      row.status === "outOfTime"
+      row.status === "expired"
     ) {
       return "00 : 00";
     }

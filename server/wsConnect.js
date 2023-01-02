@@ -50,6 +50,15 @@ module.exports = {
         console.log("change page to " + ws.box);
         break;
       }
+      case "REQUESTEXPIRED": {
+        await model.RequestModel.updateOne(
+          { _id: payload[1] },
+          { $set: { status: "expired" } }
+        );
+
+        sendData(["REQUESTEXPIRED", payload[0]], ws);
+        break;
+      }
       case "DELETEREQUESTFROMUSER": {
         let userData = await model.TeamModel.findOne({ teamID: payload[0] });
 

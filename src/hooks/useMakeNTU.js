@@ -35,6 +35,7 @@ const MakeNTUContext = React.createContext({
   setUserCards: () => {},
   cancelRequest: () => {},
   deleteRequestFromUser: () => {},
+  requestExpired: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -52,6 +53,10 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
+      case "REQUESTEXPIRED": {
+        getUser(payload);
+        break;
+      }
       case "DELETEREQUESTFROMUSER": {
         getUser(payload);
         break;
@@ -204,7 +209,9 @@ const MakeNTUProvider = (props) => {
   const deleteRequestFromUser = (payload) => {
     sendData(["DELETEREQUESTFROMUSER", payload]);
   };
-
+  const requestExpired = (payload) => {
+    sendData(["REQUESTEXPIRED", payload]);
+  };
   return (
     <MakeNTUContext.Provider
       value={{
@@ -230,6 +237,7 @@ const MakeNTUProvider = (props) => {
         userCards,
         cancelRequest,
         deleteRequestFromUser,
+        requestExpired,
       }}
       {...props}
     />
