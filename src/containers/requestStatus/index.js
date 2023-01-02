@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import StatusConsole from "./StatusConsole";
 import RequestConsole from "./RequestConsole";
 import { useState } from "react";
@@ -20,10 +20,11 @@ const Wrapper = styled.div`
   width: 45%;
   height: 100%;
 `;
-export default function BoardPage() {
-  const [searchKeyWord, setKeyWord] = useState("");
-  const { breakpoints } = useMakeNTU();
-
+export default function RequestPage() {
+  const { breakpoints, subscribe } = useMakeNTU();
+  useEffect(() => {
+    subscribe("requestStatus");
+  }, []);
   return (
     <ConsoleWrapper>
       <RequestConsole breakpoints={breakpoints} />

@@ -22,6 +22,55 @@ const broadcastPage = (page, data) => {
     });
   }
 };
+const broadcastID = (page, data) => {
+  //console.log(userPage[page]);
+  if (userID[page]) {
+    userID[page].forEach((client) => {
+      sendData(data, client);
+    });
+  }
+};
+const broadcastAuth = (page, data) => {
+  //console.log(userPage[page]);
+  if (userAuth[page]) {
+    userAuth[page].forEach((client) => {
+      sendData(data, client);
+    });
+  }
+};
+const getIntersection = (setA, setB) => {
+  if (!setA) return setB;
+  if (!setB) return setA;
+  const intersection = new Set(
+    [...setA].filter((element) => setB.has(element))
+  );
+
+  return intersection;
+};
+
+const broadcast = (condictions, data) => {
+  const { id, authority, page } = condictions;
+  const IdSet = id ? userID[id] : undefined;
+  const AuthSet = authority ? userAuth[authority] : undefined;
+  const PageSet = page ? userPage[page] : undefined;
+  let validSet = getIntersection(getIntersection(IdSet, AuthSet), PageSet);
+  if (!validSet) {
+    validSet = [];
+    userID.forEach((setA) => {
+      validSet = [...validSet, ...setA];
+    });
+    userAuth.forEach((setA) => {
+      validSet = [...validSet, ...setA];
+    });
+    userPage.forEach((setA) => {
+      validSet = [...validSet, ...setA];
+    });
+    validSet = new Set(validSet);
+  }
+  validSet.forEach((client) => {
+    sendData(data, client);
+  });
+};
 const requestExpired = async (id, status) => {
   let request = await model.RequestModel.findOne({ requestID: id });
   if (request.status === status) {
@@ -56,10 +105,16 @@ module.exports = {
     switch (task) {
       case "WSINIT": {
         const { id, authority } = payload;
+        if (userPage[ws.box]) userPage[ws.box].delete(ws);
+        if (userID[ws.id]) userID[ws.id].delete(ws);
+        if (userAuth[ws.authority]) userAuth[ws.authority].delete(ws);
+
         if (!userID[id]) userID[id] = new Set();
         userID[id].add(ws);
+        ws.id = id;
         if (!userAuth[authority]) userAuth[authority] = new Set();
         userAuth[authority].add(ws);
+        ws.authority = authority;
         if (!userPage["main"]) userPage["main"] = new Set();
         userPage["main"].add(ws);
         ws.box = "main";
@@ -68,7 +123,8 @@ module.exports = {
         console.log("change page to " + ws.box);
         break;
       }
-      case "SUBSCRIBE": { //userStatus & userProgress & adminBoardList
+      case "SUBSCRIBE": {
+        //userStatus & userProgress & adminBoardList
         if (userPage[ws.box]) {
           userPage[ws.box].delete(ws);
         }
@@ -277,17 +333,6 @@ module.exports = {
             return [e.board, e.quantity];
           });
           await updateMyCards(newReq.borrower.teamID, body);
-          let gp = await model.TeamModel.findOne({
-            teamID: newReq.borrower.teamID,
-          });
-          // await Promise.all(
-          //   newReq.requestBody.map(async (board) => {
-          //     await model.BoardModel.updateOne(
-          //       { name: board.board },
-          //       { $inc: { remain: -board.quantity } }
-          //     );
-          //   })
-          // );
           await Promise.all(
             newReq.requestBody.map(async (board) => {
               const myboard = await model.BoardModel.findOne({
@@ -295,12 +340,6 @@ module.exports = {
               });
               let found = false;
               let newInvoice = myboard.invoice.map((item) => {
-                // console.log(
-                //   "newInvoice",
-                //   newReq.borrower._id,
-                //   item.group,
-                //   String(newReq.borrower._id) === String(item.group)
-                // );
                 if (String(newReq.borrower._id) === String(item.group)) {
                   found = true;
                   return {
