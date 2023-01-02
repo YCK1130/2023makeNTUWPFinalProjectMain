@@ -46,6 +46,10 @@ function Body() {
   useEffect(() => {
     getUser(userID);
   }, []);
+  
+  useEffect(() => {
+    needList.clear();
+  }, [userID]);
 
   const handleCheck = (m) => {
     setSearchMethod(m);
