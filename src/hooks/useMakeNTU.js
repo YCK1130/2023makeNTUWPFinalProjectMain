@@ -34,7 +34,6 @@ const MakeNTUContext = React.createContext({
   breakpoints: {},
   handleReplaceBoard: () => {},
   breakpoints: {},
-  setUserCards: () => {},
   cancelRequest: () => {},
   deleteRequestFromUser: () => {},
   requestExpired: () => {},
@@ -85,14 +84,6 @@ const MakeNTUProvider = (props) => {
       case "INITUSERCARD": {
         setCardData(payload);
         console.log(payload);
-        break;
-      }
-      case "output": {
-        //setMessages(() => [...messages, ...payload]);
-        break;
-      }
-      case "clear": {
-        //setMessages(payload);
         break;
       }
       case "status": {
@@ -248,13 +239,17 @@ const MakeNTUProvider = (props) => {
         cardData,
         getUser,
         userRequest,
-
+        getRequest,
         userCards,
         cancelRequest,
         deleteRequestFromUser,
         requestExpired,
         breakpoints,
         handleReplaceBoard,
+        updateReq,
+        updateReturn,
+        requestData,
+        teamReqUpdateDate,
       }}
       {...props}
     />

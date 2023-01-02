@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import { useMakeNTU } from "../../../hooks/useMakeNTU";
 const GroupStatusContent = (props) => {
   const { data, open } = props;
-  const { updateReq } = useMakeNTU();
+  const { updateReq, deleteRequestFromUser } = useMakeNTU();
   const handleAsk = () => {
     if (!data?._id) {
       console.log("missing requestID: ", data?._id);
@@ -39,6 +39,7 @@ const GroupStatusContent = (props) => {
       return;
     }
     updateReq({ requestID: data?._id, requestStatus: "solved" });
+    deleteRequestFromUser([data.borrower.teamID, data?._id]);
   };
   const handleRecover = () => {
     if (!data?._id) {

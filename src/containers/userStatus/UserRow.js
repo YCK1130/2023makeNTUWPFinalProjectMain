@@ -18,7 +18,7 @@ function Row(props) {
   //timer
   useEffect(() => {
     var d = new Date().getTime(); //number
-    var pretime = parseInt(1 * 20 - (d - row.sendingTime) / 1000, 10);
+    var pretime = parseInt(15 * 60 - (d - row.sendingTime) / 1000, 10);
     setTimer(pretime);
     if (row.status === "pending" || row.status === "ready") {
       intervalId.current = setInterval(() => {
@@ -26,6 +26,8 @@ function Row(props) {
       }, 1000);
       console.log("break!");
       return () => clearInterval(intervalId.current);
+    } else {
+      setTimer(0);
     }
   }, []);
 
