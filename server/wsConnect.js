@@ -270,7 +270,10 @@ module.exports = {
               },
             }
           );
-          setTimeout(() => requestExpired(newReq.requestID, "ready"), 40000);
+          setTimeout(
+            () => requestExpired(newReq.requestID, "ready"),
+            15 * 60 * 1000
+          );
         }
         if (requestStatus === "solved") {
           let body = newReq.requestBody.map((e) => {

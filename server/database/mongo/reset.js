@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 const model = require("./model");
 
-// Students with raw passwords, must be hashed later
+// Teams with raw passwords, must be hashed later
 const teamsRaw = require("../data/teams.json");
 
 // ========================================

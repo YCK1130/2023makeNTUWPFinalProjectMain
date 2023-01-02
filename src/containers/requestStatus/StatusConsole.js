@@ -16,7 +16,7 @@ import { Link, useHistory } from "react-router-dom";
 import { selectSession } from "../../slices/sessionSlice";
 import styled from "styled-components";
 import GroupStatus from "./components/GroupStatus";
-import { StudentDataAPI } from "../../api";
+import { TeamDataAPI } from "../../api";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 /**
@@ -128,7 +128,7 @@ export default function StatusConsole() {
   useEffect(async () => {
     //獲取user資料
     console.log("fetching data...");
-    const { data: userData } = await StudentDataAPI.getStudentData();
+    const { data: userData } = await TeamDataAPI.getTeamData();
     console.log(userData);
     setUserStatus(userData);
   }, [requestData, teamReqUpdateDate]);
