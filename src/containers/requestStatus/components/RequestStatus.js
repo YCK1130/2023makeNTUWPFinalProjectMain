@@ -5,12 +5,57 @@ import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import GroupStatusContent from "./RequestStatusContent";
-function GroupStatus(props) {
+import { useMakeNTU } from "../../../hooks/useMakeNTU";
+function RequestStatus(props) {
   //every request
   const { data, breakpoints } = props;
   // console.log(data);
   const [open, setOpen] = React.useState(false);
+  const [timer, setTimer] = React.useState(0);
+  const [intervalId, setIntervalID] = React.useState(0);
+  const { getRequest } = useMakeNTU();
   // console.log(breakpoints);
+  React.useEffect(() => {
+    const d = new Date().getTime(); //number
+    const pretime = 15 * 60 - parseInt(d - data?.sendingTime) / 1000 + 0.5;
+    setTimer(pretime);
+    if (data?.status === "pending" || data?.status === "ready") {
+      let Id = setInterval(() => {
+        setTimer((t) => t - 1);
+      }, 1000);
+      setIntervalID(Id);
+      return () => clearInterval(Id);
+    } else {
+      setTimer(0);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (timer < 0) {
+      clearInterval(intervalId);
+      getRequest();
+    }
+  }, [timer]);
+
+  const showTime = () => {
+    if (
+      data?.status === "denied" ||
+      data?.status === "cancel" ||
+      data?.status === "expired"
+    ) {
+      return "00 : 00";
+    }
+    if (timer <= 0) return "00 : 00";
+    const sec =
+      (timer % 60) / 10 < 1
+        ? "0" + Math.floor(timer % 60)
+        : Math.floor(timer % 60);
+    const min =
+      timer / 60 / 10 < 1
+        ? "0" + Math.floor(timer / 60)
+        : Math.floor(timer / 60);
+    return `${min} : ${sec}`;
+  };
   const statusTEXT = {
     pending: "申請中",
     solved: "已領取",
@@ -25,14 +70,10 @@ function GroupStatus(props) {
         <TableCell align={breakpoints.isXs ? "center" : "left"}>
           {data?.borrower?.teamName ?? "undefined"}
         </TableCell>
-        {breakpoints.isPhone || breakpoints.isSm ? (
-          <TableCell align="center">{"⏰"}</TableCell>
-        ) : breakpoints.isXs ? (
+        {breakpoints.isXs ? (
           <></>
         ) : (
-          <TableCell align="center">
-            {data?.sendingTime ?? "undefined"}
-          </TableCell>
+          <TableCell align="center">{showTime() ?? "undefined"}</TableCell>
         )}
         <TableCell align="center">
           {statusTEXT[data?.status] ?? "未知"}
@@ -72,4 +113,4 @@ Row.propTypes = {
   }).isRequired,
 };
 */
-export default GroupStatus;
+export default RequestStatus;
