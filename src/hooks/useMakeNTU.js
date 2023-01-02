@@ -93,7 +93,8 @@ const MakeNTUProvider = (props) => {
         break;
       }
       case "AddBoard": {
-        setAddBoardData(payload);
+        setGetBoardData(payload);
+        setCardData(payload);
         break;
       }
       case "GETBOARD": {

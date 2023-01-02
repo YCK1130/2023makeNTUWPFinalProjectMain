@@ -14,6 +14,15 @@ const sendStatus = (payload, ws) => {
   sendData(["status", payload], ws);
 };
 
+const broadcastPage = (page, data) => {
+	//console.log(userPage[page]);
+  if(userPage[page]){
+    userPage[page].forEach((client) => {
+      sendData(data, client);
+    });
+  }
+};
+
 const updateMyCards = async (group, request) => {
   let gp = await model.TeamModel.findOne({ teamID: group });
 
@@ -132,11 +141,13 @@ module.exports = {
           break;
         }
         try {
-          const newBoard = await new model.BoardModel(payload).save();
-          sendData(["AddBoard", newBoard], ws);
-          sendStatus(["success", "Add successfully"], ws);
-
+          const temp = await new model.BoardModel(payload).save();
+          const newBoard = await model.BoardModel.find({});
           console.log(newBoard);
+          broadcastPage("adminBoardList", ["AddBoard", newBoard]);
+          broadcastPage("userProgress", ["AddBoard", newBoard]);
+          //sendData(["AddBoard", newBoard], ws);
+          sendStatus(["success", "Add successfully"], ws);
         } catch (e) {
           throw new Error("Message DB save error: " + e);
         }
@@ -183,6 +194,7 @@ module.exports = {
         }
         if (!userPage["adminBoardList"]) userPage["adminBoardList"] = new Set();
         userPage["adminBoardList"].add(ws);
+        console.log(userPage["adminBoardList"])
         ws.box = "adminBoardList";
         console.log("change page to " + ws.box);
 
