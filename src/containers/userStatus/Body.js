@@ -113,9 +113,11 @@ function Body() {
             alignContent: "start",
           }}
         >
-          {Object.keys(userCards).map((element) => {
-            return <Card num={userCards[element]} name={element} />;
-          })}
+          {userCards
+            ? Object.keys(userCards).map((element) => {
+                return <Card num={userCards[element]} name={element} />;
+              })
+            : ""}
         </Box>
       </Box>
     </Wrapper>

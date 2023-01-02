@@ -32,6 +32,7 @@ const MakeNTUContext = React.createContext({
   updateReturn: () => {},
   teamReqUpdateDate: [],
   breakpoints: {},
+  setUserCards: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -39,7 +40,7 @@ const MakeNTUProvider = (props) => {
   const [addBoardData, setAddBoardData] = React.useState({});
   const [getBoardData, setGetBoardData] = React.useState([]);
   const [updateBoardStatus, setUpdateBoardStatus] = React.useState("");
-
+  const [userCards, setUserCards] = React.useState([]);
   const [cardData, setCardData] = React.useState([]);
   const [userData, setUserData] = React.useState([]);
   client.onmessage = async (byteString) => {
@@ -56,7 +57,8 @@ const MakeNTUProvider = (props) => {
       }
       case "GETUSER": {
         setUserData(payload.userData);
-        setUserCards(payload.userCards);
+        if (payload.userCards) setUserCards(payload.userCards);
+        else setUserCards([]);
         break;
       }
       case "GETREQUEST": {
@@ -212,6 +214,8 @@ const MakeNTUProvider = (props) => {
         cardData,
         getUser,
         userData,
+        setUserCards,
+        userCards,
       }}
       {...props}
     />
