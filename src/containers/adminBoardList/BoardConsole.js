@@ -33,6 +33,7 @@ export default function BoardConsole({
   setSaving,
   cards,
   setCards,
+  searchMethod,
 }) {
   const history = useHistory();
   const [addCardData, setAddCardData] = useState({});
@@ -73,10 +74,12 @@ export default function BoardConsole({
     updateBoardStatus,
     showAlert,
     setUpdateBoardStatus,
+    subscribe,
   } = useMakeNTU();
 
   useEffect(() => {
     getBoards();
+    subscribe("adminBoardList");
   }, []);
 
   useEffect(() => {
@@ -168,7 +171,7 @@ export default function BoardConsole({
         {<TemplateCard setAddCardData={setAddCardData} />}
         {cards
           .filter((card) => {
-            return card.name.indexOf(keyWord) !== -1;
+            return (searchMethod === "Name" && card.name.toLowerCase().indexOf(keyWord.toLowerCase()) !== -1) ||(searchMethod === "Tag" && card.category.toLowerCase().indexOf(keyWord.toLowerCase()) !== -1)
           })
           .map((card) => {
             return (

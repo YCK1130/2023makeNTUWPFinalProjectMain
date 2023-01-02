@@ -36,6 +36,7 @@ const MakeNTUContext = React.createContext({
   breakpoints: {},
   cancelRequest: () => {},
   deleteRequestFromUser: () => {},
+  subscribe: () => {}, 
 });
 
 const MakeNTUProvider = (props) => {
@@ -173,6 +174,9 @@ const MakeNTUProvider = (props) => {
   const WSINIT = (payload) => {
     sendData(["WSINIT", payload]);
   };
+  const subscribe = (payload) => {
+    sendData(["SUBSCRIBE", payload]);
+  }
   const userBoardINIT = (payload) => {
     sendData(["INITUSERCARD", payload]);
   };
@@ -243,6 +247,7 @@ const MakeNTUProvider = (props) => {
         updateReturn,
         requestData,
         teamReqUpdateDate,
+        subscribe,
       }}
       {...props}
     />

@@ -15,10 +15,10 @@ const FooterContainer = styled.div`
 ConsoleFooter.propTypes = {
   setKeyWord: PropTypes.func.isRequired,
 };
-export default function ConsoleFooter({ setKeyWord }) {
+export default function ConsoleFooter({ setKeyWord, searchMethod, handleCheck }) {
   return (
     <FooterContainer>
-      <SearchBar handleChange={setKeyWord} />
+      <SearchBar handleCheck={handleCheck} handleChange={setKeyWord} searchMethod={searchMethod} />
     </FooterContainer>
   );
 }

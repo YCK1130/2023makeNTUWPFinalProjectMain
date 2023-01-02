@@ -68,6 +68,16 @@ module.exports = {
         console.log("change page to " + ws.box);
         break;
       }
+      case "SUBSCRIBE": { //userStatus & userProgress & adminBoardList
+        if (userPage[ws.box]) {
+          userPage[ws.box].delete(ws);
+        }
+        if (!userPage[payload]) userPage[payload] = new Set();
+        userPage[payload].add(ws);
+        ws.box = payload;
+        console.log("change page to " + ws.box);
+        break;
+      }
 
       case "DELETEREQUESTFROMUSER": {
         let userData = await model.TeamModel.findOne({ teamID: payload[0] });
@@ -94,14 +104,6 @@ module.exports = {
         break;
       }
       case "GETUSER": {
-        if (userPage[ws.box]) {
-          userPage[ws.box].delete(ws);
-        }
-        if (!userPage["userStatus"]) userPage["userStatus"] = new Set();
-        userPage["userStatus"].add(ws);
-        ws.box = "userStatus";
-        console.log("change page to " + ws.box);
-
         let userData = await model.TeamModel.findOne({ teamID: payload });
         await userData.populate("requests").execPopulate();
         // console.log(userData.requests);
@@ -116,14 +118,6 @@ module.exports = {
         break;
       }
       case "INITUSERCARD": {
-        if (userPage[ws.box]) {
-          userPage[ws.box].delete(ws);
-        }
-        if (!userPage["userProgress"]) userPage["userProgress"] = new Set();
-        userPage["userProgress"].add(ws);
-        ws.box = "userProgress";
-        console.log("change page to " + ws.box);
-
         const boards = await model.BoardModel.find({});
         sendData(["INITUSERCARD", boards], ws);
         // sendStatus(["success", "Get successfully"], ws);
@@ -190,15 +184,6 @@ module.exports = {
         break;
       }
       case "GETBOARD": {
-        if (userPage[ws.box]) {
-          userPage[ws.box].delete(ws);
-        }
-        if (!userPage["adminBoardList"]) userPage["adminBoardList"] = new Set();
-        userPage["adminBoardList"].add(ws);
-        console.log(userPage["adminBoardList"]);
-        ws.box = "adminBoardList";
-        console.log("change page to " + ws.box);
-
         const boards = await model.BoardModel.find({});
         // console.log(boards);
         sendData(["GETBOARD", boards], ws);

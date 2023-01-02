@@ -40,13 +40,14 @@ function Body() {
   const [searchWord, setSearchWord] = React.useState("");
   const [searchMethod, setSearchMethod] = React.useState("Name");
 
-  const { userBoardINIT, sendData, getUser, cardData, userRequest, userCards} = useMakeNTU();
+  const { userBoardINIT, sendData, getUser, cardData, userRequest, userCards, subscribe} = useMakeNTU();
   const { userID } = useSelector(selectSession);
   
   useEffect(() => {
     getUser(userID);
+    subscribe("userProgress");
   }, []);
-  
+
   useEffect(() => {
     needList.clear();
   }, [userID]);

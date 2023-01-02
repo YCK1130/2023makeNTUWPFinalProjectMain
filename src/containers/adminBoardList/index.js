@@ -9,6 +9,8 @@ export default function BoardPage() {
   const [saving, setSaving] = useState(false);
   const [ableSave, setAbleSave] = useState(false);
   const [cards, setCards] = useState([]);
+  const [searchMethod, setSearchMethod] = React.useState("Name");
+
 
   return (
     <div>
@@ -20,8 +22,9 @@ export default function BoardPage() {
         setAbleSave={setAbleSave}
         cards={cards}
         setCards={setCards}
+        searchMethod={searchMethod}
       />
-      <ConsoleFooter setKeyWord={setKeyWord} />
+      <ConsoleFooter searchMethod={searchMethod} handleCheck={setSearchMethod} setKeyWord={setKeyWord} />
     </div>
   );
 }
