@@ -41,13 +41,6 @@ const GroupStatusContent = (props) => {
     updateReq({ requestID: data?._id, requestStatus: "solved" });
     deleteRequestFromUser([data.borrower.teamID, data?._id]);
   };
-  const handleRecover = () => {
-    if (!data?._id) {
-      console.log("missing requestID: ", data?._id);
-      return;
-    }
-    updateReq({ requestID: data?._id, requestStatus: "pending" });
-  };
   return (
     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -99,15 +92,6 @@ const GroupStatusContent = (props) => {
                 label="取消"
                 variant="outlined"
                 onClick={handleCancel}
-                sx={{ ml: 1 }}
-              />
-            </>
-          ) : data?.status === "denied" ? (
-            <>
-              <Chip
-                label="恢復"
-                variant="outlined"
-                onClick={handleRecover}
                 sx={{ ml: 1 }}
               />
             </>

@@ -22,18 +22,18 @@ const broadcastPage = (page, data) => {
     });
   }
 };
-const broadcastID = (page, data) => {
+const broadcastID = (ID, data) => {
   //console.log(userPage[page]);
-  if (userID[page]) {
-    userID[page].forEach((client) => {
+  if (userID[ID]) {
+    userID[ID].forEach((client) => {
       sendData(data, client);
     });
   }
 };
-const broadcastAuth = (page, data) => {
+const broadcastAuth = (authority, data) => {
   //console.log(userPage[page]);
-  if (userAuth[page]) {
-    userAuth[page].forEach((client) => {
+  if (userAuth[authority]) {
+    userAuth[authority].forEach((client) => {
       sendData(data, client);
     });
   }
@@ -54,17 +54,17 @@ const broadcast = (condictions, data) => {
   const AuthSet = authority ? userAuth[authority] : undefined;
   const PageSet = page ? userPage[page] : undefined;
   let validSet = getIntersection(getIntersection(IdSet, AuthSet), PageSet);
-  if (!validSet) {
+  if (!id && !authority && !page) {
     validSet = [];
-    userID.forEach((setA) => {
-      validSet = [...validSet, ...setA];
-    });
-    userAuth.forEach((setA) => {
-      validSet = [...validSet, ...setA];
-    });
-    userPage.forEach((setA) => {
-      validSet = [...validSet, ...setA];
-    });
+    for (const [key, value] of Object.entries(userID)) {
+      validSet = [...validSet, ...value];
+    }
+    for (const [key, value] of Object.entries(userAuth)) {
+      validSet = [...validSet, ...value];
+    }
+    for (const [key, value] of Object.entries(userPage)) {
+      validSet = [...validSet, ...value];
+    }
     validSet = new Set(validSet);
   }
   validSet.forEach((client) => {
@@ -306,10 +306,19 @@ module.exports = {
           throw new Error("Message DB save error: " + e);
         }
 
+        await updateMyCards(group, requestBody);
         await model.TeamModel.updateMany(
           { teamID: group },
           { $push: { requests: request } }
         );
+        const requests = await model.RequestModel.find().populate(["borrower"]);
+        // console.log(requests);
+        broadcastAuth(1, ["status", ["success", "New Request come in!"]]);
+        broadcast({ authority: 1, page: "requestStatus" }, [
+          "UPDATEREQUEST",
+          requests,
+        ]);
+        sendStatus(["success", "Request successfully"], ws);
 
         // updateMyCards(group, requestBody);
 
@@ -344,10 +353,6 @@ module.exports = {
           );
         }
         if (requestStatus === "solved") {
-          let body = newReq.requestBody.map((e) => {
-            return [e.board, e.quantity];
-          });
-          await updateMyCards(newReq.borrower.teamID, body);
           await Promise.all(
             newReq.requestBody.map(async (board) => {
               const myboard = await model.BoardModel.findOne({
@@ -382,6 +387,10 @@ module.exports = {
         }
         const requests = await model.RequestModel.find().populate(["borrower"]);
         sendData(["UPDATEREQUEST", requests], ws);
+        broadcast({ authority: 1, page: "requestStatus" }, [
+          "UPDATEREQUEST",
+          requests,
+        ]);
         sendStatus(["success", "Update successfully"], ws);
         break;
       }
