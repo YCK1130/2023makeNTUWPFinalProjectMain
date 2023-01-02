@@ -13,7 +13,16 @@ const sendData = (data, ws) => {
 const sendStatus = (payload, ws) => {
   sendData(["status", payload], ws);
 };
-
+const requestExpired = async (id, status) => {
+  let request = await model.RequestModel.findOne({ requestID: id });
+  if (request.status === status) {
+    await model.RequestModel.updateOne(
+      { requestID: id },
+      { $set: { status: "expired" } }
+    );
+  }
+  return;
+};
 const updateMyCards = async (group, request) => {
   let gp = await model.TeamModel.findOne({ teamID: group });
 
@@ -50,15 +59,7 @@ module.exports = {
         console.log("change page to " + ws.box);
         break;
       }
-      case "REQUESTEXPIRED": {
-        await model.RequestModel.updateOne(
-          { _id: payload[1] },
-          { $set: { status: "expired" } }
-        );
 
-        sendData(["REQUESTEXPIRED", payload[0]], ws);
-        break;
-      }
       case "DELETEREQUESTFROMUSER": {
         let userData = await model.TeamModel.findOne({ teamID: payload[0] });
 
@@ -223,7 +224,14 @@ module.exports = {
           status: "pending",
           requestBody: body,
         });
-
+        setTimeout(
+          () =>
+            requestExpired(
+              "Group" + group + "_request" + (count + 1),
+              "pending"
+            ),
+          15 * 60 * 1000
+        );
         try {
           await request.save(); // Save payload to DB
         } catch (e) {
@@ -251,6 +259,19 @@ module.exports = {
           _id: requestID,
         }).populate(["borrower"]);
         // console.log(newReq);
+
+        if (requestStatus === "ready") {
+          await model.RequestModel.updateOne(
+            { _id: requestID },
+            {
+              $set: {
+                status: requestStatus,
+                sendingTime: new Date().getTime(),
+              },
+            }
+          );
+          setTimeout(() => requestExpired(newReq.requestID, "ready"), 40000);
+        }
         if (requestStatus === "solved") {
           let body = newReq.requestBody.map((e) => {
             return [e.board, e.quantity];

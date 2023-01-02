@@ -13,12 +13,15 @@ function Row(props) {
   const { row, userID } = props;
   const [open, setOpen] = useState(false);
   const [timer, setTimer] = useState(0);
-  const { deleteRequestFromUser, requestExpired } = useMakeNTU();
+  const { deleteRequestFromUser, getUser } = useMakeNTU();
   let intervalId = useRef();
   //timer
   useEffect(() => {
     var d = new Date().getTime(); //number
-    var pretime = parseInt(15 * 60 - (d - row.sendingTime) / 1000, 10);
+    var pretime = parseInt(
+      1 * 40 - Math.floor((d - row.sendingTime) / 1000),
+      10
+    );
     setTimer(pretime);
     if (row.status === "pending" || row.status === "ready") {
       intervalId.current = setInterval(() => {
@@ -34,7 +37,7 @@ function Row(props) {
   useEffect(() => {
     if (timer < 0) {
       clearInterval(intervalId.current);
-      requestExpired([userID, row._id]);
+      getUser(userID);
     }
   }, [timer]);
 
@@ -42,7 +45,8 @@ function Row(props) {
     if (
       row.status === "denied" ||
       row.status === "cancel" ||
-      row.status === "expired"
+      row.status === "expired" ||
+      timer <= 0
     ) {
       return "00 : 00";
     }
@@ -54,15 +58,18 @@ function Row(props) {
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
         {row.status === "pending" ? (
-          <TableCell align="left" sx={{ fontSize: 19 }}>
+          <TableCell align="left" sx={{ fontSize: 19, border: 0 }}>
             申請中
           </TableCell>
         ) : row.status === "ready" ? (
-          <TableCell align="left" sx={{ fontSize: 19 }}>
+          <TableCell align="left" sx={{ fontSize: 19, border: 0 }}>
             請來拿
           </TableCell>
         ) : (
-          <TableCell align="left" sx={{ fontSize: 19, color: "red" }}>
+          <TableCell
+            align="left"
+            sx={{ fontSize: 19, color: "red", border: 0 }}
+          >
             {row.status === "denied"
               ? "已拒絕"
               : row.status === "cancel"
@@ -71,11 +78,11 @@ function Row(props) {
           </TableCell>
         )}
 
-        <TableCell align="right" sx={{ fontSize: 20 }}>
+        <TableCell align="right" sx={{ fontSize: 20, border: 0 }}>
           {showTime()}
         </TableCell>
 
-        <TableCell align="right" sx={{ display: "flex" }}>
+        <TableCell align="right" sx={{ display: "flex", border: 0 }}>
           {row.status !== "pending" && row.status !== "ready" ? (
             <IconButton
               aria-label="expand row"
