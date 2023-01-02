@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   // overflow-y: hidden;
 `;
 function Body() {
-  const { userData, getUser, userCards } = useMakeNTU();
+  const { userRequest, getUser, userCards } = useMakeNTU();
   const { userID } = useSelector(selectSession);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ function Body() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {userData.map((row) => (
+                {userRequest.map((row) => (
                   <Row key={row._id} row={row} userID={userID} />
                 ))}
               </TableBody>

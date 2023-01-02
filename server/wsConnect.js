@@ -89,7 +89,7 @@ module.exports = {
         sendData(
           [
             "GETUSER",
-            { userData: userData.requests, userCards: userData.myCards },
+            { userRequest: userData.requests, userCards: userData.myCards },
           ],
           ws
         );
