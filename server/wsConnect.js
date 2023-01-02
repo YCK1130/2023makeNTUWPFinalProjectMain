@@ -49,17 +49,24 @@ module.exports = {
       case "CANCELREQUEST": {
         let userData = await model.TeamModel.findOne({ teamID: payload[0] });
         await model.RequestModel.updateOne(
-          { requestID: payload[1] },
+          { _id: payload[1] },
           { $set: { status: "cancel" } }
         );
-
+        await userData.populate("requests").execPopulate();
+        sendData(["CANCELREQUEST", userData.requests], ws);
         break;
       }
       case "GETUSER": {
         let userData = await model.TeamModel.findOne({ teamID: payload });
         await userData.populate("requests").execPopulate();
         console.log(userData.requests);
-        sendData(["GETUSER", userData.requests], ws);
+        sendData(
+          [
+            "GETUSER",
+            { userData: userData.requests, userCards: userData.myCards },
+          ],
+          ws
+        );
         // sendStatus(["success", "Get successfully"], ws);
         break;
       }

@@ -21,6 +21,7 @@ const MakeNTUContext = React.createContext({
   setAlert: () => {},
   userData: [],
   getUser: () => {},
+  userCards: [],
 });
 
 const MakeNTUProvider = (props) => {
@@ -31,6 +32,7 @@ const MakeNTUProvider = (props) => {
 
   const [cardData, setCardData] = React.useState([]);
   const [userData, setUserData] = React.useState([]);
+  const [userCards, setUserCards] = React.useState([]);
   client.onmessage = async (byteString) => {
     //收回傳訊息
     const { data } = byteString;
@@ -39,11 +41,13 @@ const MakeNTUProvider = (props) => {
     console.log(task, payload);
     switch (task) {
       case "CANCELREQUEST": {
+        setUserData(payload);
         //im not sure what to do
         break;
       }
       case "GETUSER": {
-        setUserData(payload);
+        setUserData(payload.userData);
+        setUserCards(payload.userCards);
         break;
       }
       case "INITUSERCARD": {
@@ -137,6 +141,7 @@ const MakeNTUProvider = (props) => {
         getUser,
         userData,
         cancelRequest,
+        userCards,
       }}
       {...props}
     />

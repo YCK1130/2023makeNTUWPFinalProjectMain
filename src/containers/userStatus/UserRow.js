@@ -5,12 +5,11 @@ import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import RowContent from "./UserRowContent";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
-  const [timer, setTimer] = React.useState(0);
-  const intervalRef = useRef();
+  const { row, userID } = props;
+  const [open, setOpen] = useState(false);
+  const [timer, setTimer] = useState(0);
 
   //timer
   var intervalId;
@@ -22,20 +21,24 @@ function Row(props) {
       setTimer((t) => t - 1);
     }, 1000);
     console.log("break!");
-    return () => clearInterval(intervalId);
+    //return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     if (timer < 0) {
-      console.log("out of time");
+      //console.log("out of time");
       clearInterval(intervalId);
     }
   }, [timer]);
+
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
         <TableCell align="left" sx={{ fontSize: 19 }}>
-          {row.status === "unsolved" ? "申請中" : "請來拿"}
+          {
+            //row.status === "unsolved" ? "申請中" : "請來拿"
+          }
+          {row.status}
         </TableCell>
 
         <TableCell align="right" sx={{ fontSize: 20 }}>
@@ -52,7 +55,7 @@ function Row(props) {
         </TableCell>
       </TableRow>
       <TableRow sx={{ maxHeight: "30vh", overflowY: "scroll" }}>
-        <RowContent row={row} open={open} />
+        <RowContent row={row} open={open} userID={userID} />
       </TableRow>
     </React.Fragment>
   );

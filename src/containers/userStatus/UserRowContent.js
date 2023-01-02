@@ -6,12 +6,26 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-
 import Box from "@mui/material/Box";
-
+import AlertWindow from "./AlertWindow";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 const rowContent = (props) => {
-  const { row, open } = props;
-  const handleClick = () => {};
+  const { row, open, userID } = props;
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const { cancelRequest } = useMakeNTU();
+  const handleClick = () => {
+    setAlertOpen(true);
+  };
+  const handleAlertClose = () => {
+    console.log("nope");
+    setAlertOpen(false);
+  };
+  const handleAlertAgree = () => {
+    console.log("yes");
+    cancelRequest([userID, row._id]);
+    setAlertOpen(false);
+  };
+
   return (
     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -43,6 +57,11 @@ const rowContent = (props) => {
           )}
         </Box>
       </Collapse>
+      <AlertWindow
+        open={alertOpen}
+        handleAlertClose={handleAlertClose}
+        handleAlertAgree={handleAlertAgree}
+      />
     </TableCell>
   );
 };
