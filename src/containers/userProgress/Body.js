@@ -40,9 +40,13 @@ function Body() {
   const [searchWord, setSearchWord] = React.useState("");
   const [searchMethod, setSearchMethod] = React.useState("Name");
 
-  const { userBoardINIT, sendData, cardData } = useMakeNTU();
+  const { userBoardINIT, sendData, getUser, cardData, userData} = useMakeNTU();
   const { userID } = useSelector(selectSession);
-  console.log("page", cardData);
+  // console.log("page", cardData);
+  useEffect(() => {
+    getUser(userID);
+  }, []);
+
   const handleCheck = (m) => {
     setSearchMethod(m);
   };
@@ -57,6 +61,7 @@ function Body() {
   };
 
   const handleNext = () => {
+    console.log(userData);
     if (activeStep === steps.length - 1) {
       setActiveStep(0);
       needList.clear();
