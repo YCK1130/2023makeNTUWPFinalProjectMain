@@ -50,6 +50,20 @@ module.exports = {
         console.log("change page to " + ws.box);
         break;
       }
+      case "DELETEREQUESTFROMUSER": {
+        let userData = await model.TeamModel.findOne({ teamID: payload[0] });
+
+        let newRequest = userData.requests;
+        const newR = newRequest.filter(
+          (re) => String(re._id) !== String(payload[1])
+        );
+        await model.TeamModel.updateOne(
+          { teamID: payload[0] },
+          { $set: { requests: newR } }
+        );
+        sendData(["DELETEREQUESTFROMUSER", payload[0]], ws);
+        break;
+      }
       case "CANCELREQUEST": {
         let userData = await model.TeamModel.findOne({ teamID: payload[0] });
         await model.RequestModel.updateOne(

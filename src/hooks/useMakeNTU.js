@@ -33,6 +33,8 @@ const MakeNTUContext = React.createContext({
   teamReqUpdateDate: [],
   breakpoints: {},
   setUserCards: () => {},
+  cancelRequest: () => {},
+  deleteRequestFromUser: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -50,6 +52,10 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
+      case "DELETEREQUESTFROMUSER": {
+        getUser(payload);
+        break;
+      }
       case "CANCELREQUEST": {
         setUserData(payload);
         //im not sure what to do
@@ -192,6 +198,12 @@ const MakeNTUProvider = (props) => {
   const getUser = (payload) => {
     sendData(["GETUSER", payload]);
   };
+  const cancelRequest = (payload) => {
+    sendData(["CANCELREQUEST", payload]);
+  };
+  const deleteRequestFromUser = (payload) => {
+    sendData(["DELETEREQUESTFROMUSER", payload]);
+  };
 
   return (
     <MakeNTUContext.Provider
@@ -216,6 +228,8 @@ const MakeNTUProvider = (props) => {
         userData,
         setUserCards,
         userCards,
+        cancelRequest,
+        deleteRequestFromUser,
       }}
       {...props}
     />
