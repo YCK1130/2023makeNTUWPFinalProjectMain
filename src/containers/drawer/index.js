@@ -321,7 +321,7 @@ const Drawer = ({ children }) => {
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={alert?.open}
-        autoHideDuration={1000}
+        autoHideDuration={alert?.duration ?? 1000}
         onClose={() => setAlert({ ...alert, open: false })}
       >
         <Alert variant="filled" severity={alert?.severity}>

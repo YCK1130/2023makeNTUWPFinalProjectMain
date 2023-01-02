@@ -30,6 +30,7 @@ const MakeNTUContext = React.createContext({
   updateReturn: () => {},
   teamReqUpdateDate: [],
   breakpoints: {},
+  handleReplaceBoard: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -155,9 +156,9 @@ const MakeNTUProvider = (props) => {
   const sendData = (data) => {
     client.send(JSON.stringify(data));
   };
-  const showAlert = (severity, msg) => {
+  const showAlert = (severity, msg, duration) => {
     //success,error
-    setAlert({ open: true, severity, msg });
+    setAlert({ open: true, severity, msg, duration });
   };
   const userBoardINIT = (payload) => {
     sendData(["INITUSERCARD", payload]);
@@ -188,6 +189,9 @@ const MakeNTUProvider = (props) => {
   const updateReturn = (payload) => {
     sendData(["UPDATERETURN", payload]);
   };
+  const handleReplaceBoard = (payload) => {
+    sendData(["REPLACEBOARD", payload]);
+  };
   return (
     <MakeNTUContext.Provider
       value={{
@@ -214,6 +218,7 @@ const MakeNTUProvider = (props) => {
         updateReturn,
         teamReqUpdateDate,
         breakpoints,
+        handleReplaceBoard,
       }}
       {...props}
     />

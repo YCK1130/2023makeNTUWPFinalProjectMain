@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import { makeStyles } from "@mui/styles";
 import SearchBar from "../../components/searchBar";
 import PropTypes from "prop-types";
 import {
@@ -13,6 +14,8 @@ import {
   Box,
 } from "@mui/material";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
+import Papa from "papaparse";
+import { useEffect } from "react";
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -30,25 +33,160 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-export default function Header({ setSaving, ableSave }) {
+
+const useStyles = makeStyles(() => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+    maxWidth: "1000px",
+    padding: "0px",
+    "& > *": {
+      margin: "auto",
+    },
+  },
+  input: {
+    display: "none",
+  },
+}));
+export default function Header({ setSaving, ableSave, data }) {
+  const classes = useStyles();
   const [importOpen, setImportOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
-  const { dataINIT } = useMakeNTU();
+  const [loaded, setLoaded] = useState(false);
+  const [newBoardData, setNewBoardData] = useState([]);
+  const [fileName, setFilename] = useState("");
+  const [uploaded, setUploaded] = useState(false);
+  const [importError, setImportError] = useState(false);
+  const [csv, setCsv] = React.useState("");
+  const { dataINIT, handleReplaceBoard, showAlert } = useMakeNTU();
+  useEffect(() => {
+    setCsv(Papa.unparse(data));
+  }, [data]);
+  const handleInitData = () => {
+    dataINIT();
+    handleCloseImport();
+  };
+
   const handleCloseImport = () => {
+    setNewBoardData([]);
+    setFilename("");
+    setLoaded(false);
+    setImportError(false);
     setImportOpen(false);
   };
   const handleImport = () => {
-    dataINIT();
-    handleCloseImport();
+    console.log("handleImport");
+    if (loaded) {
+      console.log("uploading");
+      try {
+        handleReplaceBoard(newBoardData);
+        setUploaded(true);
+        setLoaded(false);
+        setCsv(Papa.unparse(newBoardData));
+      } catch (e) {
+        showAlert("error", "Upload file Failed.");
+        console.log(e);
+      }
+    }
   };
   const handleOpenImport = () => {
     setImportOpen(true);
   };
-
+  const testRepeatArr = (arr) => {
+    return new Set(arr).size !== arr.length;
+  };
+  const handleUploadCsv = (efile) => {
+    // console.log(efile);
+    if (efile) {
+      Papa.parse(efile, {
+        skipEmptyLines: true,
+        complete(results) {
+          let valid = true;
+          console.log(results.data.slice(1));
+          results.data.slice(1).forEach((board) => {
+            if (!board[1] || !board[2] || !board[3] || !board[4]) {
+              valid = false;
+            }
+          });
+          const IDArr = results.data.slice(1).map((e) => e[0]);
+          const NameArr = results.data.slice(1).map((e) => e[1]);
+          let repeatID = testRepeatArr(IDArr);
+          let repeatName = testRepeatArr(NameArr);
+          let repeat = repeatID || repeatName;
+          if (valid && !repeat) {
+            const newData = results.data.slice(1).reduce((obj, cur) => {
+              return obj.concat([
+                {
+                  id: cur[0].toUpperCase(),
+                  name: cur[1],
+                  category: cur[2],
+                  limit: cur[3],
+                  totalNum: cur[4],
+                  remain: cur[4],
+                  image: cur[5] ?? "",
+                },
+              ]);
+            }, []);
+            console.log(newData);
+            setNewBoardData(newData);
+            setImportError(false);
+            setLoaded(true);
+            setFilename(efile.name);
+            showAlert("success", "File Loaded.", 2000);
+            return;
+          }
+          if (!valid && !repeat) {
+            showAlert("error", "Invalid data format.", 3000);
+            setImportError(true);
+          }
+          if (valid && repeat) {
+            showAlert(
+              "error",
+              `Team ${
+                repeatID && repeatName ? "ID&Name" : repeatName ? "Name" : "ID"
+              } repeat.`,
+              3000
+            );
+            setImportError(true);
+          }
+          if (!valid && repeat) {
+            showAlert(
+              "error",
+              `Invalid data format & Team ${
+                repeatID && repeatName ? "ID&Name" : repeatName ? "Name" : "ID"
+              } repeat..`,
+              3000
+            );
+            setImportError(true);
+          }
+          console.log("file");
+          setNewBoardData([]);
+          setLoaded(false);
+          setFilename("");
+        },
+      });
+    }
+  };
   const handleCloseExport = () => {
     setExportOpen(false);
   };
+  const download = (filename, text) => {
+    const element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`
+    );
+    element.setAttribute("download", filename);
+
+    element.style.display = "none";
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  };
   const handleExport = () => {
+    download(`boards_${new Date()}.csv`, csv);
     handleCloseExport();
   };
   const handleOpenExport = () => {
@@ -70,13 +208,60 @@ export default function Header({ setSaving, ableSave }) {
         >
           <DialogTitle id="simple-dialog-title">Importing Data</DialogTitle>
           <DialogContent>
-            <Box sx={{ minWidth: "15vw", minHeight: "10vh" }} />
+            <Box sx={{ minWidth: "15vw", minHeight: "10vh" }}>
+              <label htmlFor="contained-button-file">
+                <input
+                  accept=".csv"
+                  className={classes.input}
+                  id="contained-button-file"
+                  type="file"
+                  onChange={(e) => handleUploadCsv(e.target.files[0])}
+                />
+                <Button
+                  variant="contained"
+                  color={importError ? "error" : "primary"}
+                  component="span"
+                >
+                  Import csv file
+                </Button>
+              </label>
+              {loaded && !uploaded ? fileName : ""}
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseImport}>Cancel</Button>
-            <Button onClick={handleImport} variant="contained" color="primary">
-              {"Import"}
-            </Button>
+
+            {uploaded ? (
+              <Button
+                onClick={handleCloseImport}
+                variant="contained"
+                color="primary"
+              >
+                Finish
+              </Button>
+            ) : (
+              <>
+                <Button
+                  onClick={handleInitData}
+                  variant="contained"
+                  color="primary"
+                  sx={{ m: "5px" }}
+                >
+                  {"Init"}
+                </Button>
+                {loaded ? (
+                  <Button
+                    onClick={handleImport}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Upload
+                  </Button>
+                ) : (
+                  <> </>
+                )}
+              </>
+            )}
           </DialogActions>
         </Dialog>
         <Dialog

@@ -56,7 +56,6 @@ module.exports = {
         // sendStatus(["success", "Get successfully"], ws);
         break;
       }
-
       case "INITUSERCARD": {
         const boards = await model.BoardModel.find({});
         sendData(["INITUSERCARD", boards], ws);
@@ -276,6 +275,26 @@ module.exports = {
 
         sendData(["UPDATERETURN", teams], ws);
         sendStatus(["success", "Update successfully"], ws);
+        break;
+      }
+      case "REPLACEBOARD": {
+        await model.BoardModel.deleteMany({});
+        await model.RequestModel.deleteMany({});
+        await model.TeamModel.updateMany(
+          { authority: 0 },
+          { $set: { myCards: {}, request: [] } }
+        );
+
+        console.log(payload);
+        const newBoards = await Promise.all(
+          payload.map(async (newBoard) => {
+            const saveBoard = await new model.BoardModel(newBoard).save();
+            return saveBoard;
+          })
+        );
+        sendData(["GETBOARD", newBoards], ws);
+        sendStatus(["success", "Reset successfully"], ws);
+        break;
       }
     }
   },

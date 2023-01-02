@@ -31,9 +31,10 @@ export default function BoardConsole({
   saving,
   setAbleSave,
   setSaving,
+  cards,
+  setCards,
 }) {
   const history = useHistory();
-  const [cards, setCards] = useState([]);
   const [addCardData, setAddCardData] = useState({});
   const [delCardID, setDelCardID] = useState(0);
   const [changedData, setChangedData] = useState([]);
