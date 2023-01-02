@@ -15,7 +15,7 @@ import Main from "./containers/main";
 import Login from "./containers/login";
 import UserProgress from "./containers/userProgress";
 import UserStatus from "./containers/userStatus";
-import StudentData from "./containers/studentData";
+import TeamData from "./containers/teamData";
 import AdminBoardList from "./containers/adminBoardList";
 import RequestStatus from "./containers/requestStatus";
 
@@ -40,8 +40,8 @@ const Routes = () => {
       <LoginRoute exact path="/login">
         <Login />
       </LoginRoute>
-      <PrivateRoute exact path="/studentdata">
-        <StudentData />
+      <PrivateRoute exact path="/teamdata">
+        <TeamData />
       </PrivateRoute>
       <PrivateRoute exact path="/boardlist">
         <AdminBoardList />

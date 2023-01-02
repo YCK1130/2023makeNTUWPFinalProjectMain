@@ -26,7 +26,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import HomeIcon from "@mui/icons-material/Home"; // Main
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"; // Login, Logout
-import PeopleIcon from "@mui/icons-material/People"; // Student Data
+import PeopleIcon from "@mui/icons-material/People"; // Team Data
 import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard"; //boardList
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; //租借開發版
 import FactCheckIcon from "@mui/icons-material/FactCheck";
@@ -161,8 +161,8 @@ const Drawer = ({ children }) => {
           //admin區
           { text: "Main", to: "/", icon: <HomeIcon /> },
           {
-            text: "Student Data",
-            to: "/studentdata",
+            text: "Team Data",
+            to: "/teamdata",
             icon: <PeopleIcon />,
           },
           {

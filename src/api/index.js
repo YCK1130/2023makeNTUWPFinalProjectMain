@@ -23,8 +23,8 @@ export const SessionAPI = {
   deleteSession: () => axios.delete(`/api/session`),
 };
 
-export const StudentDataAPI = {
-  getStudentData: () =>
+export const TeamDataAPI = {
+  getTeamData: () =>
     axios
       .get(`/api/users`, {
         params: {
@@ -35,13 +35,13 @@ export const StudentDataAPI = {
         },
       })
       .catch((error) => errorHandling(error)),
-  postStudentData: (teams) =>
+  postTeamData: (teams) =>
     axios.post(`/api/users`, teams).catch((error) => errorHandling(error)),
-  deleteStudentData: (ids) =>
+  deleteTeamData: (ids) =>
     axios
       .delete(`/api/users`, { data: [...ids] })
       .catch((error) => errorHandling(error)),
-  putStudentData: (team) =>
+  putTeamData: (team) =>
     axios.put(`/api/users`, team).catch((error) => errorHandling(error)),
 };
 

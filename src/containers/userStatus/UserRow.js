@@ -19,7 +19,7 @@ function Row(props) {
   useEffect(() => {
     var d = new Date().getTime(); //number
     var pretime = parseInt(
-      1 * 40 - Math.floor((d - row.sendingTime) / 1000),
+      15 * 60 - Math.floor((d - row.sendingTime) / 1000),
       10
     );
     setTimer(pretime);
