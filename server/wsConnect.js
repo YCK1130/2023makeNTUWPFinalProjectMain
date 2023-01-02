@@ -71,6 +71,22 @@ const broadcast = (condictions, data) => {
     sendData(data, client);
   });
 };
+const changeBoardRemain = async (req) => {
+  try {
+    req.requestBody.map(async (re) => {
+      let board = await model.BoardModel.findOne({ name: re.board });
+      await model.BoardModel.updateOne(
+        { name: re.board },
+        { $set: { remain: board.remain + re.quantity } }
+      );
+    });
+  } catch (e) {
+    throw new Error("Message DB save error: " + e);
+  }
+  const newBoard = await model.BoardModel.find({});
+  broadcastPage("userProgress", ["AddBoard", newBoard]);
+};
+
 const requestExpired = async (id, status) => {
   let request = await model.RequestModel.findOne({ requestID: id });
   if (request.status === status) {
@@ -79,6 +95,8 @@ const requestExpired = async (id, status) => {
       { $set: { status: "expired" } }
     );
   }
+  await changeBoardRemain(request);
+  // broadcastPage("requestStatus", ["AddBoard", newBoard]);
   return;
 };
 const updateMyCards = async (group, request) => {
@@ -146,7 +164,8 @@ module.exports = {
           { teamID: payload[0] },
           { $set: { requests: newR } }
         );
-        sendData(["DELETEREQUESTFROMUSER", payload[0]], ws);
+        await userData.populate("requests").execPopulate();
+        broadcastPage("userStatus", ["GETUSER", userData]);
         break;
       }
       case "CANCELREQUEST": {
@@ -155,21 +174,17 @@ module.exports = {
           { _id: payload[1] },
           { $set: { status: "cancel" } }
         );
+        let request = await model.RequestModel.findById(payload[1]);
+        await changeBoardRemain(request);
         await userData.populate("requests").execPopulate();
-        sendData(["CANCELREQUEST", userData.requests], ws);
+        //broadcastPage("requestStatus", ["AddBoard", newBoard]);
+        broadcastPage("userStatus", ["GETUSER", userData]);
         break;
       }
       case "GETUSER": {
         let userData = await model.TeamModel.findOne({ teamID: payload });
         await userData.populate("requests").execPopulate();
-        // console.log(userData.requests);
-        sendData(
-          [
-            "GETUSER",
-            { userRequest: userData.requests, userCards: userData.myCards },
-          ],
-          ws
-        );
+        sendData(["GETUSER", userData], ws);
         // sendStatus(["success", "Get successfully"], ws);
         break;
       }

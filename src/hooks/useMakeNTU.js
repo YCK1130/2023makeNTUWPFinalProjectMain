@@ -36,7 +36,7 @@ const MakeNTUContext = React.createContext({
   breakpoints: {},
   cancelRequest: () => {},
   deleteRequestFromUser: () => {},
-  subscribe: () => {}, 
+  subscribe: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -46,7 +46,6 @@ const MakeNTUProvider = (props) => {
   const [updateBoardStatus, setUpdateBoardStatus] = React.useState("");
   const [userCards, setUserCards] = React.useState([]);
   const [cardData, setCardData] = React.useState([]);
-
   const [requestData, setRequestData] = React.useState([]);
   const [teamReqUpdateDate, setTeamReqUpdateDate] = React.useState([]);
   const [userRequest, setUserRequest] = React.useState([]);
@@ -58,19 +57,9 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
-      case "DELETEREQUESTFROMUSER": {
-        getUser(payload);
-        break;
-      }
-      case "CANCELREQUEST": {
-        setUserRequest(payload);
-        //im not sure what to do
-        break;
-      }
       case "GETUSER": {
-        setUserRequest(payload.userRequest);
-        if (payload.userCards) setUserCards(payload.userCards);
-        else setUserCards([]);
+        setUserRequest(payload.requests ? payload.requests : []);
+        setUserCards(payload.myCards ? payload.myCards : []);
         break;
       }
       case "GETREQUEST": {
@@ -176,7 +165,7 @@ const MakeNTUProvider = (props) => {
   };
   const subscribe = (payload) => {
     sendData(["SUBSCRIBE", payload]);
-  }
+  };
   const userBoardINIT = (payload) => {
     sendData(["INITUSERCARD", payload]);
   };

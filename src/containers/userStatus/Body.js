@@ -27,11 +27,12 @@ const Wrapper = styled.div`
   // overflow-y: hidden;
 `;
 function Body() {
-  const { userRequest, getUser, userCards } = useMakeNTU();
+  const { userRequest, getUser, userCards, subscribe } = useMakeNTU();
   const { userID } = useSelector(selectSession);
 
   useEffect(() => {
     getUser(userID);
+    subscribe("userStatus");
   }, []);
 
   return (
