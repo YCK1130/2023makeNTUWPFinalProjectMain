@@ -35,10 +35,7 @@ function Row(props) {
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
         <TableCell align="left" sx={{ fontSize: 19 }}>
-          {
-            //row.status === "unsolved" ? "申請中" : "請來拿"
-          }
-          {row.status}
+          {row.status === "pending" ? "申請中" : "請來拿"}
         </TableCell>
 
         <TableCell align="right" sx={{ fontSize: 20 }}>

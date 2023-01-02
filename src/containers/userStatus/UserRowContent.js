@@ -50,7 +50,7 @@ const rowContent = (props) => {
           </Table>
         </Box>
         <Box sx={{ margin: 1, display: "flex", flexDirection: "row-reverse" }}>
-          {row.status === "unsolved" ? (
+          {row.status === "pending" ? (
             <Chip label="Cancel" variant="outlined" onClick={handleClick} />
           ) : (
             <></>
