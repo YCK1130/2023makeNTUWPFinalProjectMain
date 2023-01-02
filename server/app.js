@@ -37,7 +37,7 @@ db.once("open", async () => {
   }
 
   wss.on("connection", (ws) => {
-    ws.box = "";
+    ws.box = "";  //記page
     ws.onmessage = wsConnect.onMessage(ws); //當ws有message時，執行後面的把丟入method
   });
 

@@ -7,6 +7,7 @@ const client = new WebSocket("ws://localhost:4000"); //step 2
 
 const MakeNTUContext = React.createContext({
   dataINIT: () => {},
+  WSINIT: () => {},
   userBoardINIT: () => {},
   sendData: () => {},
   cardData: [],
@@ -148,6 +149,7 @@ const MakeNTUProvider = (props) => {
       },
     ]);
   };
+
   const sendData = (data) => {
     client.send(JSON.stringify(data));
   };
@@ -155,6 +157,9 @@ const MakeNTUProvider = (props) => {
     //success,error
     setAlert({ open: true, severity, msg });
   };
+  const WSINIT = (payload) => {
+    sendData(["WSINIT", payload]);
+  }
   const userBoardINIT = (payload) => {
     sendData(["INITUSERCARD", payload]);
   };
@@ -189,6 +194,7 @@ const MakeNTUProvider = (props) => {
       value={{
         dataINIT,
         userBoardINIT,
+        WSINIT,
         addBoard,
         deleteBoard,
         updateBoards,

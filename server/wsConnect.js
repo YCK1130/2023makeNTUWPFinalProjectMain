@@ -1,24 +1,12 @@
 const { BreakfastDiningOutlined } = require("@mui/icons-material");
 const model = require("./database/mongo/model");
-
 //import { TeamModel, RequestModel, BoardModel} from "./database/mongo/model";
-const board = [
-  { name: "A", tag: "Arduino", left: "2", v: true, ID: "1" },
-  { name: "B", tag: "Arduino", left: "5", v: true, ID: "2" },
-  { name: "C", tag: "Rpi", left: "1", v: true, ID: "3" },
-  { name: "D", tag: "Rpi", left: "5", v: true, ID: "4" },
-  { name: "E", tag: "Rpi", left: "2", v: true, ID: "5" },
-  { name: "F", tag: "Arduino", left: "10", v: true, ID: "6" },
-  { name: "G", tag: "Rpi", left: "5", v: true, ID: "7" },
-  { name: "H", tag: "Arduino", left: "1", v: true, ID: "8" },
-  { name: "I", tag: "Rpi", left: "3", v: true, ID: "9" },
-  { name: "J", tag: "Arduino", left: "150", v: true, ID: "10" },
-  { name: "K", tag: "Rpi", left: "2", v: true, ID: "11" },
-  { name: "L", tag: "Arduino", left: "2", v: true, ID: "13" },
-  { name: "M", tag: "Rpi", left: "5", v: true, ID: "14" },
-  { name: "N", tag: "Arduino", left: "1", v: true, ID: "15" },
-  { name: "Nano 33 IoT", tag: "Arduino", left: "5", v: false, ID: "24" },
-];
+
+const userID = {}; //記ws是哪個group => 給需要呼叫該組時
+const userAuth = {}; //記ws的authority => 給需要更新data時
+const userPage = {}; //記ws現在在哪個page => 給需要更新data時
+
+
 const sendData = (data, ws) => {
   ws.send(JSON.stringify(data));
 };
@@ -47,8 +35,31 @@ module.exports = {
     const { data } = byteString;
     const [task, payload] = JSON.parse(data);
     console.log(task, payload);
+    
     switch (task) {
+      case "WSINIT" : {
+        const { id, authority } = payload;
+        if (!userID[id]) userID[id] = new Set();
+				userID[id].add(ws);
+        if (!userAuth[authority]) userAuth[authority] = new Set();
+				userAuth[authority].add(ws);
+        if (!userPage["main"]) userPage["main"] = new Set();
+				userPage["main"].add(ws);
+        ws.box = "main";
+
+        console.log(id,authority)
+        console.log("change page to "+ws.box)
+        break;
+      }
       case "GETUSER": {
+        if(userPage[ws.box]){
+          userPage[ws.box].delete(ws);
+        }
+        if (!userPage["userStatus"]) userPage["userStatus"] = new Set();
+				userPage["userStatus"].add(ws);
+        ws.box = "userStatus";
+        console.log("change page to "+ws.box)
+
         let userData = await model.TeamModel.findOne({ teamID: payload });
         await userData.populate("requests").execPopulate();
         console.log(userData.requests);
@@ -58,6 +69,14 @@ module.exports = {
       }
 
       case "INITUSERCARD": {
+        if(userPage[ws.box]){
+          userPage[ws.box].delete(ws);
+        }
+        if (!userPage["userProgress"]) userPage["userProgress"] = new Set();
+				userPage["userProgress"].add(ws);
+        ws.box = "userProgress";
+        console.log("change page to "+ws.box)
+
         const boards = await model.BoardModel.find({});
         sendData(["INITUSERCARD", boards], ws);
         // sendStatus(["success", "Get successfully"], ws);
@@ -122,6 +141,14 @@ module.exports = {
         break;
       }
       case "GETBOARD": {
+        if(userPage[ws.box]){
+          userPage[ws.box].delete(ws);
+        }
+        if (!userPage["adminBoardList"]) userPage["adminBoardList"] = new Set();
+				userPage["adminBoardList"].add(ws);
+        ws.box = "adminBoardList";
+        console.log("change page to "+ws.box)
+
         const boards = await model.BoardModel.find({});
         // console.log(boards);
         sendData(["GETBOARD", boards], ws);
