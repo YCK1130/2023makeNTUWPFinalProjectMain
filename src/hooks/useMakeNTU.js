@@ -8,6 +8,7 @@ const client = new WebSocket("ws://localhost:4000"); //step 2
 
 const MakeNTUContext = React.createContext({
   dataINIT: () => {},
+  WSINIT: () => {},
   userBoardINIT: () => {},
   sendData: () => {},
   cardData: [],
@@ -22,8 +23,9 @@ const MakeNTUContext = React.createContext({
   updateBoardStatus: "",
   showAlert: () => {},
   setAlert: () => {},
-  userData: [],
+  userRequest: [],
   getUser: () => {},
+  userCards: [],
   requestData: [],
   getRequest: () => {},
   updateReq: () => {},
@@ -31,6 +33,11 @@ const MakeNTUContext = React.createContext({
   teamReqUpdateDate: [],
   breakpoints: {},
   handleReplaceBoard: () => {},
+  breakpoints: {},
+  setUserCards: () => {},
+  cancelRequest: () => {},
+  deleteRequestFromUser: () => {},
+  requestExpired: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -38,12 +45,12 @@ const MakeNTUProvider = (props) => {
   const [addBoardData, setAddBoardData] = React.useState({});
   const [getBoardData, setGetBoardData] = React.useState([]);
   const [updateBoardStatus, setUpdateBoardStatus] = React.useState("");
-
+  const [userCards, setUserCards] = React.useState([]);
   const [cardData, setCardData] = React.useState([]);
-  const [userData, setUserData] = React.useState([]);
+
   const [requestData, setRequestData] = React.useState([]);
   const [teamReqUpdateDate, setTeamReqUpdateDate] = React.useState([]);
-
+  const [userRequest, setUserRequest] = React.useState([]);
   const breakpoints = useBreakpoints();
   client.onmessage = async (byteString) => {
     //收回傳訊息
@@ -52,8 +59,23 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
-      case "GETUSER": {
+      case "REQUESTEXPIRED": {
+        getUser(payload);
+        break;
+      }
+      case "DELETEREQUESTFROMUSER": {
+        getUser(payload);
+        break;
+      }
+      case "CANCELREQUEST": {
         setUserData(payload);
+        //im not sure what to do
+        break;
+      }
+      case "GETUSER": {
+        setUserRequest(payload.userRequest);
+        if (payload.userCards) setUserCards(payload.userCards);
+        else setUserCards([]);
         break;
       }
       case "GETREQUEST": {
@@ -153,12 +175,16 @@ const MakeNTUProvider = (props) => {
       },
     ]);
   };
+
   const sendData = (data) => {
     client.send(JSON.stringify(data));
   };
   const showAlert = (severity, msg, duration) => {
     //success,error
     setAlert({ open: true, severity, msg, duration });
+  };
+  const WSINIT = (payload) => {
+    sendData(["WSINIT", payload]);
   };
   const userBoardINIT = (payload) => {
     sendData(["INITUSERCARD", payload]);
@@ -183,6 +209,15 @@ const MakeNTUProvider = (props) => {
   const getUser = (payload) => {
     sendData(["GETUSER", payload]);
   };
+  const cancelRequest = (payload) => {
+    sendData(["CANCELREQUEST", payload]);
+  };
+  const deleteRequestFromUser = (payload) => {
+    sendData(["DELETEREQUESTFROMUSER", payload]);
+  };
+  const requestExpired = (payload) => {
+    sendData(["REQUESTEXPIRED", payload]);
+  };
   const getRequest = (payload) => {
     sendData(["GETREQUEST", payload]);
   };
@@ -197,6 +232,7 @@ const MakeNTUProvider = (props) => {
       value={{
         dataINIT,
         userBoardINIT,
+        WSINIT,
         addBoard,
         deleteBoard,
         updateBoards,
@@ -211,12 +247,12 @@ const MakeNTUProvider = (props) => {
         sendData,
         cardData,
         getUser,
-        userData,
-        requestData,
-        getRequest,
-        updateReq,
-        updateReturn,
-        teamReqUpdateDate,
+        userRequest,
+
+        userCards,
+        cancelRequest,
+        deleteRequestFromUser,
+        requestExpired,
         breakpoints,
         handleReplaceBoard,
       }}

@@ -17,6 +17,7 @@ function GroupStatus(props) {
     ready: "呼叫中",
     denied: "已拒絕",
     cancel: "已取消",
+    expired: "已逾期",
   };
   return (
     <React.Fragment>

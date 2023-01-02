@@ -5,24 +5,86 @@ import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import RowContent from "./UserRowContent";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
+
 function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState("");
+  const { row, userID } = props;
+  const [open, setOpen] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const { deleteRequestFromUser, requestExpired } = useMakeNTU();
+  let intervalId = useRef();
+  //timer
   useEffect(() => {
     var d = new Date().getTime(); //number
-    setInterval(function () {}, 1000);
+    var pretime = parseInt(1 * 20 - (d - row.sendingTime) / 1000, 10);
+    setTimer(pretime);
+    if (row.status === "pending" || row.status === "ready") {
+      intervalId.current = setInterval(() => {
+        setTimer((t) => t - 1);
+      }, 1000);
+      console.log("break!");
+      return () => clearInterval(intervalId.current);
+    }
   }, []);
+
+  useEffect(() => {
+    if (timer < 0) {
+      clearInterval(intervalId.current);
+      requestExpired([userID, row._id]);
+    }
+  }, [timer]);
+
+  const showTime = () => {
+    if (
+      row.status === "denied" ||
+      row.status === "cancel" ||
+      row.status === "expired"
+    ) {
+      return "00 : 00";
+    }
+    var min = (timer % 60) / 10 < 1 ? "0" + (timer % 60) : timer % 60;
+    return parseInt(timer / 60) + " : " + min;
+  };
+
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
-        <TableCell align="left">
-          {row.status === "unsolved" ? "申請中" : "請來拿"}
+        {row.status === "pending" ? (
+          <TableCell align="left" sx={{ fontSize: 19 }}>
+            申請中
+          </TableCell>
+        ) : row.status === "ready" ? (
+          <TableCell align="left" sx={{ fontSize: 19 }}>
+            請來拿
+          </TableCell>
+        ) : (
+          <TableCell align="left" sx={{ fontSize: 19, color: "red" }}>
+            {row.status === "denied"
+              ? "已拒絕"
+              : row.status === "cancel"
+              ? "已取消"
+              : "已超時 請重新申請"}
+          </TableCell>
+        )}
+
+        <TableCell align="right" sx={{ fontSize: 20 }}>
+          {showTime()}
         </TableCell>
 
-        <TableCell align="right">{row.sendingTime}</TableCell>
-        <TableCell align="right">
+        <TableCell align="right" sx={{ display: "flex" }}>
+          {row.status !== "pending" && row.status !== "ready" ? (
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => deleteRequestFromUser([userID, row._id])}
+            >
+              <DeleteIcon />
+            </IconButton>
+          ) : (
+            ""
+          )}
           <IconButton
             aria-label="expand row"
             size="small"
@@ -33,7 +95,7 @@ function Row(props) {
         </TableCell>
       </TableRow>
       <TableRow sx={{ maxHeight: "30vh", overflowY: "scroll" }}>
-        <RowContent row={row} open={open} />
+        <RowContent row={row} open={open} userID={userID} />
       </TableRow>
     </React.Fragment>
   );

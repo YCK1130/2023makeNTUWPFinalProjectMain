@@ -14,33 +14,6 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
 import { useEffect, useState } from "react";
-function createData(_id, status, sendingTime) {
-  return {
-    _id,
-    status,
-    sendingTime,
-    details: [
-      { stuff: "開發板1", amount: "3個" },
-      { stuff: "開發板7", amount: "8個" },
-      { stuff: "開發板1", amount: "3個" },
-      { stuff: "開發板4", amount: "8個" },
-      { stuff: "開發板6", amount: "3個" },
-      { stuff: "開發板7", amount: "8個" },
-      { stuff: "開發板6", amount: "3個" },
-      { stuff: "開發板7", amount: "8個" },
-      { stuff: "開發板6", amount: "3個" },
-      { stuff: "開發板7", amount: "8個" },
-    ],
-  };
-}
-
-const rows2 = [
-  createData(1, "pending", "timing"),
-  createData(2, "pending", "timing"),
-  createData(3, "canTake", "timing"),
-  createData(4, "pending", "timing"),
-  createData(5, "canTake", "timing"),
-];
 
 const Wrapper = styled.div`
   width: 100%;
@@ -54,14 +27,11 @@ const Wrapper = styled.div`
   // overflow-y: hidden;
 `;
 function Body() {
-  const { userData, getUser } = useMakeNTU();
+  const { userRequest, getUser, userCards } = useMakeNTU();
   const { userID } = useSelector(selectSession);
-  const [rows, setRows] = useState([]);
-  console.log("page"); //typeof userData[0].sendingTime);
 
   useEffect(() => {
     getUser(userID);
-    console.log(userData);
   }, []);
 
   return (
@@ -118,8 +88,8 @@ function Body() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {userData.map((row) => (
-                  <Row key={row._id} row={row} />
+                {userRequest.map((row) => (
+                  <Row key={row._id} row={row} userID={userID} />
                 ))}
               </TableBody>
             </Table>
@@ -143,10 +113,11 @@ function Body() {
             alignContent: "start",
           }}
         >
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {userCards
+            ? Object.keys(userCards).map((element) => {
+                return <Card num={userCards[element]} name={element} />;
+              })
+            : ""}
         </Box>
       </Box>
     </Wrapper>

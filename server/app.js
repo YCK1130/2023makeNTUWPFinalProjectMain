@@ -24,8 +24,8 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", async () => {
   console.log("Successfully connect to MongoDB!");
   console.log(`dbName = "${process.env.MONGO_DBNAME}"`);
-  await model.BoardModel.deleteMany({});
-  await model.RequestModel.deleteMany({});
+  //await model.BoardModel.deleteMany({});
+  //await model.RequestModel.deleteMany({});
 
   const app = express();
   const server = http.createServer(app);
@@ -37,7 +37,7 @@ db.once("open", async () => {
   }
 
   wss.on("connection", (ws) => {
-    ws.box = "";
+    ws.box = ""; //記page
     ws.onmessage = wsConnect.onMessage(ws); //當ws有message時，執行後面的把丟入method
   });
 
