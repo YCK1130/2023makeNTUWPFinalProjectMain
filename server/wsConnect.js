@@ -6,7 +6,6 @@ const userID = {}; //記ws是哪個group => 給需要呼叫該組時
 const userAuth = {}; //記ws的authority => 給需要更新data時
 const userPage = {}; //記ws現在在哪個page => 給需要更新data時
 
-
 const sendData = (data, ws) => {
   ws.send(JSON.stringify(data));
 };
@@ -35,47 +34,63 @@ module.exports = {
     const { data } = byteString;
     const [task, payload] = JSON.parse(data);
     console.log(task, payload);
-    
+
     switch (task) {
-      case "WSINIT" : {
+      case "WSINIT": {
         const { id, authority } = payload;
         if (!userID[id]) userID[id] = new Set();
-				userID[id].add(ws);
+        userID[id].add(ws);
         if (!userAuth[authority]) userAuth[authority] = new Set();
-				userAuth[authority].add(ws);
+        userAuth[authority].add(ws);
         if (!userPage["main"]) userPage["main"] = new Set();
-				userPage["main"].add(ws);
+        userPage["main"].add(ws);
         ws.box = "main";
 
-        console.log(id,authority)
-        console.log("change page to "+ws.box)
+        console.log(id, authority);
+        console.log("change page to " + ws.box);
+        break;
+      }
+      case "CANCELREQUEST": {
+        let userData = await model.TeamModel.findOne({ teamID: payload[0] });
+        await model.RequestModel.updateOne(
+          { _id: payload[1] },
+          { $set: { status: "cancel" } }
+        );
+        await userData.populate("requests").execPopulate();
+        sendData(["CANCELREQUEST", userData.requests], ws);
         break;
       }
       case "GETUSER": {
-        if(userPage[ws.box]){
+        if (userPage[ws.box]) {
           userPage[ws.box].delete(ws);
         }
         if (!userPage["userStatus"]) userPage["userStatus"] = new Set();
-				userPage["userStatus"].add(ws);
+        userPage["userStatus"].add(ws);
         ws.box = "userStatus";
-        console.log("change page to "+ws.box)
+        console.log("change page to " + ws.box);
 
         let userData = await model.TeamModel.findOne({ teamID: payload });
         await userData.populate("requests").execPopulate();
         console.log(userData.requests);
-        sendData(["GETUSER", userData.requests], ws);
+        sendData(
+          [
+            "GETUSER",
+            { userData: userData.requests, userCards: userData.myCards },
+          ],
+          ws
+        );
         // sendStatus(["success", "Get successfully"], ws);
         break;
       }
 
       case "INITUSERCARD": {
-        if(userPage[ws.box]){
+        if (userPage[ws.box]) {
           userPage[ws.box].delete(ws);
         }
         if (!userPage["userProgress"]) userPage["userProgress"] = new Set();
-				userPage["userProgress"].add(ws);
+        userPage["userProgress"].add(ws);
         ws.box = "userProgress";
-        console.log("change page to "+ws.box)
+        console.log("change page to " + ws.box);
 
         const boards = await model.BoardModel.find({});
         sendData(["INITUSERCARD", boards], ws);
@@ -141,13 +156,13 @@ module.exports = {
         break;
       }
       case "GETBOARD": {
-        if(userPage[ws.box]){
+        if (userPage[ws.box]) {
           userPage[ws.box].delete(ws);
         }
         if (!userPage["adminBoardList"]) userPage["adminBoardList"] = new Set();
-				userPage["adminBoardList"].add(ws);
+        userPage["adminBoardList"].add(ws);
         ws.box = "adminBoardList";
-        console.log("change page to "+ws.box)
+        console.log("change page to " + ws.box);
 
         const boards = await model.BoardModel.find({});
         // console.log(boards);

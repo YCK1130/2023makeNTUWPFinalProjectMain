@@ -18,8 +18,8 @@ const Img = styled("img")({
 });
 
 export default function Card(props) {
-  const [num, setNum] = React.useState(0);
-
+  //const [num, setNum] = React.useState(0);
+  const { num, name } = props;
   //console.log(props.addNeedList);
   /*useEffect(() => {
     if (props.needList.has(props.id)) {
@@ -52,7 +52,7 @@ export default function Card(props) {
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div">
-                props.name
+                {name}
               </Typography>
               <Typography variant="body2" gutterBottom>
                 props.tag
@@ -67,7 +67,7 @@ export default function Card(props) {
                 id="outlined-disabled"
                 label="Amount"
                 size="small"
-                defaultValue="33個"
+                defaultValue={num}
               />
             </Grid>
           </Grid>

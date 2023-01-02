@@ -25,6 +25,7 @@ const MakeNTUContext = React.createContext({
   setAlert: () => {},
   userData: [],
   getUser: () => {},
+  userCards: [],
   requestData: [],
   getRequest: () => {},
   updateReq: () => {},
@@ -41,10 +42,6 @@ const MakeNTUProvider = (props) => {
 
   const [cardData, setCardData] = React.useState([]);
   const [userData, setUserData] = React.useState([]);
-  const [requestData, setRequestData] = React.useState([]);
-  const [teamReqUpdateDate, setTeamReqUpdateDate] = React.useState([]);
-
-  const breakpoints = useBreakpoints();
   client.onmessage = async (byteString) => {
     //收回傳訊息
     const { data } = byteString;
@@ -52,8 +49,14 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
-      case "GETUSER": {
+      case "CANCELREQUEST": {
         setUserData(payload);
+        //im not sure what to do
+        break;
+      }
+      case "GETUSER": {
+        setUserData(payload.userData);
+        setUserCards(payload.userCards);
         break;
       }
       case "GETREQUEST": {
@@ -163,7 +166,7 @@ const MakeNTUProvider = (props) => {
   };
   const WSINIT = (payload) => {
     sendData(["WSINIT", payload]);
-  }
+  };
   const userBoardINIT = (payload) => {
     sendData(["INITUSERCARD", payload]);
   };
@@ -187,12 +190,7 @@ const MakeNTUProvider = (props) => {
   const getUser = (payload) => {
     sendData(["GETUSER", payload]);
   };
-  const getRequest = (payload) => {
-    sendData(["GETREQUEST", payload]);
-  };
-  const updateReturn = (payload) => {
-    sendData(["UPDATERETURN", payload]);
-  };
+
   return (
     <MakeNTUContext.Provider
       value={{
@@ -214,12 +212,6 @@ const MakeNTUProvider = (props) => {
         cardData,
         getUser,
         userData,
-        requestData,
-        getRequest,
-        updateReq,
-        updateReturn,
-        teamReqUpdateDate,
-        breakpoints,
       }}
       {...props}
     />
