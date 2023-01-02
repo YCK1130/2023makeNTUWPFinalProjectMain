@@ -25,7 +25,7 @@ const updateMyCards = async (group, request) => {
     })
   );
   await gp.save();
-  console.log(gp.myCards);
+  // console.log(gp.myCards);
   //console.log(gp, "hi");
 };
 
@@ -94,7 +94,7 @@ module.exports = {
 
         let userData = await model.TeamModel.findOne({ teamID: payload });
         await userData.populate("requests").execPopulate();
-        console.log(userData.requests);
+        // console.log(userData.requests);
         sendData(
           [
             "GETUSER",
@@ -328,9 +328,9 @@ module.exports = {
             else return item;
           });
           myboard.invoice = newInvoice.filter((item) => item.number > 0);
-          console.log(myboard.invoice);
+          // console.log(myboard.invoice);
           await myboard.save();
-          console.log(myboard.invoice);
+          // console.log(myboard.invoice);
           if (teamsCard[key] === 0) delete teamsCard[key];
         }
         team.myCards = teamsCard;

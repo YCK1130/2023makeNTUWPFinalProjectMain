@@ -145,7 +145,8 @@ export default function RequestConsole({ breakpoints }) {
                   (request) =>
                     request?.status?.toUpperCase() !== "solved".toUpperCase() &&
                     request?.status?.toUpperCase() !== "denied".toUpperCase() &&
-                    request?.status?.toUpperCase() !== "cancel".toUpperCase()
+                    request?.status?.toUpperCase() !== "cancel".toUpperCase() &&
+                    request?.status?.toUpperCase() !== "expired".toUpperCase()
                 )
                 .map((request) => {
                   return (
@@ -220,7 +221,8 @@ export default function RequestConsole({ breakpoints }) {
               {requests
                 .filter(
                   (request) =>
-                    request?.status?.toUpperCase() === "cancel".toUpperCase()
+                    request?.status?.toUpperCase() === "cancel".toUpperCase() ||
+                    request?.status?.toUpperCase() === "expired".toUpperCase()
                 )
                 .map((request) => {
                   return (
