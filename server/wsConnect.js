@@ -67,6 +67,7 @@ const broadcast = (condictions, data) => {
     }
     validSet = new Set(validSet);
   }
+  if (!validSet) return;
   validSet.forEach((client) => {
     sendData(data, client);
   });
