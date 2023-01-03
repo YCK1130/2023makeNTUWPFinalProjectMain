@@ -20,7 +20,7 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 const steps = ["挑選開發版", "確認並送出", "申請結果"];
 
-const needList = new Map();
+var needList = {};
 
 const Wrapper = styled.div`
   width: 100%;
@@ -39,7 +39,9 @@ function Body() {
   const [rerender, setRerender] = React.useState(false);
   const [searchWord, setSearchWord] = React.useState("");
   const [searchMethod, setSearchMethod] = React.useState("Name");
-
+  //const [needList, setNeedList] = React.useState({});
+  const [userCardData, setUserCardData] = React.useState([]);
+  const [ableNext, setAbleNext] = React.useState(false);
   const {
     userBoardINIT,
     sendData,
@@ -54,38 +56,47 @@ function Body() {
   useEffect(() => {
     getUser(userID);
     subscribe({ id: userID, authority: authority, page: "userProgress" });
+    needList = {};
   }, []);
+  useEffect(() => {
+    setUserCardData(
+      cardData.map((e) => {
+        e.needList = needList;
+        return e;
+      })
+    );
+    setRerender(false);
+  }, [needList, cardData, rerender]);
 
   useEffect(() => {
-    needList.clear();
+    needList = {};
   }, [userID]);
-
-  const handleCheck = (m) => {
-    setSearchMethod(m);
-  };
 
   const addNeedList = (name, quantity) => {
     if (quantity === 0) {
-      needList.delete(name, needList.get(name));
+      delete needList[name];
     } else {
-      needList.set(name, quantity);
+      needList[name] = quantity;
     }
     //console.log([...needList]);
+    setAbleNext(Object.keys(needList).length !== 0);
   };
 
   const handleNext = () => {
     console.log(userRequest, userCards);
     if (activeStep === steps.length - 1) {
-      setActiveStep(0);
-      needList.clear();
+      handleReset();
       return;
     } else if (activeStep === steps.length - 2) {
       let requestBody = [];
       let group = userID;
 
-      for (var [key, value] of needList.entries()) {
-        requestBody.push([key, value]);
-      }
+      // for (var [key, value] of needList.entries()) {
+      //   requestBody.push([key, value]);
+      // }
+      Object.keys(needList).forEach(function (key) {
+        requestBody.push([key, needList[key]]);
+      });
       // console.log({ group, requestBody });
       sendData(["REQUEST", { group, requestBody }]);
     }
@@ -99,16 +110,20 @@ function Body() {
   };
 
   const handleReset = () => {
-    needList.clear();
+    needList = {};
+    setUserCardData([]);
     setActiveStep(0);
     setRerender(true);
   };
 
   const order = () => {
     let a = [];
-    for (var [key, value] of needList.entries()) {
-      a.push("板子 : " + key + "  申請" + value + "個");
-    }
+    // for (var [key, value] of needList.entries()) {
+    //   a.push("板子 : " + key + "  申請" + value + "個");
+    // }
+    Object.keys(needList).forEach(function (key) {
+      a.push("板子 : " + key + "  申請" + needList[key] + "個");
+    });
     //console.log(a);
 
     if (a.length === 0) {
@@ -119,54 +134,6 @@ function Body() {
 
   const showNeedList = order();
 
-  const renderCard = () => {
-    let newBoard = cardData.map((e) => {
-      if (activeStep === steps.length - 2) {
-        if (needList.has(e.name)) {
-          return (
-            <Card
-              key={e.name + e.id}
-              name={e.name}
-              tag={e.category}
-              left={e.remain}
-              limit={e.limit}
-              v={true}
-              id={e.id}
-              needList={needList}
-              addNeedList={addNeedList}
-            />
-          );
-        }
-      } else {
-        //這裡要filter
-
-        if (
-          (searchMethod === "Name" &&
-            e.name.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1) ||
-          (searchMethod === "Tag" &&
-            e.category.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1)
-        ) {
-          return (
-            <Card
-              key={e.name + e.id}
-              name={e.name}
-              tag={e.category}
-              left={e.remain}
-              limit={e.limit}
-              v={true}
-              id={e.id}
-              needList={needList}
-              addNeedList={addNeedList}
-              rerender={rerender}
-            />
-          );
-        }
-      }
-    });
-
-    return newBoard;
-  };
-
   useEffect(() => {
     setRerender(false);
   }, [rerender]);
@@ -175,6 +142,27 @@ function Body() {
     let payload = 0;
     userBoardINIT(payload);
   }, [rerender]);
+
+  const calcuLimit = (limit, boardName) => {
+    let groupLimit = limit;
+
+    if (userCards[boardName]) {
+      groupLimit -= userCards[boardName];
+    }
+
+    userRequest.map((rq) => {
+      if (rq.status === "pending") {
+        console.log(boardName);
+        rq.requestBody.map((rb) => {
+          if (rb.board === boardName) {
+            groupLimit -= rb.quantity;
+          }
+        });
+      }
+    });
+    console.log(groupLimit);
+    return groupLimit;
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -225,7 +213,58 @@ function Body() {
               alignContent: "start",
             }}
           >
-            {renderCard()}
+            {userCardData.length !== 0 ? (
+              userCardData.map((e) => {
+                console.log("hi");
+                if (activeStep === steps.length - 2) {
+                  if (needList[e.name]) {
+                    return (
+                      <Card
+                        key={`${e.name} + ${e.id} +${userID}`}
+                        name={e.name}
+                        tag={e.category}
+                        left={e.remain}
+                        limit={calcuLimit(e.limit, e.name)}
+                        v={true}
+                        id={e.id}
+                        userID={userID}
+                        needList={e.needList}
+                        addNeedList={addNeedList}
+                      />
+                    );
+                  }
+                } else {
+                  //這裡要filter
+
+                  if (
+                    (searchMethod === "Name" &&
+                      e.name.toLowerCase().indexOf(searchWord.toLowerCase()) !==
+                        -1) ||
+                    (searchMethod === "Tag" &&
+                      e.category
+                        .toLowerCase()
+                        .indexOf(searchWord.toLowerCase()) !== -1)
+                  ) {
+                    return (
+                      <Card
+                        key={e.name + e.id}
+                        name={e.name}
+                        tag={e.category}
+                        left={e.remain}
+                        limit={calcuLimit(e.limit, e.name)}
+                        v={true}
+                        id={e.id}
+                        needList={e.needList}
+                        addNeedList={addNeedList}
+                        rerender={rerender}
+                      />
+                    );
+                  }
+                }
+              })
+            ) : (
+              <></>
+            )}
           </Box>
         </Wrapper>
       )}
@@ -266,7 +305,7 @@ function Body() {
             <Button onClick={handleReset}>Reset</Button>
           ) : null}
 
-          <Button onClick={handleNext}>
+          <Button onClick={handleNext} disabled={!ableNext}>
             {activeStep === steps.length - 2
               ? "Confirm"
               : activeStep === steps.length - 1

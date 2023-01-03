@@ -204,6 +204,11 @@ module.exports = {
           "GETUSER",
           userData,
         ]);
+        const requests = await model.RequestModel.find().populate(["borrower"]);
+        broadcast({ authority: 1, page: "requestStatus" }, [
+          "UPDATEREQUEST",
+          requests,
+        ]);
         break;
       }
       case "GETUSER": {
@@ -345,7 +350,22 @@ module.exports = {
         sendStatus(["success", "Request successfully"], ws);
 
         // updateMyCards(group, requestBody);
+        await Promise.all(
+          request.requestBody.map(async (board) => {
+            const myboard = await model.BoardModel.findOne({
+              name: board.board,
+            });
+            myboard.remain -= board.quantity;
+            await myboard.save();
+          })
+        );
+        const boards = await model.BoardModel.find({});
+        console.log(boards);
+        broadcast({ page: "userProgress" }, ["INITUSERCARD", boards]);
 
+        let userData = await model.TeamModel.findOne({ teamID: group });
+        await userData.populate("requests").execPopulate();
+        broadcast({ id: group }, ["GETUSER", userData]);
         // let c = await model.TeamModel.findOne({teamID: group});
         // console.log(c);
         break;
@@ -375,6 +395,10 @@ module.exports = {
             () => requestExpired(newReq.requestID, "ready"),
             15 * 60 * 1000
           );
+          broadcast({ id: newReq.borrower.teamID }, [
+            "status",
+            ["success", "Request Ready!!"],
+          ]);
         }
         if (requestStatus === "solved") {
           await updateMyCards(newReq.borrower.teamID, newReq.requestBody);
@@ -411,7 +435,7 @@ module.exports = {
           console.log(boards);
         }
         const requests = await model.RequestModel.find().populate(["borrower"]);
-        sendData(["UPDATEREQUEST", requests], ws);
+        // sendData(["UPDATEREQUEST", requests], ws);
         broadcast({ authority: 1, page: "requestStatus" }, [
           "UPDATEREQUEST",
           requests,
@@ -426,7 +450,7 @@ module.exports = {
         if (requestStatus === "solved") {
           broadcast({ id: newReq.borrower.teamID }, [
             "status",
-            ["success", "Request Ready!!"],
+            ["success", "Boards have taken!!"],
           ]);
         }
         if (requestStatus === "denied") {
@@ -434,6 +458,8 @@ module.exports = {
             "status",
             ["error", "Sorry Request Denied :("],
           ]);
+          // broadcast({ id: newReq.borrower.teamID }, ["GETUSER", userData]);
+          changeBoardRemain(newReq);
         }
         sendStatus(["success", "Update successfully"], ws);
         break;

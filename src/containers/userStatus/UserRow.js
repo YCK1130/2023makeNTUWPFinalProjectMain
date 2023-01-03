@@ -13,7 +13,7 @@ function Row(props) {
   const { row, userID } = props;
   const [open, setOpen] = useState(false);
   const [timer, setTimer] = useState(0);
-  const { deleteRequestFromUser, getUser } = useMakeNTU();
+  const { deleteRequestFromUser, getUser, render } = useMakeNTU();
   let intervalId = useRef();
   //timer
   useEffect(() => {
@@ -32,7 +32,7 @@ function Row(props) {
     } else {
       setTimer(0);
     }
-  }, []);
+  }, [render]);
 
   useEffect(() => {
     if (timer < 0) {

@@ -18,14 +18,23 @@ const Img = styled("img")({
 });
 
 export default function Card(props) {
+  // console.log(props)
   const [num, setNum] = React.useState(0);
 
   //console.log(props.addNeedList);
   useEffect(() => {
-    if (props.needList.has(props.name)) {
-      setNum(props.needList.get(props.name));
+    if (props.needList[props.name]) {
+      console.log("needList " + num);
+      setNum(props.needList[props.name]);
+      if (props.needList[props.name] > props.left) {
+        props.addNeedList(props.name, props.left);
+      }
     }
-  }, []);
+  }, [props.needList]);
+
+  useEffect(() => {
+    console.log("default is " + num);
+  }, [num]);
 
   return (
     <Paper
@@ -65,6 +74,7 @@ export default function Card(props) {
                 id={props.id}
                 name={props.name}
                 defaultValue={num}
+                userID={props.userID}
                 limit={Math.min(props.limit, props.left)}
                 addNeedList={props.addNeedList}
               />

@@ -6,9 +6,17 @@ import Select from '@mui/material/Select';
 import { useEffect } from 'react';
 
 export default function Selector(props) {
+  const [df, setDf] = React.useState(0);
 
+  useEffect(() => {
+    if (props.defaultValue !== 0) {
+      setDf(props.defaultValue);
+    }
+  }, [props.defaultValue]);
+  
   const handleChange = (event) => {
     props.addNeedList(props.name, event.target.value);
+    setDf(event.target.value)
   };
 
   const makeArray = (limit) => {
@@ -28,10 +36,10 @@ export default function Selector(props) {
       <Select
         labelId="demo-select-small"
         id="demo-select-small"
-        key={props.id}
+        key={`${props.id}`}
         label="quantity"
         onChange={handleChange}
-        defaultValue={props.defaultValue||0}
+        value={df}
       >
         {a.map((e) => {
             return <MenuItem key={props.id+"_"+ e} value={e}>{e}</MenuItem>
