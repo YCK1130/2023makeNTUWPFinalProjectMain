@@ -37,6 +37,7 @@ const MakeNTUContext = React.createContext({
   cancelRequest: () => {},
   deleteRequestFromUser: () => {},
   subscribe: () => {},
+  render: [],
 });
 
 const MakeNTUProvider = (props) => {
@@ -49,6 +50,7 @@ const MakeNTUProvider = (props) => {
   const [requestData, setRequestData] = React.useState([]);
   const [teamReqUpdateDate, setTeamReqUpdateDate] = React.useState([]);
   const [userRequest, setUserRequest] = React.useState([]);
+  const [render, setRender] = React.useState(false);
   const breakpoints = useBreakpoints();
 
   client.onmessage = async (byteString) => {
@@ -60,8 +62,9 @@ const MakeNTUProvider = (props) => {
     switch (task) {
       case "GETUSER": {
         setUserRequest(payload.requests ?? []);
-        getBoards();
         setUserCards({ ...payload.myCards } ?? []);
+        getBoards();
+
         break;
       }
       case "GETREQUEST": {
@@ -87,6 +90,7 @@ const MakeNTUProvider = (props) => {
       case "GETBOARD": {
         setGetBoardData(payload);
         setUpdateBoardStatus("");
+        setRender((re) => !re);
         break;
       }
       case "UpdateBoard": {
@@ -240,6 +244,7 @@ const MakeNTUProvider = (props) => {
         requestData,
         teamReqUpdateDate,
         subscribe,
+        render,
       }}
       {...props}
     />

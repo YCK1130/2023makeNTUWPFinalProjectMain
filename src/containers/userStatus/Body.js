@@ -31,35 +31,34 @@ function Body() {
   const {
     userRequest,
     getUser,
-    getBoards,
     userCards,
     subscribe,
     getBoardData,
+    render,
+    getBoards,
   } = useMakeNTU();
   const { userID, authority } = useSelector(selectSession);
   const [userBoard, setUserBoard] = useState([]);
   const [myRequest, setMyRequest] = useState([]);
   useEffect(() => {
     getUser(userID);
+    //getBoards();
     subscribe({ id: userID, authority: authority, page: "userStatus" });
   }, []);
   useEffect(() => {
-    if (userCards) {
-      let ub = JSON.parse(JSON.stringify(getBoardData));
-      ub = ub
-        .filter((ubb) => ubb.name in userCards)
-        .map((item) => {
-          item.num = userCards[item.name];
-          return item;
-        });
-      setUserBoard(ub);
-    } else {
-      setUserBoard([]);
-    }
-  }, [getBoardData, userCards]);
-  useEffect(() => {
     setMyRequest(JSON.parse(JSON.stringify(userRequest)));
-  }, [userRequest]);
+    setUserBoard([]);
+    let ub = JSON.parse(JSON.stringify(getBoardData));
+    //console.log(userCards);
+    ub = ub
+      .filter((ubb) => ubb.name in userCards)
+      .map((item) => {
+        item.num = userCards[item.name];
+        return item;
+      });
+    setUserBoard(ub);
+  }, [render]);
+
   return (
     <Wrapper>
       <Box

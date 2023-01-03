@@ -67,7 +67,7 @@ export default function Card(props) {
                 id="outlined-disabled"
                 label="Amount"
                 size="small"
-                defaultValue={num}
+                value={num}
               />
             </Grid>
           </Grid>

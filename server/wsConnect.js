@@ -283,7 +283,7 @@ module.exports = {
         const boards = await model.BoardModel.find({});
         // console.log(boards);
         sendData(["GETBOARD", boards], ws);
-        sendStatus(["success", "Get successfully"], ws);
+        //sendStatus(["success", "Get successfully"], ws);
         break;
       }
       case "GETREQUEST": {
@@ -486,7 +486,7 @@ module.exports = {
           })
         );
         sendData(["GETBOARD", newBoards], ws);
-        sendStatus(["success", "Reset successfully"], ws);
+        //sendStatus(["success", "Reset successfully"], ws);
         break;
       }
     }
