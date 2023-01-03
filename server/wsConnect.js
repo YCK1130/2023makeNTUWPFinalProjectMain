@@ -1,4 +1,3 @@
-const { BreakfastDiningOutlined } = require("@mui/icons-material");
 const model = require("./database/mongo/model");
 //import { TeamModel, RequestModel, BoardModel} from "./database/mongo/model";
 
@@ -47,7 +46,6 @@ const getIntersection = (setA, setB) => {
 
   return intersection;
 };
-
 const broadcast = (condictions, data) => {
   const { id, authority, page } = condictions;
   const IdSet = id ? userID[id] : undefined;
@@ -84,7 +82,7 @@ const changeBoardRemain = async (req) => {
     throw new Error("Message DB save error: " + e);
   }
   const newBoard = await model.BoardModel.find({});
-  broadcastPage("userProgress", ["AddBoard", newBoard]);
+  broadcastPage("userProgress", ["INITUSERCARD", newBoard]);
 };
 
 const requestExpired = async (id, status) => {
@@ -97,6 +95,10 @@ const requestExpired = async (id, status) => {
     );
   }
   await changeBoardRemain(request);
+  broadcast({ id: request.borrower.teamID }, [
+    "status",
+    ["error", "One Request Expired :("],
+  ]);
   return;
 };
 
@@ -120,6 +122,7 @@ module.exports = {
     let request = await model.RequestModel.findOne({ requestID: id }).populate([
       "borrower",
     ]);
+    if (!request) return;
     if (request.status === status) {
       await model.RequestModel.updateOne(
         { requestID: id },
@@ -164,7 +167,6 @@ module.exports = {
         console.log("change page to " + ws.box);
         break;
       }
-
       case "DELETEREQUESTFROMUSER": {
         let userData = await model.TeamModel.findOne({ teamID: payload[0] });
 
@@ -180,6 +182,7 @@ module.exports = {
         );
         userData = await model.TeamModel.findOne({ teamID: payload[0] });
         await userData.populate("requests").execPopulate();
+        await userData.save();
         broadcast({ id: userData.teamID, authority: 0, page: "userStatus" }, [
           "GETUSER",
           userData,
@@ -195,8 +198,6 @@ module.exports = {
         let request = await model.RequestModel.findById(payload[1]);
         await changeBoardRemain(request);
         await userData.populate("requests").execPopulate();
-        //broadcastPage("requestStatus", ["AddBoard", newBoard]);
-        //broadcastPage("userStatus", ["GETUSER", userData]);
         broadcast({ id: userData.teamID, authority: 0, page: "userStatus" }, [
           "GETUSER",
           userData,
@@ -227,12 +228,9 @@ module.exports = {
       }
       case "ADDBOARD": {
         const newData = payload;
-        // console.log(group);
-        // console.log(requestBody);
         const existing = await model.BoardModel.find({
           name: newData.name,
         });
-        // console.log(existing);
         if (existing.length !== 0) {
           sendStatus(["error", `${newData.name} already exist.`], ws);
           break;
@@ -240,15 +238,12 @@ module.exports = {
         try {
           const temp = await new model.BoardModel(payload).save();
           const newBoard = await model.BoardModel.find({});
-          console.log(newBoard);
           broadcastPage("adminBoardList", ["AddBoard", newBoard]);
           broadcastPage("userProgress", ["AddBoard", newBoard]);
-          //sendData(["AddBoard", newBoard], ws);
           sendStatus(["success", "Add successfully"], ws);
         } catch (e) {
-          throw new Error("Message DB save error: " + e);
+          throw new Error("Board DB save error: " + e);
         }
-        // let c = await model.BoardModel.find({});
         break;
       }
       case "UPDATEBOARDS": {
@@ -270,18 +265,15 @@ module.exports = {
           const boards = await model.BoardModel.find({});
           sendData(["UpdateBoard", { status: "success", data: boards }], ws);
         } catch (e) {
-          throw new Error("Message DB update error: " + e);
+          throw new Error("Board DB update error: " + e);
         }
         break;
       }
       case "DELETEBOARD": {
         const newDataID = payload;
-        // console.log(group);
-        // console.log(requestBody);
         const existing = await model.BoardModel.deleteOne({
           id: newDataID,
         });
-        // console.log(existing);
         sendStatus(["success", "Delete successfully"], ws);
         break;
       }
@@ -303,11 +295,7 @@ module.exports = {
       }
       case "REQUEST": {
         let { group, requestBody } = payload;
-        // console.log(group);
-        // console.log(requestBody);
-
         let gp = await model.TeamModel.findOne({ teamID: group });
-
         let count = await model.RequestModel.find({
           borrower: gp,
         }).count();
@@ -332,43 +320,39 @@ module.exports = {
           15 * 60 * 1000
         );
         try {
-          await request.save(); // Save payload to DB
+          await request.save();
         } catch (e) {
-          throw new Error("Message DB save error: " + e);
+          throw new Error("Request DB save error: " + e);
         }
-
         await model.TeamModel.updateMany(
           { teamID: group },
           { $push: { requests: request } }
         );
         const requests = await model.RequestModel.find().populate(["borrower"]);
         // console.log(requests);
+        await Promise.all(
+          request.requestBody.map(async (board) => {
+            const myboard = await model.BoardModel.updateOne(
+              {
+                name: board.board,
+              },
+              { $inc: { remain: -board.quantity } }
+            );
+            // myboard.remain -= board.quantity;
+          })
+        );
         broadcastAuth(1, ["status", ["success", "New Request come in!"]]);
         broadcast({ authority: 1, page: "requestStatus" }, [
           "UPDATEREQUEST",
           requests,
         ]);
         sendStatus(["success", "Request successfully"], ws);
-
-        // updateMyCards(group, requestBody);
-        await Promise.all(
-          request.requestBody.map(async (board) => {
-            const myboard = await model.BoardModel.findOne({
-              name: board.board,
-            });
-            myboard.remain -= board.quantity;
-            await myboard.save();
-          })
-        );
         const boards = await model.BoardModel.find({});
-        console.log(boards);
         broadcast({ page: "userProgress" }, ["INITUSERCARD", boards]);
 
         let userData = await model.TeamModel.findOne({ teamID: group });
         await userData.populate("requests").execPopulate();
         broadcast({ id: group }, ["GETUSER", userData]);
-        // let c = await model.TeamModel.findOne({teamID: group});
-        // console.log(c);
         break;
       }
       case "UPDATEREQ": {
@@ -453,7 +437,7 @@ module.exports = {
             "status",
             ["success", "Boards have taken!!"],
           ]);
-        }
+        } // broadcast
         if (requestStatus === "denied") {
           broadcast({ id: newReq.borrower.teamID }, [
             "status",
@@ -461,7 +445,10 @@ module.exports = {
           ]);
           // broadcast({ id: newReq.borrower.teamID }, ["GETUSER", userData]);
           changeBoardRemain(newReq);
-        }
+        } // broadcast
+        if (requestStatus === "cancel") {
+          changeBoardRemain(newReq);
+        } // broadcast
         sendStatus(["success", "Update successfully"], ws);
         break;
       }

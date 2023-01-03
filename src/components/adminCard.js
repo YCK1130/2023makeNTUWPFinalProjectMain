@@ -7,6 +7,7 @@ import {
   Grid,
   TextField,
   FormControl,
+  CardMedia,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { NumericFormat } from "react-number-format";
@@ -37,7 +38,7 @@ NumberFormatCustom.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
-const Img = styled("img")({
+const Img = styled(CardMedia)({
   margin: "auto",
   display: "block",
   maxWidth: "100%",
@@ -55,7 +56,7 @@ export default function ComplexGrid({
     setValues({ limit: data.limit, totalNum: data.totalNum });
     // console.log(data);
   }, []);
-  console.log(data);
+  // console.log(data);
   const handleChange = (event) => {
     const { name, value } = event.target;
     const changingValue = parseInt(value);
@@ -154,7 +155,7 @@ export default function ComplexGrid({
         </Grid>
         <Grid item>
           <ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="no img" src={"https://lurl.cc/1F8aOb"} />
+            <Img alt="no img" image={data?.image} component="img" />
           </ButtonBase>
         </Grid>
         <Grid
@@ -178,6 +179,7 @@ export default function ComplexGrid({
             variant="standard"
             sx={{ width: "50%" }}
             autoComplete="off"
+            disabled={data?.remain !== data?.totalNum}
           />
         </Grid>
         <Grid
@@ -201,6 +203,7 @@ export default function ComplexGrid({
             variant="standard"
             sx={{ width: "50%" }}
             autoComplete="off"
+            disabled={data?.remain !== data?.totalNum}
           />
         </Grid>
       </Grid>

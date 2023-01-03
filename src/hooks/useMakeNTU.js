@@ -65,7 +65,6 @@ const MakeNTUProvider = (props) => {
         setUserRequest(payload.requests ?? []);
         setUserCards({ ...payload.myCards } ?? []);
         getBoards();
-
         break;
       }
       case "GETREQUEST": {
@@ -115,7 +114,9 @@ const MakeNTUProvider = (props) => {
   client.onclose = () => {
     showAlert("error", "Connection Error. Please Refresh Later!");
   };
-  const dataINIT = () => {
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+  const dataINIT = async () => {
     const newCard = {
       limit: 5,
       category: "arduino",
@@ -128,6 +129,7 @@ const MakeNTUProvider = (props) => {
     addBoard({ ...newCard, name: "board 3", id: uuidv4() });
     addBoard({ ...newCard, name: "board 4", id: uuidv4() });
     addBoard({ ...newCard, name: "board 5", id: uuidv4() });
+    await delay(5000);
     sendData([
       "REQUEST",
       {
@@ -138,6 +140,7 @@ const MakeNTUProvider = (props) => {
         ],
       },
     ]);
+    await delay(1000);
     sendData([
       "REQUEST",
       {
