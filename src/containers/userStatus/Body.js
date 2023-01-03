@@ -45,14 +45,14 @@ function Body() {
   }, []);
   useEffect(() => {
     if (userCards) {
-      let ub = JSON.parse(JSON.stringify(getBoardData));
-      ub = ub
+      const ub = JSON.parse(JSON.stringify(getBoardData));
+      const newUb = ub
         .filter((ubb) => ubb.name in userCards)
         .map((item) => {
           item.num = userCards[item.name];
           return item;
         });
-      setUserBoard(ub);
+      setUserBoard(newUb);
     } else {
       setUserBoard([]);
     }
