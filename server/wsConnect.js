@@ -445,6 +445,7 @@ module.exports = {
         const teamsCard = JSON.parse(JSON.stringify(team.myCards));
         console.log(teamsCard);
         for (const [key, value] of Object.entries(returned)) {
+          if (value === 0) continue;
           teamsCard[key] -= value;
           const myboard = await model.BoardModel.findOne({
             name: key,
