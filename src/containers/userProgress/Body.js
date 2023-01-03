@@ -46,6 +46,8 @@ function Body() {
   
   useEffect(() => {
     getUser(userID);
+    console.log("userRequest",userRequest)
+    console.log("userCards",userCards)
     subscribe("userProgress");
     needList={}
   }, []);
@@ -72,7 +74,6 @@ function Body() {
       delete needList[name];
     } else {
       needList[name] = quantity;
-      console.log(needList);
     }
     //console.log([...needList]);
   };
@@ -129,12 +130,6 @@ function Body() {
 
   const showNeedList = order();
 
-  const renderCard = () => {
-    // let newBoard = ;
-
-    // return newBoard;
-  };
-
   useEffect(() => {
     setRerender(false);
   }, [rerender]);
@@ -143,7 +138,7 @@ function Body() {
     let payload = 0;
     userBoardINIT(payload);
   }, [rerender]);
-  console.log(cardData)
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box mb={2}>
