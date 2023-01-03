@@ -139,6 +139,27 @@ function Body() {
     userBoardINIT(payload);
   }, [rerender]);
 
+  const calcuLimit = (limit, boardName) => {
+
+    let groupLimit = limit;
+
+    if(userCards[boardName]){
+      groupLimit -= userCards[boardName];
+    }
+
+    userRequest.map((rq) =>{
+      if(rq.status === "pending"){
+        rq.requestBody.map((rb) =>{
+          if(rb.board === boardName){
+            groupLimit -= rb.quantity
+          }
+        })
+      }
+    })
+    console.log(groupLimit);
+    return groupLimit;
+  }
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box mb={2}>
@@ -198,7 +219,7 @@ function Body() {
               name={e.name}
               tag={e.category}
               left={e.remain}
-              limit={e.limit}
+              limit={calcuLimit(e.limit,e.name)}
               v={true}
               id={e.id}
               userID={userID}
@@ -220,7 +241,7 @@ function Body() {
               name={e.name}
               tag={e.category}
               left={e.remain}
-              limit={e.limit}
+              limit={calcuLimit(e.limit,e.name)}
               v={true}
               id={e.id}
               needList={e.needList}
