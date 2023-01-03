@@ -13,7 +13,7 @@ function Row(props) {
   const { row, userID } = props;
   const [open, setOpen] = useState(false);
   const [timer, setTimer] = useState(0);
-  const { deleteRequestFromUser, getUser, render } = useMakeNTU();
+  const { deleteRequestFromUser, getUser, render, breakpoints } = useMakeNTU();
   let intervalId = useRef();
   //timer
   useEffect(() => {
@@ -59,31 +59,33 @@ function Row(props) {
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
         {row.status === "pending" ? (
-          <TableCell align="left" sx={{ fontSize: 19, border: 0 }}>
+          <TableCell align="left" sx={{ p: "6px", border: 0, minWidth: "4em" }}>
             申請中
           </TableCell>
         ) : row.status === "ready" ? (
-          <TableCell align="left" sx={{ fontSize: 19, border: 0 }}>
+          <TableCell align="left" sx={{ border: 0, minWidth: "4em", p: "6px" }}>
             請來拿
           </TableCell>
         ) : (
           <TableCell
             align="left"
-            sx={{ fontSize: 19, color: "red", border: 0 }}
+            sx={{ color: "red", border: 0, minWidth: "4em", p: "6px" }}
           >
             {row.status === "denied"
               ? "已拒絕"
               : row.status === "cancel"
               ? "已取消"
+              : breakpoints.isPhone
+              ? "已超時..."
               : "已超時 請重新申請"}
           </TableCell>
         )}
 
-        <TableCell align="right" sx={{ fontSize: 20, border: 0 }}>
+        <TableCell align="center" sx={{ p: "6px", border: 0 }}>
           {showTime()}
         </TableCell>
 
-        <TableCell align="right" sx={{ display: "flex", border: 0 }}>
+        <TableCell align="right" sx={{ display: "flex", border: 0, p: "6px" }}>
           {row.status !== "pending" && row.status !== "ready" ? (
             <IconButton
               aria-label="expand row"
