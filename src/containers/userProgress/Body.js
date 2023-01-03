@@ -12,7 +12,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
 import SearchBar from "./Components/SearchBar";
-import Card from "./Cards";
+import Card from "./Components/Cards";
+import ResetWindow from "./Components/ResetWindow";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
@@ -42,6 +43,7 @@ function Body() {
   //const [needList, setNeedList] = React.useState({});
   const [userCardData, setUserCardData] = React.useState([]);
   const [ableNext, setAbleNext] = React.useState(false);
+  const [resetOpen, setResetOpen] = React.useState(false);
   const {
     userBoardINIT,
     sendData,
@@ -110,11 +112,20 @@ function Body() {
   };
 
   const handleReset = () => {
+    setResetOpen(true);
+  };
+  const handleResetClose = () => {
+    console.log("算了")
+    setResetOpen(false);
+  };
+  const reset = () => {
+    console.log("重置")
     needList = {};
     setUserCardData([]);
     setActiveStep(0);
     setRerender(true);
-  };
+    setResetOpen(false);
+  }
 
   const order = () => {
     let a = [];
@@ -312,6 +323,11 @@ function Body() {
               ? "Finish"
               : "Next"}
           </Button>
+          <ResetWindow
+        open={resetOpen}
+        handleResetClose={handleResetClose}
+        handleResetAgree={reset}
+      />
         </Box>
       </Box>
     </Box>

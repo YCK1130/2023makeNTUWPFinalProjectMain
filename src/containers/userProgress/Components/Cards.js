@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 
-import Selector from "./Components/Selector";
+import Selector from "./Selector";
 import { NearMeDisabled } from "@mui/icons-material";
 import { useState } from "react";
 import { useEffect } from "react";

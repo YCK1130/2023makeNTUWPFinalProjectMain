@@ -180,22 +180,14 @@ const Drawer = ({ children }) => {
           //user區
           { text: "Main", to: "/", icon: <HomeIcon /> },
           {
-            text: "租借開發版",
+            text: "Borrow Board",
             to: "/user",
-            icon: <ShoppingCartIcon />,
-          },
-        ],
-        0: [
-          //user區
-          {
-            text: "租借開發版",
-            to: "/user",
-            icon: <PeopleIcon />,
+            icon: <DeveloperBoardIcon />,
           },
           {
-            text: "借用狀況",
+            text: "User Status",
             to: "/user/status",
-            icon: <PeopleIcon />,
+            icon: <FactCheckIcon />,
           },
         ],
       }[authority] || [{ text: "Main", to: "/", icon: <HomeIcon /> }];
