@@ -89,6 +89,7 @@ const changeBoardRemain = async (req) => {
 
 const requestExpired = async (id, status) => {
   let request = await model.RequestModel.findOne({ requestID: id });
+  if (!request) return;
   if (request.status === status) {
     await model.RequestModel.updateOne(
       { requestID: id },

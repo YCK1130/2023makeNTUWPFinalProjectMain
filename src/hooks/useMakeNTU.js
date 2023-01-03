@@ -38,6 +38,7 @@ const MakeNTUContext = React.createContext({
   deleteRequestFromUser: () => {},
   subscribe: () => {},
   render: [],
+  setRender: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -90,7 +91,7 @@ const MakeNTUProvider = (props) => {
       case "GETBOARD": {
         setGetBoardData(payload);
         setUpdateBoardStatus("");
-        setRender((re) => !re);
+        setRender(true);
         break;
       }
       case "UpdateBoard": {
@@ -245,6 +246,7 @@ const MakeNTUProvider = (props) => {
         teamReqUpdateDate,
         subscribe,
         render,
+        setRender,
       }}
       {...props}
     />

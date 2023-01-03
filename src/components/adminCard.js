@@ -55,7 +55,7 @@ export default function ComplexGrid({
     setValues({ limit: data.limit, totalNum: data.totalNum });
     // console.log(data);
   }, []);
-
+  console.log(data);
   const handleChange = (event) => {
     const { name, value } = event.target;
     const changingValue = parseInt(value);
@@ -154,7 +154,7 @@ export default function ComplexGrid({
         </Grid>
         <Grid item>
           <ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="no img" src="/static/images/grid/complex.jpg" />
+            <Img alt="no img" src={"https://lurl.cc/1F8aOb"} />
           </ButtonBase>
         </Grid>
         <Grid

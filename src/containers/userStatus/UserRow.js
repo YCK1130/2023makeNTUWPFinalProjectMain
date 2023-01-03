@@ -17,6 +17,7 @@ function Row(props) {
   let intervalId = useRef();
   //timer
   useEffect(() => {
+    if (render) return;
     var d = new Date().getTime(); //number
     var pretime = parseInt(
       15 * 60 - Math.floor((d - row.sendingTime) / 1000),

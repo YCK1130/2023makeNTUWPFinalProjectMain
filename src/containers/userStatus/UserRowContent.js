@@ -17,11 +17,9 @@ const rowContent = (props) => {
     setAlertOpen(true);
   };
   const handleAlertClose = () => {
-    console.log("nope");
     setAlertOpen(false);
   };
   const handleAlertAgree = () => {
-    console.log("yes");
     cancelRequest([userID, row._id]);
     setAlertOpen(false);
   };

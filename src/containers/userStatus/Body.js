@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
 import { useEffect, useState } from "react";
 import { elementType } from "prop-types";
+import { createSerializableStateInvariantMiddleware } from "@reduxjs/toolkit";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -35,17 +36,19 @@ function Body() {
     subscribe,
     getBoardData,
     render,
-    getBoards,
+    setRender,
   } = useMakeNTU();
   const { userID, authority } = useSelector(selectSession);
   const [userBoard, setUserBoard] = useState([]);
   const [myRequest, setMyRequest] = useState([]);
+
   useEffect(() => {
     getUser(userID);
     //getBoards();
     subscribe({ id: userID, authority: authority, page: "userStatus" });
   }, []);
   useEffect(() => {
+    if (!render) return;
     setMyRequest(JSON.parse(JSON.stringify(userRequest)));
     setUserBoard([]);
     let ub = JSON.parse(JSON.stringify(getBoardData));
@@ -57,6 +60,7 @@ function Body() {
         return item;
       });
     setUserBoard(ub);
+    setRender(false);
   }, [render]);
 
   return (
