@@ -17,7 +17,7 @@ function RequestStatus(props) {
   // console.log(breakpoints);
   React.useEffect(() => {
     const d = new Date().getTime(); //number
-    const pretime = 15 * 60 - parseInt(d - data?.sendingTime) / 1000 + 0.5;
+    const pretime = 15 * 60 - Math.floor(d - data?.sendingTime) / 1000;
     setTimer(pretime);
     if (data?.status === "pending" || data?.status === "ready") {
       let Id = setInterval(() => {
