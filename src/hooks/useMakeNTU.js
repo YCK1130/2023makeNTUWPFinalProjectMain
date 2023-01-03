@@ -59,6 +59,7 @@ const MakeNTUProvider = (props) => {
     switch (task) {
       case "GETUSER": {
         setUserRequest(payload.requests ? payload.requests : []);
+        getBoards();
         setUserCards(payload.myCards ? payload.myCards : []);
         break;
       }
@@ -205,6 +206,7 @@ const MakeNTUProvider = (props) => {
   const handleReplaceBoard = (payload) => {
     sendData(["REPLACEBOARD", payload]);
   };
+
   return (
     <MakeNTUContext.Provider
       value={{

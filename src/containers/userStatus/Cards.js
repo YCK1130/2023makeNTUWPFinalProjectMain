@@ -19,7 +19,7 @@ const Img = styled("img")({
 
 export default function Card(props) {
   //const [num, setNum] = React.useState(0);
-  const { num, name } = props;
+  const { num, userBoard } = props;
   //console.log(props.addNeedList);
   /*useEffect(() => {
     if (props.needList.has(props.id)) {
@@ -52,13 +52,13 @@ export default function Card(props) {
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography gutterBottom variant="subtitle1" component="div">
-                {name}
+                {userBoard.name}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                props.tag
+                Tag : {userBoard.category}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                ID: 1030114
+                {userBoard.id}
               </Typography>
             </Grid>
             <Grid item>

@@ -27,6 +27,29 @@ db.once("open", async () => {
   //await model.BoardModel.deleteMany({});
   //await model.RequestModel.deleteMany({});
 
+  let oldReq = await model.RequestModel.find({
+    $or: [{ status: "pending" }, { status: "ready" }],
+  });
+  let nowTime = new Date().getTime();
+  oldReq.map(async (req) => {
+    if (nowTime - req.sendingTime > 15 * 60 * 1000 - 5000) {
+      await model.RequestModel.updateOne(
+        { _id: req._id },
+        { $set: { status: "expired" } }
+      );
+      req.requestBody.map(async (re) => {
+        await model.BoardModel.updateOne(
+          { name: re.board },
+          { $inc: { remain: re.quantity } }
+        );
+      });
+    } else {
+      setTimeout(
+        () => wsConnect.requestExpired(req.requestID),
+        15 * 60 * 1000 - (nowTime - req.sendingTime)
+      );
+    }
+  });
   const app = express();
   const server = http.createServer(app);
   const wss = new ws.WebSocketServer({ server });

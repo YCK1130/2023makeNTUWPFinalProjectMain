@@ -27,14 +27,30 @@ const Wrapper = styled.div`
   // overflow-y: hidden;
 `;
 function Body() {
-  const { userRequest, getUser, userCards, subscribe } = useMakeNTU();
+  const {
+    userRequest,
+    getUser,
+    getBoards,
+    userCards,
+    subscribe,
+    getBoardData,
+  } = useMakeNTU();
   const { userID } = useSelector(selectSession);
-
+  const [userBoard, setUserBoard] = useState([]);
   useEffect(() => {
     getUser(userID);
     subscribe("userStatus");
   }, []);
-
+  useEffect(() => {
+    if (userCards) {
+      let ub = JSON.parse(JSON.stringify(getBoardData));
+      console.log(ub, "hi");
+      ub.filter((ubb) => ubb.name in userCards);
+      setUserBoard(ub);
+    } else {
+      setUserBoard([]);
+    }
+  }, [getBoardData]);
   return (
     <Wrapper>
       <Box
@@ -114,9 +130,15 @@ function Body() {
             alignContent: "start",
           }}
         >
-          {userCards
-            ? Object.keys(userCards).map((element) => {
-                return <Card num={userCards[element]} name={element} />;
+          {userBoard
+            ? userBoard.map((element) => {
+                return (
+                  <Card
+                    key={element.id + userID}
+                    num={userCards[element.name]}
+                    userBoard={element}
+                  />
+                );
               })
             : ""}
         </Box>

@@ -74,10 +74,9 @@ const broadcast = (condictions, data) => {
 const changeBoardRemain = async (req) => {
   try {
     req.requestBody.map(async (re) => {
-      let board = await model.BoardModel.findOne({ name: re.board });
       await model.BoardModel.updateOne(
         { name: re.board },
-        { $set: { remain: board.remain + re.quantity } }
+        { $inc: { remain: re.quantity } }
       );
     });
   } catch (e) {
@@ -96,9 +95,9 @@ const requestExpired = async (id, status) => {
     );
   }
   await changeBoardRemain(request);
-  // broadcastPage("requestStatus", ["AddBoard", newBoard]);
   return;
 };
+
 const updateMyCards = async (group, request) => {
   let gp = await model.TeamModel.findOne({ teamID: group });
 
@@ -115,6 +114,17 @@ const updateMyCards = async (group, request) => {
 };
 
 module.exports = {
+  requestExpired: async (id, status) => {
+    let request = await model.RequestModel.findOne({ requestID: id });
+    if (request.status === status) {
+      await model.RequestModel.updateOne(
+        { requestID: id },
+        { $set: { status: "expired" } }
+      );
+    }
+    await changeBoardRemain(request);
+    return;
+  },
   onMessage: (ws) => async (byteString) => {
     const { data } = byteString;
     const [task, payload] = JSON.parse(data);
@@ -165,7 +175,10 @@ module.exports = {
           { $set: { requests: newR } }
         );
         await userData.populate("requests").execPopulate();
-        broadcastPage("userStatus", ["GETUSER", userData]);
+        broadcast({ id: userData.teamID, authority: 1, page: "userStatus" }, [
+          "GETUSER",
+          userData,
+        ]);
         break;
       }
       case "CANCELREQUEST": {
@@ -178,7 +191,15 @@ module.exports = {
         await changeBoardRemain(request);
         await userData.populate("requests").execPopulate();
         //broadcastPage("requestStatus", ["AddBoard", newBoard]);
-        broadcastPage("userStatus", ["GETUSER", userData]);
+        //broadcastPage("userStatus", ["GETUSER", userData]);
+        broadcast({ id: userData.teamID, authority: 1, page: "userStatus" }, [
+          "GETUSER",
+          userData,
+        ]);
+        broadcast({ id: userData.teamID, authority: 1, page: "userProgress" }, [
+          "GETUSER",
+          userData,
+        ]);
         break;
       }
       case "GETUSER": {
