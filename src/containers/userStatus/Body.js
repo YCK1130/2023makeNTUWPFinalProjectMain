@@ -14,6 +14,7 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
 import { useEffect, useState } from "react";
+import { elementType } from "prop-types";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -35,22 +36,30 @@ function Body() {
     subscribe,
     getBoardData,
   } = useMakeNTU();
-  const { userID } = useSelector(selectSession);
+  const { userID, authority } = useSelector(selectSession);
   const [userBoard, setUserBoard] = useState([]);
+  const [myRequest, setMyRequest] = useState([]);
   useEffect(() => {
     getUser(userID);
-    subscribe("userStatus");
+    subscribe({ id: userID, authority: authority, page: "userStatus" });
   }, []);
   useEffect(() => {
     if (userCards) {
       let ub = JSON.parse(JSON.stringify(getBoardData));
-      console.log(ub, "hi");
-      ub.filter((ubb) => ubb.name in userCards);
+      ub = ub
+        .filter((ubb) => ubb.name in userCards)
+        .map((item) => {
+          item.num = userCards[item.name];
+          return item;
+        });
       setUserBoard(ub);
     } else {
       setUserBoard([]);
     }
-  }, [getBoardData]);
+  }, [getBoardData, userCards]);
+  useEffect(() => {
+    setMyRequest(JSON.parse(JSON.stringify(userRequest)));
+  }, [userRequest]);
   return (
     <Wrapper>
       <Box
@@ -105,7 +114,7 @@ function Body() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {userRequest.map((row) => (
+                {myRequest.map((row) => (
                   <Row key={row._id} row={row} userID={userID} />
                 ))}
               </TableBody>
@@ -135,7 +144,7 @@ function Body() {
                 return (
                   <Card
                     key={element.id + userID}
-                    num={userCards[element.name]}
+                    num={element.num}
                     userBoard={element}
                   />
                 );

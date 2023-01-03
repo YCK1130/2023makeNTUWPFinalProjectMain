@@ -40,12 +40,20 @@ function Body() {
   const [searchWord, setSearchWord] = React.useState("");
   const [searchMethod, setSearchMethod] = React.useState("Name");
 
-  const { userBoardINIT, sendData, getUser, cardData, userRequest, userCards, subscribe} = useMakeNTU();
-  const { userID } = useSelector(selectSession);
-  
+  const {
+    userBoardINIT,
+    sendData,
+    getUser,
+    cardData,
+    userRequest,
+    userCards,
+    subscribe,
+  } = useMakeNTU();
+  const { userID, authority } = useSelector(selectSession);
+
   useEffect(() => {
     getUser(userID);
-    subscribe("userProgress");
+    subscribe({ id: userID, authority: authority, page: "userProgress" });
   }, []);
 
   useEffect(() => {
@@ -66,7 +74,7 @@ function Body() {
   };
 
   const handleNext = () => {
-    console.log(userRequest,userCards);
+    console.log(userRequest, userCards);
     if (activeStep === steps.length - 1) {
       setActiveStep(0);
       needList.clear();
@@ -133,8 +141,10 @@ function Body() {
         //這裡要filter
 
         if (
-          (searchMethod === "Name" && e.name.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1) ||
-          (searchMethod === "Tag" && e.category.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1)
+          (searchMethod === "Name" &&
+            e.name.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1) ||
+          (searchMethod === "Tag" &&
+            e.category.toLowerCase().indexOf(searchWord.toLowerCase()) !== -1)
         ) {
           return (
             <Card

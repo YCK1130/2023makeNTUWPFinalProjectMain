@@ -104,9 +104,9 @@ const updateMyCards = async (group, request) => {
 
   await Promise.all(
     request.map(async (e) => {
-      (await gp.myCards.has(e[0]))
-        ? await gp.myCards.set(e[0], gp.myCards.get(e[0]) + e[1])
-        : await gp.myCards.set(e[0], e[1]);
+      (await gp.myCards.has(e.board))
+        ? await gp.myCards.set(e.board, gp.myCards.get(e.board) + e.quantity)
+        : await gp.myCards.set(e.board, e.quantity);
     })
   );
   await gp.save();
@@ -116,14 +116,21 @@ const updateMyCards = async (group, request) => {
 
 module.exports = {
   requestExpired: async (id, status) => {
-    let request = await model.RequestModel.findOne({ requestID: id });
+    let request = await model.RequestModel.findOne({ requestID: id }).populate([
+      "borrower",
+    ]);
     if (request.status === status) {
       await model.RequestModel.updateOne(
         { requestID: id },
         { $set: { status: "expired" } }
       );
+
+      await changeBoardRemain(request);
+      broadcast({ id: request.borrower.teamID }, [
+        "status",
+        ["error", "One Request Expired :("],
+      ]);
     }
-    await changeBoardRemain(request);
     return;
   },
   onMessage: (ws) => async (byteString) => {
@@ -132,34 +139,27 @@ module.exports = {
     console.log(task, payload);
 
     switch (task) {
-      case "WSINIT": {
-        const { id, authority } = payload;
+      case "SUBSCRIBE": {
+        const { id, authority, page } = payload;
+        //userStatus & userProgress & adminBoardList
         if (userPage[ws.box]) userPage[ws.box].delete(ws);
         if (userID[ws.id]) userID[ws.id].delete(ws);
         if (userAuth[ws.authority]) userAuth[ws.authority].delete(ws);
 
+        if (!userPage[page]) userPage[page] = new Set();
+        userPage[page].add(ws);
+        ws.box = page;
+        // console.log("change page to " + ws.box);
+
         if (!userID[id]) userID[id] = new Set();
         userID[id].add(ws);
         ws.id = id;
+
         if (!userAuth[authority]) userAuth[authority] = new Set();
         userAuth[authority].add(ws);
         ws.authority = authority;
-        if (!userPage["main"]) userPage["main"] = new Set();
-        userPage["main"].add(ws);
-        ws.box = "main";
 
         console.log(id, authority);
-        console.log("change page to " + ws.box);
-        break;
-      }
-      case "SUBSCRIBE": {
-        //userStatus & userProgress & adminBoardList
-        if (userPage[ws.box]) {
-          userPage[ws.box].delete(ws);
-        }
-        if (!userPage[payload]) userPage[payload] = new Set();
-        userPage[payload].add(ws);
-        ws.box = payload;
         console.log("change page to " + ws.box);
         break;
       }
@@ -171,12 +171,15 @@ module.exports = {
         const newR = newRequest.filter(
           (re) => String(re._id) !== String(payload[1])
         );
+        // console.log("newR:", newR);
+        // console.log("newRequest:", newRequest);
         await model.TeamModel.updateOne(
           { teamID: payload[0] },
           { $set: { requests: newR } }
         );
+        userData = await model.TeamModel.findOne({ teamID: payload[0] });
         await userData.populate("requests").execPopulate();
-        broadcast({ id: userData.teamID, authority: 1, page: "userStatus" }, [
+        broadcast({ id: userData.teamID, authority: 0, page: "userStatus" }, [
           "GETUSER",
           userData,
         ]);
@@ -193,11 +196,11 @@ module.exports = {
         await userData.populate("requests").execPopulate();
         //broadcastPage("requestStatus", ["AddBoard", newBoard]);
         //broadcastPage("userStatus", ["GETUSER", userData]);
-        broadcast({ id: userData.teamID, authority: 1, page: "userStatus" }, [
+        broadcast({ id: userData.teamID, authority: 0, page: "userStatus" }, [
           "GETUSER",
           userData,
         ]);
-        broadcast({ id: userData.teamID, authority: 1, page: "userProgress" }, [
+        broadcast({ id: userData.teamID, authority: 0, page: "userProgress" }, [
           "GETUSER",
           userData,
         ]);
@@ -328,7 +331,6 @@ module.exports = {
           throw new Error("Message DB save error: " + e);
         }
 
-        await updateMyCards(group, requestBody);
         await model.TeamModel.updateMany(
           { teamID: group },
           { $push: { requests: request } }
@@ -375,6 +377,7 @@ module.exports = {
           );
         }
         if (requestStatus === "solved") {
+          await updateMyCards(newReq.borrower.teamID, newReq.requestBody);
           await Promise.all(
             newReq.requestBody.map(async (board) => {
               const myboard = await model.BoardModel.findOne({
@@ -413,6 +416,25 @@ module.exports = {
           "UPDATEREQUEST",
           requests,
         ]);
+        const userData = await model.TeamModel.findOne({
+          teamID: newReq.borrower.teamID,
+        }).populate(["requests"]);
+        broadcast(
+          { id: newReq.borrower.teamID, authority: 0, page: "userStatus" },
+          ["GETUSER", userData]
+        );
+        if (requestStatus === "solved") {
+          broadcast({ id: newReq.borrower.teamID }, [
+            "status",
+            ["success", "Request Ready!!"],
+          ]);
+        }
+        if (requestStatus === "denied") {
+          broadcast({ id: newReq.borrower.teamID }, [
+            "status",
+            ["error", "Sorry Request Denied :("],
+          ]);
+        }
         sendStatus(["success", "Update successfully"], ws);
         break;
       }

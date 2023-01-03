@@ -50,6 +50,7 @@ const MakeNTUProvider = (props) => {
   const [teamReqUpdateDate, setTeamReqUpdateDate] = React.useState([]);
   const [userRequest, setUserRequest] = React.useState([]);
   const breakpoints = useBreakpoints();
+
   client.onmessage = async (byteString) => {
     //收回傳訊息
     const { data } = byteString;
@@ -58,9 +59,9 @@ const MakeNTUProvider = (props) => {
     console.log(task, payload);
     switch (task) {
       case "GETUSER": {
-        setUserRequest(payload.requests ? payload.requests : []);
+        setUserRequest(payload.requests ?? []);
         getBoards();
-        setUserCards(payload.myCards ? payload.myCards : []);
+        setUserCards({ ...payload.myCards } ?? []);
         break;
       }
       case "GETREQUEST": {

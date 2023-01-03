@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Element } from "react-scroll";
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/material/";
 import { Link, useHistory } from "react-router-dom";
-import { selectSession } from "../../slices/sessionSlice";
 import AdminCard from "../../components/adminCard";
 import styled from "styled-components";
 import TemplateCard from "../../components/templateCard";
 import { v4 as uuidv4 } from "uuid";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
+import { useSelector, useDispatch } from "react-redux";
+import { selectSession } from "../../slices/sessionSlice";
 /**
  * This is Main Page
  */
@@ -76,10 +76,11 @@ export default function BoardConsole({
     setUpdateBoardStatus,
     subscribe,
   } = useMakeNTU();
+  const { userID, authority } = useSelector(selectSession);
 
   useEffect(() => {
     getBoards();
-    subscribe("adminBoardList");
+    subscribe({ id: userID, authority: authority, page: "adminBoardList" });
   }, []);
 
   useEffect(() => {
@@ -171,7 +172,14 @@ export default function BoardConsole({
         {<TemplateCard setAddCardData={setAddCardData} />}
         {cards
           .filter((card) => {
-            return (searchMethod === "Name" && card.name.toLowerCase().indexOf(keyWord.toLowerCase()) !== -1) ||(searchMethod === "Tag" && card.category.toLowerCase().indexOf(keyWord.toLowerCase()) !== -1)
+            return (
+              (searchMethod === "Name" &&
+                card.name.toLowerCase().indexOf(keyWord.toLowerCase()) !==
+                  -1) ||
+              (searchMethod === "Tag" &&
+                card.category.toLowerCase().indexOf(keyWord.toLowerCase()) !==
+                  -1)
+            );
           })
           .map((card) => {
             return (

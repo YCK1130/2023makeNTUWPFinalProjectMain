@@ -12,11 +12,11 @@ import theme from "./theme";
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <MakeNTUProvider>
-        <Provider store={store}>
+      <Provider store={store}>
+        <MakeNTUProvider>
           <App />
-        </Provider>
-      </MakeNTUProvider>
+        </MakeNTUProvider>
+      </Provider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")

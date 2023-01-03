@@ -99,8 +99,10 @@ export default function TeamData() {
     teamName: "",
     authority: "",
   });
-  const { authority } = useSelector(selectSession);
-
+  const { userID, authority } = useSelector(selectSession);
+  useEffect(() => {
+    subscribe({ id: userID, authority: authority, page: "teamData" });
+  }, []);
   const showAlert = (severity, msg) => {
     setAlert({ open: true, severity, msg });
   };

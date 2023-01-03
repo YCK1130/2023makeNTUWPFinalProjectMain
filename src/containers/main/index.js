@@ -5,12 +5,11 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
 
-
 export default function Main() {
-  const { WSINIT } = useMakeNTU();
+  const { subscribe } = useMakeNTU();
   const { userID, authority } = useSelector(selectSession);
 
-  WSINIT({id:userID, authority:authority});
+  subscribe({ id: userID, authority: authority, page: "main" });
 
   return (
     <div>

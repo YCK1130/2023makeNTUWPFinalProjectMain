@@ -4,6 +4,8 @@ import RequestConsole from "./RequestConsole";
 import { useState } from "react";
 import styled from "styled-components";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
+import { useSelector } from "react-redux";
+import { selectSession } from "../../slices/sessionSlice";
 
 const ConsoleWrapper = styled.div`
   width: 100%;
@@ -22,8 +24,10 @@ const Wrapper = styled.div`
 `;
 export default function RequestPage() {
   const { breakpoints, subscribe } = useMakeNTU();
+  const { userID, authority } = useSelector(selectSession);
+
   useEffect(() => {
-    subscribe("requestStatus");
+    subscribe({ id: userID, authority: authority, page: "requestStatus" });
   }, []);
   return (
     <ConsoleWrapper>
