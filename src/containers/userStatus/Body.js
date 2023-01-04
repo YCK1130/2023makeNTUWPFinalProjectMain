@@ -14,8 +14,6 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
 import { useEffect, useState } from "react";
-import { elementType } from "prop-types";
-import { createSerializableStateInvariantMiddleware } from "@reduxjs/toolkit";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -26,6 +24,7 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
   align-items: start;
   justify-content: center;
+  //min-width: 380px;
   // overflow-y: hidden;
 `;
 function Body() {
@@ -45,7 +44,6 @@ function Body() {
 
   useEffect(() => {
     getUser(userID);
-    //getBoards();
     subscribe({ id: userID, authority: authority, page: "userStatus" });
   }, []);
   useEffect(() => {
@@ -83,7 +81,12 @@ function Body() {
         <Box
           sx={{
             //margin: "5px",
-            width: breakpoints.isPhone ? "50%" : "35%",
+            width:
+              breakpoints.isXs || breakpoints.isSm
+                ? "100%"
+                : breakpoints.isPhone
+                ? "47%"
+                : "35%",
             height: "100%",
             backgroundColor: "rgba(38,43,50)",
             overflowY: "auto",
@@ -119,8 +122,18 @@ function Body() {
                 </TableRow>
               </TableHead>
               <TableBody>
+                {breakpoints.isXs || breakpoints.isSm ? (
+                  <Row
+                    key={"userBoard" + userID}
+                    row={userBoard}
+                    userID={userID}
+                    state={true}
+                  />
+                ) : (
+                  ""
+                )}
                 {myRequest.map((row) => (
-                  <Row key={row._id} row={row} userID={userID} />
+                  <Row key={row._id} row={row} userID={userID} state={false} />
                 ))}
               </TableBody>
             </Table>
@@ -133,13 +146,13 @@ function Body() {
         <Box
           sx={{
             //margin: "5px",
-            width: breakpoints.isPhone ? "50%" : "65%",
+            width: breakpoints.isPhone ? "53%" : "65%",
             height: "100%",
             backgroundColor: "rgba(255,255,255,0.6)",
             overflowY: "auto",
             overflowX: "hidden",
             borderRadius: "5px",
-            display: "flex",
+            display: "flex", //breakpoints.isXs || breakpoints.isSm ? "none" : "flex",
             flexWrap: "wrap",
             justifyContent: "space-around",
             alignContent: "start",

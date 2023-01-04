@@ -8,9 +8,9 @@ import RowContent from "./UserRowContent";
 import { useEffect, useState, useRef } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
-
+import { List, ListItem } from "@mui/material";
 function Row(props) {
-  const { row, userID } = props;
+  const { row, userID, state } = props;
   const [open, setOpen] = useState(false);
   const [timer, setTimer] = useState(0);
   const { deleteRequestFromUser, getUser, render, breakpoints } = useMakeNTU();
@@ -18,6 +18,8 @@ function Row(props) {
   //timer
   useEffect(() => {
     if (render) return;
+    if (state) return;
+
     var d = new Date().getTime(); //number
     var pretime = parseInt(
       15 * 60 - Math.floor((d - row.sendingTime) / 1000),
@@ -47,7 +49,8 @@ function Row(props) {
       row.status === "denied" ||
       row.status === "cancel" ||
       row.status === "expired" ||
-      timer <= 0
+      timer <= 0 ||
+      state
     ) {
       return "00 : 00";
     }
@@ -58,7 +61,14 @@ function Row(props) {
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
-        {row.status === "pending" ? (
+        {state ? (
+          <TableCell
+            align="left"
+            sx={{ p: "6px", border: 0, minWidth: "4em", color: "green" }}
+          >
+            已領取
+          </TableCell>
+        ) : row.status === "pending" ? (
           <TableCell align="left" sx={{ p: "6px", border: 0, minWidth: "4em" }}>
             申請中
           </TableCell>
@@ -69,24 +79,38 @@ function Row(props) {
         ) : (
           <TableCell
             align="left"
-            sx={{ color: "red", border: 0, minWidth: "4em", p: "6px" }}
+            sx={{
+              color: "red",
+              border: 0,
+              minWidth: "5em",
+              p: "6px",
+            }}
           >
-            {row.status === "denied"
-              ? "已拒絕"
-              : row.status === "cancel"
-              ? "已取消"
-              : breakpoints.isPhone
-              ? "已超時..."
-              : "已超時 請重新申請"}
+            {row.status === "denied" ? (
+              "已拒絕"
+            ) : row.status === "cancel" ? (
+              "已取消"
+            ) : breakpoints.isPhone || breakpoints.isXs || breakpoints.isSm ? (
+              "已超時..."
+            ) : (
+              <List sx={{ p: "0px" }}>
+                <ListItem key="已超時" sx={{ p: "2px", pl: "0px" }}>
+                  已超時
+                </ListItem>
+                <ListItem key="請重新申請" sx={{ p: "2px", pl: "0px" }}>
+                  請重新申請
+                </ListItem>
+              </List>
+            )}
           </TableCell>
         )}
 
-        <TableCell align="center" sx={{ p: "6px", border: 0 }}>
+        <TableCell align="center" sx={{ py: "6px", px: "0px", border: 0 }}>
           {showTime()}
         </TableCell>
 
         <TableCell align="right" sx={{ display: "flex", border: 0, p: "6px" }}>
-          {row.status !== "pending" && row.status !== "ready" ? (
+          {!state && row.status !== "pending" && row.status !== "ready" ? (
             <IconButton
               aria-label="expand row"
               size="small"
@@ -106,8 +130,8 @@ function Row(props) {
           </IconButton>
         </TableCell>
       </TableRow>
-      <TableRow sx={{ maxHeight: "30vh", overflowY: "scroll" }}>
-        <RowContent row={row} open={open} userID={userID} />
+      <TableRow>
+        <RowContent row={row} open={open} userID={userID} state={state} />
       </TableRow>
     </React.Fragment>
   );

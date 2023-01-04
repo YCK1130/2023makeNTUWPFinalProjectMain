@@ -9,8 +9,9 @@ import Collapse from "@mui/material/Collapse";
 import Box from "@mui/material/Box";
 import AlertWindow from "./AlertWindow";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
+
 const rowContent = (props) => {
-  const { row, open, userID } = props;
+  const { row, open, userID, state } = props;
   const [alertOpen, setAlertOpen] = React.useState(false);
   const { cancelRequest, breakpoints } = useMakeNTU();
   const handleClick = () => {
@@ -40,19 +41,33 @@ const rowContent = (props) => {
                 //breakpoints.is
               }
 
-              {row.requestBody.map((detailRow) => (
-                <TableRow key={detailRow._id}>
-                  <TableCell component="th" scope="row">
-                    {detailRow.board}
-                  </TableCell>
-                  <TableCell>{detailRow.quantity}</TableCell>
-                </TableRow>
-              ))}
+              {state
+                ? row.map((detailRow) => {
+                    console.log(detailRow);
+                    return (
+                      <TableRow key={detailRow.id.slice(0, 8)}>
+                        <TableCell component="th" scope="row">
+                          {detailRow.name}
+                        </TableCell>
+                        <TableCell>{detailRow.num}</TableCell>
+                      </TableRow>
+                    );
+                  })
+                : row.requestBody.map((detailRow) => (
+                    <TableRow key={detailRow._id}>
+                      <TableCell component="th" scope="row">
+                        {detailRow.board}
+                      </TableCell>
+                      <TableCell>{detailRow.quantity}</TableCell>
+                    </TableRow>
+                  ))}
             </TableBody>
           </Table>
         </Box>
         <Box sx={{ margin: 1, display: "flex", flexDirection: "row-reverse" }}>
-          {row.status === "pending" ? (
+          {state ? (
+            <></>
+          ) : row.status === "pending" ? (
             <Chip label="Cancel" variant="outlined" onClick={handleClick} />
           ) : (
             <></>

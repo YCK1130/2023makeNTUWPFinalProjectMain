@@ -42,7 +42,13 @@ export default function Card(props) {
     >
       <Grid container spacing={2}>
         <Grid item>
-          <ButtonBase sx={{ width: 128, height: 128 }}>
+          <ButtonBase
+            sx={
+              breakpoints.isPhone
+                ? { width: 90, height: 90 }
+                : { width: 128, height: 128 }
+            }
+          >
             <Img alt="nano33" src="/photoData/nano33.jpg" />
             {/* 這裡是放照片的 */}
           </ButtonBase>
@@ -54,10 +60,10 @@ export default function Card(props) {
                 {userBoard.name}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                Tag : {userBoard.category}
+                Tag: {userBoard.category}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {userBoard.id}
+                ID: {userBoard.id.slice(0, 8)}
               </Typography>
             </Grid>
             <Grid item>
