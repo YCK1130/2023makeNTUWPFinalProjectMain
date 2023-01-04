@@ -12,16 +12,14 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
 const rowContent = (props) => {
   const { row, open, userID } = props;
   const [alertOpen, setAlertOpen] = React.useState(false);
-  const { cancelRequest } = useMakeNTU();
+  const { cancelRequest, breakpoints } = useMakeNTU();
   const handleClick = () => {
     setAlertOpen(true);
   };
   const handleAlertClose = () => {
-    console.log("nope");
     setAlertOpen(false);
   };
   const handleAlertAgree = () => {
-    console.log("yes");
     cancelRequest([userID, row._id]);
     setAlertOpen(false);
   };
@@ -38,6 +36,10 @@ const rowContent = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
+              {
+                //breakpoints.is
+              }
+
               {row.requestBody.map((detailRow) => (
                 <TableRow key={detailRow._id}>
                   <TableCell component="th" scope="row">

@@ -26,6 +26,7 @@ import { selectSession } from "../../slices/sessionSlice";
 import TeamTable from "./TeamTable";
 
 import { TeamDataAPI, PasswordAPI } from "../../api";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 const characters =
   "ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnpqrstuvwxyz123456789"; // no O, o, 0
@@ -100,6 +101,7 @@ export default function TeamData() {
     authority: "",
   });
   const { userID, authority } = useSelector(selectSession);
+  const { subscribe } = useMakeNTU();
   useEffect(() => {
     subscribe({ id: userID, authority: authority, page: "teamData" });
   }, []);

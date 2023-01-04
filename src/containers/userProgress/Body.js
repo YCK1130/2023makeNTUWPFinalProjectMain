@@ -25,7 +25,7 @@ var needList = {};
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 74vh;
+  height: calc(74vh - 70px);
   margin: 5px 0 5px 0;
   display: flex;
   flex-direction: row;
@@ -85,7 +85,7 @@ function Body() {
   };
 
   const handleNext = () => {
-    console.log(userRequest, userCards);
+    //console.log(userRequest, userCards);
     if (activeStep === steps.length - 1) {
       handleReset();
       return;
@@ -163,7 +163,7 @@ function Body() {
 
     userRequest.map((rq) => {
       if (rq.status === "pending") {
-        console.log(boardName);
+        //console.log(boardName);
         rq.requestBody.map((rb) => {
           if (rb.board === boardName) {
             groupLimit -= rb.quantity;
@@ -171,7 +171,7 @@ function Body() {
         });
       }
     });
-    console.log(groupLimit);
+    //console.log(groupLimit);
     return groupLimit;
   };
 
@@ -226,7 +226,6 @@ function Body() {
           >
             {userCardData.length !== 0 ? (
               userCardData.map((e) => {
-                console.log("hi");
                 if (activeStep === steps.length - 2) {
                   if (needList[e.name]) {
                     return (

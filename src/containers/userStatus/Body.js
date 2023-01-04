@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
 import { useEffect, useState } from "react";
 import { elementType } from "prop-types";
+import { createSerializableStateInvariantMiddleware } from "@reduxjs/toolkit";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -35,17 +36,20 @@ function Body() {
     subscribe,
     getBoardData,
     render,
-    getBoards,
+    setRender,
+    breakpoints,
   } = useMakeNTU();
   const { userID, authority } = useSelector(selectSession);
   const [userBoard, setUserBoard] = useState([]);
   const [myRequest, setMyRequest] = useState([]);
+
   useEffect(() => {
     getUser(userID);
     //getBoards();
     subscribe({ id: userID, authority: authority, page: "userStatus" });
   }, []);
   useEffect(() => {
+    if (!render) return;
     setMyRequest(JSON.parse(JSON.stringify(userRequest)));
     setUserBoard([]);
     let ub = JSON.parse(JSON.stringify(getBoardData));
@@ -57,6 +61,7 @@ function Body() {
         return item;
       });
     setUserBoard(ub);
+    setRender(false);
   }, [render]);
 
   return (
@@ -78,10 +83,11 @@ function Body() {
         <Box
           sx={{
             //margin: "5px",
-            width: "35%",
+            width: breakpoints.isPhone ? "50%" : "35%",
             height: "100%",
             backgroundColor: "rgba(38,43,50)",
-            overflowY: "scroll",
+            overflowY: "auto",
+            overflowX: "hidden",
             borderRadius: "5px",
             display: "flex",
             flexWrap: "wrap",
@@ -127,10 +133,11 @@ function Body() {
         <Box
           sx={{
             //margin: "5px",
-            width: "65%",
+            width: breakpoints.isPhone ? "50%" : "65%",
             height: "100%",
             backgroundColor: "rgba(255,255,255,0.6)",
-            overflowY: "scroll",
+            overflowY: "auto",
+            overflowX: "hidden",
             borderRadius: "5px",
             display: "flex",
             flexWrap: "wrap",

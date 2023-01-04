@@ -9,6 +9,7 @@ import Selector from "./Selector";
 import { NearMeDisabled } from "@mui/icons-material";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 const Img = styled("img")({
   margin: "auto",
@@ -20,7 +21,7 @@ const Img = styled("img")({
 export default function Card(props) {
   // console.log(props)
   const [num, setNum] = React.useState(0);
-
+  const { breakpoints } = useMakeNTU();
   //console.log(props.addNeedList);
   useEffect(() => {
     if (props.needList[props.name]) {
@@ -40,7 +41,7 @@ export default function Card(props) {
     <Paper
       sx={{
         minWidth: 230,
-        maxHeight: 180,
+        maxHeight: breakpoints.isXs ? 800 : 180,
         p: 2,
         margin: "5px",
         flexGrow: 3,
@@ -63,10 +64,10 @@ export default function Card(props) {
                 {props.name}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {props.tag}
+                {"Tag: " + props.tag}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                ID: ILOVEMAKENTU
+                {"ID: " + props.id.slice(0, 8)}
               </Typography>
             </Grid>
             <Grid item>

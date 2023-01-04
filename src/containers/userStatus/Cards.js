@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import Selector from "../userProgress/Components/Selector";
 
 import { useEffect } from "react";
+import { useMakeNTU } from "../../hooks/useMakeNTU";
 
 const Img = styled("img")({
   margin: "auto",
@@ -20,6 +21,7 @@ const Img = styled("img")({
 export default function Card(props) {
   //const [num, setNum] = React.useState(0);
   const { num, userBoard } = props;
+  const { breakpoints } = useMakeNTU();
   //console.log(props.addNeedList);
   /*useEffect(() => {
     if (props.needList.has(props.id)) {
@@ -30,9 +32,6 @@ export default function Card(props) {
   return (
     <Paper
       sx={{
-        minWidth: 230,
-        maxHeight: 180,
-
         p: 2,
         margin: "5px",
         flexGrow: 3,

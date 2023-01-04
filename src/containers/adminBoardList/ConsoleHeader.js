@@ -60,7 +60,11 @@ export default function Header({ setSaving, ableSave, data }) {
   const [csv, setCsv] = React.useState("");
   const { dataINIT, handleReplaceBoard, showAlert } = useMakeNTU();
   useEffect(() => {
-    setCsv(Papa.unparse(data));
+    const csvData = data.map((item) => {
+      const { id, name, category, limit, totalNum, image } = item;
+      return { id, name, category, limit, totalNum, image };
+    });
+    setCsv(Papa.unparse(csvData));
   }, [data]);
   const handleInitData = () => {
     dataINIT();
@@ -186,7 +190,7 @@ export default function Header({ setSaving, ableSave, data }) {
     document.body.removeChild(element);
   };
   const handleExport = () => {
-    download(`boards_${new Date()}.csv`, csv);
+    download(`boards_${new Date().getTime()}.csv`, csv);
     handleCloseExport();
   };
   const handleOpenExport = () => {
