@@ -9,8 +9,7 @@ const wsConnect = require("./wsConnect");
 
 // ========================================
 
-const port = process.env.PORT || 8000;
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 if (process.env.NODE_ENV === "development") {
   console.log("NODE_ENV = development");
