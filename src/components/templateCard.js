@@ -306,8 +306,11 @@ export default function ComplexGrid({ setAddCardData }) {
           top: 0,
         }}
         onClick={() => {
-          let { name, limit, totalNum } = values;
-          if (name && limit && totalNum) {
+          setHasFocus(() => {
+            return { name: true, category: true };
+          });
+          let { name, limit, totalNum, category } = values;
+          if (name && limit && totalNum && category) {
             setAddCardData(values);
             // nameInputRef.current.value = "";
           } else {
