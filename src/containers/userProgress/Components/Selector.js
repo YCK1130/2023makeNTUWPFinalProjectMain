@@ -1,9 +1,9 @@
-import * as React from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { useEffect } from 'react';
+import * as React from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { useEffect } from "react";
 
 export default function Selector(props) {
   const [df, setDf] = React.useState(0);
@@ -13,17 +13,17 @@ export default function Selector(props) {
       setDf(props.defaultValue);
     }
   }, [props.defaultValue]);
-  
+
   const handleChange = (event) => {
     props.addNeedList(props.name, event.target.value);
-    setDf(event.target.value)
+    setDf(event.target.value);
   };
 
   const makeArray = (limit) => {
-    //console.log(limit);
+    //// console.log(limit);
     let a = [];
-    for(let i=0 ; i<limit+1 ; i++){
-        a.push(i);
+    for (let i = 0; i < limit + 1; i++) {
+      a.push(i);
     }
     return a;
   };
@@ -42,7 +42,11 @@ export default function Selector(props) {
         value={df}
       >
         {a.map((e) => {
-            return <MenuItem key={props.id+"_"+ e} value={e}>{e}</MenuItem>
+          return (
+            <MenuItem key={props.id + "_" + e} value={e}>
+              {e}
+            </MenuItem>
+          );
         })}
       </Select>
     </FormControl>

@@ -30,7 +30,7 @@ function Row(props) {
       intervalId.current = setInterval(() => {
         setTimer((t) => t - 1);
       }, 1000);
-      console.log("break!");
+      // console.log("break!");
       return () => clearInterval(intervalId.current);
     } else {
       setTimer(0);

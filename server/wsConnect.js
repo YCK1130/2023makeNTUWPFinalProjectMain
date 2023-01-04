@@ -14,7 +14,7 @@ const sendStatus = (payload, ws) => {
 };
 
 const broadcastPage = (page, data) => {
-  //console.log(userPage[page]);
+  //// console.log(userPage[page]);
   if (userPage[page]) {
     userPage[page].forEach((client) => {
       sendData(data, client);
@@ -22,7 +22,7 @@ const broadcastPage = (page, data) => {
   }
 };
 const broadcastID = (ID, data) => {
-  //console.log(userPage[page]);
+  //// console.log(userPage[page]);
   if (userID[ID]) {
     userID[ID].forEach((client) => {
       sendData(data, client);
@@ -30,7 +30,7 @@ const broadcastID = (ID, data) => {
   }
 };
 const broadcastAuth = (authority, data) => {
-  //console.log(userPage[page]);
+  //// console.log(userPage[page]);
   if (userAuth[authority]) {
     userAuth[authority].forEach((client) => {
       sendData(data, client);
@@ -113,8 +113,8 @@ const updateMyCards = async (group, request) => {
     })
   );
   await gp.save();
-  // console.log(gp.myCards);
-  //console.log(gp, "hi");
+  // // console.log(gp.myCards);
+  //// console.log(gp, "hi");
 };
 
 module.exports = {
@@ -140,7 +140,7 @@ module.exports = {
   onMessage: (ws) => async (byteString) => {
     const { data } = byteString;
     const [task, payload] = JSON.parse(data);
-    console.log(task, payload);
+    // console.log(task, payload);
 
     switch (task) {
       case "RESETDATABASE": {
@@ -150,7 +150,7 @@ module.exports = {
           {},
           { $set: { myCards: new Map(), requests: [] } }
         );
-        console.log("Database has been cleared.");
+        // console.log("Database has been cleared.");
 
         const userData = await model.TeamModel.find({});
         userData.map((user) => {
@@ -160,7 +160,7 @@ module.exports = {
         broadcast({ authority: 1 }, ["GETBOARD", []]);
         broadcast({ page: "requestStatus" }, ["UPDATEREQUEST", []]);
         broadcast({ page: "requestStatus" }, ["UPDATERETURN", userData]);
-        console.log("All Change has been sent.");
+        // console.log("All Change has been sent.");
 
         break;
       }
@@ -174,7 +174,7 @@ module.exports = {
         if (!userPage[page]) userPage[page] = new Set();
         userPage[page].add(ws);
         ws.box = page;
-        // console.log("change page to " + ws.box);
+        // // console.log("change page to " + ws.box);
 
         if (!userID[id]) userID[id] = new Set();
         userID[id].add(ws);
@@ -184,8 +184,8 @@ module.exports = {
         userAuth[authority].add(ws);
         ws.authority = authority;
 
-        console.log(id, authority);
-        console.log("change page to " + ws.box);
+        // console.log(id, authority);
+        // console.log("change page to " + ws.box);
         break;
       }
       case "DELETEREQUESTFROMUSER": {
@@ -195,8 +195,8 @@ module.exports = {
         const newR = newRequest.filter(
           (re) => String(re._id) !== String(payload[1])
         );
-        // console.log("newR:", newR);
-        // console.log("newRequest:", newRequest);
+        // // console.log("newR:", newR);
+        // // console.log("newRequest:", newRequest);
         await model.TeamModel.updateOne(
           { teamID: payload[0] },
           { $set: { requests: newR } }
@@ -249,7 +249,7 @@ module.exports = {
       }
       case "ADDBOARD": {
         const newData = payload;
-        console.log("AddBoard:", newData);
+        // console.log("AddBoard:", newData);
         const existing = await model.BoardModel.find({
           name: newData.name,
         });
@@ -304,7 +304,7 @@ module.exports = {
       }
       case "GETBOARD": {
         const boards = await model.BoardModel.find({});
-        // console.log(boards);
+        // // console.log(boards);
         sendData(["GETBOARD", boards], ws);
         //sendStatus(["success", "Get successfully"], ws);
         break;
@@ -313,7 +313,7 @@ module.exports = {
         //need populate
         const requests = await model.RequestModel.find().populate(["borrower"]);
         // await requests..execPopulate();
-        // console.log(requests);
+        // // console.log(requests);
         sendData(["GETREQUEST", requests], ws);
         // sendStatus(["success", "Get successfully"], ws);
         break;
@@ -331,7 +331,7 @@ module.exports = {
               name: board[0],
             });
             if (!myboard) {
-              console.log("Board missing:", board, myboard);
+              // console.log("Board missing:", board, myboard);
               boardMissing = true;
             }
           })
@@ -379,7 +379,7 @@ module.exports = {
           { $push: { requests: request } }
         );
         const requests = await model.RequestModel.find().populate(["borrower"]);
-        // console.log(requests);
+        // // console.log(requests);
         await Promise.all(
           request.requestBody.map(async (board) => {
             const myboard = await model.BoardModel.updateOne(
@@ -416,7 +416,7 @@ module.exports = {
         const newReq = await model.RequestModel.findOne({
           _id: requestID,
         }).populate(["borrower"]);
-        // console.log(newReq);
+        // // console.log(newReq);
 
         if (requestStatus === "ready") {
           await model.RequestModel.updateOne(
@@ -462,14 +462,14 @@ module.exports = {
                   { group: newReq.borrower._id, number: board.quantity },
                 ];
               }
-              // console.log("newInvoice: ", board, newInvoice);
+              // // console.log("newInvoice: ", board, newInvoice);
               myboard.invoice = newInvoice;
               myboard.remain -= board.quantity;
               await myboard.save();
             })
           );
           const boards = await model.BoardModel.find({});
-          console.log(boards);
+          // console.log(boards);
         }
         const requests = await model.RequestModel.find().populate(["borrower"]);
         // sendData(["UPDATEREQUEST", requests], ws);
@@ -506,12 +506,12 @@ module.exports = {
       }
       case "UPDATERETURN": {
         const { id, returned } = payload;
-        console.log(id, returned);
+        // console.log(id, returned);
         const team = await model.TeamModel.findOne({ teamID: id }).populate([
           "requests",
         ]);
         const teamsCard = JSON.parse(JSON.stringify(team.myCards));
-        console.log(teamsCard);
+        // console.log(teamsCard);
         for (const [key, value] of Object.entries(returned)) {
           if (value === 0) continue;
           teamsCard[key] -= value;
@@ -525,14 +525,14 @@ module.exports = {
             else return item;
           });
           myboard.invoice = newInvoice.filter((item) => item.number > 0);
-          // console.log(myboard.invoice);
+          // // console.log(myboard.invoice);
           await myboard.save();
-          // console.log(myboard.invoice);
+          // // console.log(myboard.invoice);
           if (teamsCard[key] === 0) delete teamsCard[key];
         }
         team.myCards = teamsCard;
         await team.save();
-        // console.log(team.myCards);
+        // // console.log(team.myCards);
         const teams = await model.TeamModel.find({});
 
         broadcast(
@@ -555,7 +555,7 @@ module.exports = {
           { $set: { myCards: {}, request: [] } }
         );
 
-        console.log(payload);
+        // console.log(payload);
         const newBoards = await Promise.all(
           payload.map(async (newBoard) => {
             const saveBoard = await new model.BoardModel(newBoard).save();

@@ -122,7 +122,7 @@ export default function TeamData() {
   }, []);
 
   const handleOpenAddMultiple = () => {
-    // console.log("handleOpenAddMultiple");
+    // // console.log("handleOpenAddMultiple");
     setUploaded(false);
     setAddMultipleOpen(true);
     setNewTeamMultiple({
@@ -135,13 +135,13 @@ export default function TeamData() {
   };
 
   const handleCloseAddMultiple = () => {
-    // console.log("handleCloseAddMultiple");
+    // // console.log("handleCloseAddMultiple");
     setAddMultipleOpen(false);
   };
 
   const handleOpenAdd = () => {
-    // console.log(data);
-    // console.log("handleOpenAdd");
+    // // console.log(data);
+    // // console.log("handleOpenAdd");
     setNewTeam({
       id: "",
       teamName: "",
@@ -161,7 +161,7 @@ export default function TeamData() {
   };
 
   const handleCloseAdd = () => {
-    // console.log("handleCloseAdd");
+    // // console.log("handleCloseAdd");
     setNewTeam({
       id: "",
       teamName: "",
@@ -181,9 +181,9 @@ export default function TeamData() {
   };
 
   const handleOpenEdit = (id) => {
-    // console.log("handleOpenEdit");
+    // // console.log("handleOpenEdit");
     setEditId(id);
-    // console.log(id);
+    // // console.log(id);
     const team = data.find((e) => e.id === id);
     setNewTeam({
       id: team.id,
@@ -204,7 +204,7 @@ export default function TeamData() {
   };
 
   const handleCloseEdit = () => {
-    // console.log("handleCloseEdit");
+    // // console.log("handleCloseEdit");
     setEditId("");
     setNewTeam({
       id: "",
@@ -292,7 +292,7 @@ export default function TeamData() {
   };
 
   const handleUploadCsv = async (efile) => {
-    // console.log(efile);
+    // // console.log(efile);
     if (efile) {
       Papa.parse(efile, {
         skipEmptyLines: true,
@@ -305,11 +305,11 @@ export default function TeamData() {
               !team[1]
             ) {
               valid = false;
-              // console.log(team);
+              // // console.log(team);
             }
             if (testRepeatId(team[0])) {
               repeat = true;
-              // console.log(team);
+              // // console.log(team);
             }
           });
           if (valid && !repeat) {
@@ -324,8 +324,8 @@ export default function TeamData() {
             }, []);
             setNewTeamMultiple(newData);
             setLoaded(true);
-            // console.log("Multiple team data loaded");
-            // console.log(newData);
+            // // console.log("Multiple team data loaded");
+            // // console.log(newData);
             setFilename(efile.name);
             return;
           }
@@ -354,14 +354,14 @@ export default function TeamData() {
   };
 
   const handleAddMultipleTeams = async () => {
-    // console.log("handleAddMultipleTeams");
+    // // console.log("handleAddMultipleTeams");
     if (loaded) {
       const newData = newTeamMultiple.map((team) => {
         const password = genPassword();
         return { ...team, password };
       });
-      // console.log(newData);
-      // console.log("start post datas");
+      // // console.log(newData);
+      // // console.log("start post datas");
       try {
         await TeamDataAPI.postTeamData(
           newData.map((team) => {
@@ -373,11 +373,11 @@ export default function TeamData() {
             };
           })
         );
-        // console.log("finish post");
+        // // console.log("finish post");
         setUploaded(true);
         setData(data.concat(newData));
-        // console.log(newData);
-        // console.log(data);
+        // // console.log(newData);
+        // // console.log(data);
 
         setNewTeamMultiple({
           id: "",
@@ -419,14 +419,14 @@ export default function TeamData() {
   };
 
   const handleDownloadPassword = () => {
-    // console.log("download password");
+    // // console.log("download password");
     if (
       data.filter((e) => selected.includes(e.id)).filter((e) => !e.password)
         .length === 0
     ) {
-      // console.log(data.filter((e) => selected.includes(e.id)));
+      // // console.log(data.filter((e) => selected.includes(e.id)));
       const csvData = [];
-      // console.log(data);
+      // // console.log(data);
       data
         .slice(1)
         .filter((e) => selected.includes(e.id))
@@ -444,12 +444,12 @@ export default function TeamData() {
   };
 
   const handleDownload = () => {
-    // console.log(csv);
+    // // console.log(csv);
     download("datas.csv", csv);
   };
 
   const handleGeneratePassword = async () => {
-    // console.log("generate password");
+    // // console.log("generate password");
     const passwords = [];
     const updateData = data.map((e) => {
       if (selected.includes(e.id)) {
@@ -477,7 +477,7 @@ export default function TeamData() {
   };
 
   const judgeNewTeam = () => {
-    // console.log(newTeam);
+    // // console.log(newTeam);
     let error = false;
     let newErrors = errors;
     let newErrorsMsg = errorsMsg;
@@ -612,8 +612,8 @@ export default function TeamData() {
     try {
       await TeamDataAPI.deleteTeamData(deleteIds);
       setData(data.filter((team) => !deleteIds.includes(team.id)));
-      // console.log("delete team data finish : ");
-      // console.log(deleteIds);
+      // // console.log("delete team data finish : ");
+      // // console.log(deleteIds);
       setDeleteIds([]);
       setSelected([]);
       handleCloseDelete();

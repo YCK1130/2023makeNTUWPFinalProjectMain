@@ -10,7 +10,7 @@ function BoardRequest(props) {
   //every team
   const { team, breakpoints } = props;
   const [open, setOpen] = React.useState(false);
-  // console.log(team?.myCards);
+  // // console.log(team?.myCards);
   React.useEffect(() => {
     const notReturned = team?.myCards ? Object.keys(team?.myCards).length : 0;
 

@@ -62,7 +62,7 @@ const Routes = () => {
 
 export default function App() {
   return (
-    <div>
+    <div style={{ userSelect: "none" }}>
       <Router>
         <Drawer>
           <Routes />

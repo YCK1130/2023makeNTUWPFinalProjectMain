@@ -43,7 +43,7 @@ const rowContent = (props) => {
 
               {state
                 ? row.map((detailRow) => {
-                    console.log(detailRow);
+                    // console.log(detailRow);
                     return (
                       <TableRow key={detailRow.id.slice(0, 8)}>
                         <TableCell component="th" scope="row">

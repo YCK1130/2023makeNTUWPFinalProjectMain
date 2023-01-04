@@ -51,7 +51,7 @@ function Body() {
     setMyRequest(JSON.parse(JSON.stringify(userRequest)));
     setUserBoard([]);
     let ub = JSON.parse(JSON.stringify(getBoardData));
-    //console.log(userCards);
+    //// console.log(userCards);
     ub = ub
       .filter((ubb) => ubb.name in userCards)
       .map((item) => {

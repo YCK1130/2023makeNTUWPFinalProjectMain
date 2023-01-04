@@ -16,7 +16,7 @@ function GroupContent(props) {
   const [boards, setBoards] = React.useState([]);
   const { updateReturn } = useMakeNTU();
   const handleEdit = () => {
-    console.log(team, numReturn);
+    // console.log(team, numReturn);
     updateReturn({ id: team.id, returned: numReturn });
   };
 
@@ -24,7 +24,7 @@ function GroupContent(props) {
     // let newBoards = [];
     if (!team?.myCards) return;
     if (Object.keys(team.myCards).length === 0) return;
-    // console.log(Object.keys(team.myCards));
+    // // console.log(Object.keys(team.myCards));
     let newReturn;
     let newBoards = Object.keys(team.myCards).map((key) => {
       newReturn = { ...newReturn, [key]: 0 };
@@ -34,7 +34,7 @@ function GroupContent(props) {
       };
     });
     setNumReturn(newReturn);
-    // console.log("team", newBoards);
+    // // console.log("team", newBoards);
     setBoards(newBoards);
   }, [team]);
 

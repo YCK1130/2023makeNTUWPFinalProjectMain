@@ -62,7 +62,7 @@ export default function ComplexGrid({ setAddCardData }) {
     image: "",
   });
   const uploadImg = (link) => {
-    console.log(link, "link");
+    // console.log(link, "link");
     setValues(() => ({ ...values, image: link }));
     setOpenDialog(false);
   };
@@ -79,7 +79,7 @@ export default function ComplexGrid({ setAddCardData }) {
   };
   const handleKeyDown = (event) => {
     if (event.key !== "Enter") {
-      // // console.log(event.key);
+      // // // console.log(event.key);
       return;
     }
     setHasFocus(() => {
@@ -94,10 +94,10 @@ export default function ComplexGrid({ setAddCardData }) {
         name: "",
       });
     } else {
-      // console.log("something missing: ", name, limit, totalNum);
+      // // console.log("something missing: ", name, limit, totalNum);
     }
   };
-  // // console.log(values);
+  // // // console.log(values);
   return (
     <Paper
       sx={{
@@ -313,7 +313,7 @@ export default function ComplexGrid({ setAddCardData }) {
             setAddCardData(values);
             // nameInputRef.current.value = "";
           } else {
-            // console.log("something missing: ", name, limit, totalNum);
+            // // console.log("something missing: ", name, limit, totalNum);
           }
         }}
       >

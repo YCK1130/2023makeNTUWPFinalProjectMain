@@ -94,11 +94,11 @@ export default function RequestConsole({ breakpoints }) {
   };
   useEffect(() => {
     //獲取user資料
-    console.log("fetching data...");
+    // console.log("fetching data...");
     getRequest();
   }, []);
   useEffect(() => {
-    console.log("requestData", requestData);
+    // console.log("requestData", requestData);
     setRequests(requestData);
   }, [requestData]);
   return (

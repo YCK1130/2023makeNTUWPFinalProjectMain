@@ -127,14 +127,14 @@ export default function StatusConsole() {
   const { requestData, teamReqUpdateDate } = useMakeNTU();
   useEffect(async () => {
     //獲取user資料
-    console.log("fetching data...");
+    // console.log("fetching data...");
     const { data: userData } = await TeamDataAPI.getTeamData();
-    console.log(userData);
+    // console.log(userData);
     setUserStatus(userData);
   }, [requestData, teamReqUpdateDate]);
 
   useEffect(() => {
-    console.log(changedData);
+    // console.log(changedData);
   }, [changedData]);
 
   const classes = useStyles();

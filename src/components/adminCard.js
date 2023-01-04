@@ -59,9 +59,9 @@ export default function ComplexGrid({
   const [values, setValues] = useState({});
   useEffect(() => {
     setValues({ limit: data.limit, totalNum: data.totalNum });
-    // console.log(data);
+    // // console.log(data);
   }, []);
-  // console.log(data);
+  // // console.log(data);
   const handleChange = (event) => {
     const { name, value } = event.target;
     const changingValue = parseInt(value);

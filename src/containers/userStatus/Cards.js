@@ -22,7 +22,7 @@ export default function Card(props) {
   //const [num, setNum] = React.useState(0);
   const { num, userBoard } = props;
   const { breakpoints } = useMakeNTU();
-  //console.log(props.addNeedList);
+  //// console.log(props.addNeedList);
   /*useEffect(() => {
     if (props.needList.has(props.id)) {
       setNum(props.needList.get(props.id));

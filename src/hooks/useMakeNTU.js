@@ -62,7 +62,7 @@ const MakeNTUProvider = (props) => {
     const { data } = byteString;
     const [task, payload] = JSON.parse(data);
 
-    console.log(task, payload);
+    // console.log(task, payload);
     switch (task) {
       case "USERPROGRESSSTATUS":
         setUserProgressStatus(payload);
@@ -79,7 +79,7 @@ const MakeNTUProvider = (props) => {
       }
       case "INITUSERCARD": {
         setCardData(payload);
-        console.log(payload);
+        // console.log(payload);
         break;
       }
       case "status": {
@@ -100,7 +100,7 @@ const MakeNTUProvider = (props) => {
         break;
       }
       case "UpdateBoard": {
-        // console.log(payload);
+        // // console.log(payload);
         setUpdateBoardStatus(payload.status);
         if (payload.status === "success") setGetBoardData(payload.data);
         break;
@@ -186,7 +186,7 @@ const MakeNTUProvider = (props) => {
     sendData(["INITUSERCARD", payload]);
   };
   const addBoard = (payload) => {
-    console.log("adding");
+    // console.log("adding");
     sendData(["ADDBOARD", payload]); //Board data
   };
   const deleteBoard = (payload) => {

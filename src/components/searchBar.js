@@ -65,7 +65,7 @@ function SearchBar({ handleChange, handleCheck, searchMethod }) {
           breakpoints.isSm || breakpoints.isXs ? "Search by name" : "Search"
         }
         onChange={(e) => {
-          //   console.log(e.target.value);
+          //   // console.log(e.target.value);
           handleChange(e.target.value);
         }}
         onKeyDown={(e) => {

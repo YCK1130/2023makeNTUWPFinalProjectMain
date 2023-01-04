@@ -81,9 +81,9 @@ export default function Header({ setSaving, ableSave, data }) {
     setImportOpen(false);
   };
   const handleImport = () => {
-    console.log("handleImport");
+    // console.log("handleImport");
     if (loaded) {
-      console.log("uploading");
+      // console.log("uploading");
       try {
         handleReplaceBoard(newBoardData);
         setUploaded(true);
@@ -91,7 +91,7 @@ export default function Header({ setSaving, ableSave, data }) {
         setCsv(Papa.unparse(newBoardData));
       } catch (e) {
         showAlert("error", "Upload file Failed.");
-        console.log(e);
+        // console.log(e);
       }
     }
   };
@@ -102,13 +102,13 @@ export default function Header({ setSaving, ableSave, data }) {
     return new Set(arr).size !== arr.length;
   };
   const handleUploadCsv = (efile) => {
-    // console.log(efile);
+    // // console.log(efile);
     if (efile) {
       Papa.parse(efile, {
         skipEmptyLines: true,
         complete(results) {
           let valid = true;
-          console.log(results.data.slice(1));
+          // console.log(results.data.slice(1));
           results.data.slice(1).forEach((board) => {
             if (!board[1] || !board[2] || !board[3] || !board[4]) {
               valid = false;
@@ -133,7 +133,7 @@ export default function Header({ setSaving, ableSave, data }) {
                 },
               ]);
             }, []);
-            console.log(newData);
+            // console.log(newData);
             setNewBoardData(newData);
             setImportError(false);
             setLoaded(true);
@@ -165,7 +165,7 @@ export default function Header({ setSaving, ableSave, data }) {
             );
             setImportError(true);
           }
-          console.log("file");
+          // console.log("file");
           setNewBoardData([]);
           setLoaded(false);
           setFilename("");

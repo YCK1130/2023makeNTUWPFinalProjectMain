@@ -90,10 +90,10 @@ export default function BoardConsole({
   }, [saving]);
 
   useEffect(() => {
-    // // console.log("hi", changedData);
+    // // // console.log("hi", changedData);
     if (changedData.length !== 0) setAbleSave(true);
     else setAbleSave(false);
-    // console.log("change", changedData);
+    // // console.log("change", changedData);
   }, [changedData]);
 
   useEffect(() => {
@@ -106,8 +106,8 @@ export default function BoardConsole({
   }, [updateBoardStatus]);
 
   const updateData = () => {
-    // // console.log("updating");
-    // console.log("updating", changedData);
+    // // // console.log("updating");
+    // // console.log("updating", changedData);
     updateBoards(changedData);
   };
 
@@ -116,10 +116,10 @@ export default function BoardConsole({
     const exist = cards.filter((card) => card.name === addCardData.name.trim());
     if (exist.length !== 0) {
       showAlert("error", `${addCardData.name.trim()} already exist!`);
-      // // console.log("existed");
+      // // // console.log("existed");
       return;
     }
-    // console.log("handling", addCardData);
+    // // console.log("handling", addCardData);
     const newCard = {
       ...addCardData,
       id: uuidv4(),
@@ -132,7 +132,7 @@ export default function BoardConsole({
 
   useEffect(() => {
     if (Object.keys(addBoardData).length === 0) return;
-    // console.log(addBoardData);
+    // // console.log(addBoardData);
     setCards([addBoardData, ...cards]);
   }, [addBoardData]);
 
@@ -143,12 +143,12 @@ export default function BoardConsole({
   useEffect(() => {
     if (cards.length === 0) return;
     // const exist = cards.filter((card) => card.id === delCardID);
-    // console.log(delCardID);
+    // // console.log(delCardID);
     deleteBoard(delCardID); // talk to server
     const remainCards = cards.filter((card) => card.id !== delCardID);
 
     setChangedData(changedData.filter((card) => card.id !== delCardID));
-    // // console.log("deleting", exist);
+    // // // console.log("deleting", exist);
     setCards(remainCards);
   }, [delCardID]);
 

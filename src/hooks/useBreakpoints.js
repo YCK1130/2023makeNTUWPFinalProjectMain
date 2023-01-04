@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material/styles";
  */
 export default function useBreakpoints() {
   const theme = useTheme();
-  //   console.log(theme);
+  //   // console.log(theme);
   const breakpoints = {
     isXs: useMediaQuery(`(max-width: ${theme.breakpoints.values.sm}px)`),
     isSm: useMediaQuery(

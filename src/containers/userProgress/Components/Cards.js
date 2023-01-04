@@ -19,13 +19,13 @@ const Img = styled("img")({
 });
 
 export default function Card(props) {
-  // console.log(props)
+  // // console.log(props)
   const [num, setNum] = React.useState(0);
   const { breakpoints } = useMakeNTU();
-  //console.log(props.addNeedList);
+  //// console.log(props.addNeedList);
   useEffect(() => {
     if (props.needList[props.name]) {
-      console.log("needList " + num);
+      // console.log("needList " + num);
       setNum(props.needList[props.name]);
       if (props.needList[props.name] > props.left) {
         props.addNeedList(props.name, props.left);
@@ -34,7 +34,7 @@ export default function Card(props) {
   }, [props.needList]);
 
   useEffect(() => {
-    console.log("default is " + num);
+    // console.log("default is " + num);
   }, [num]);
 
   return (

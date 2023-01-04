@@ -14,28 +14,28 @@ const GroupStatusContent = (props) => {
   const { updateReq, deleteRequestFromUser } = useMakeNTU();
   const handleAsk = () => {
     if (!data?._id) {
-      console.log("missing requestID: ", data?._id);
+      // console.log("missing requestID: ", data?._id);
       return;
     }
     updateReq({ requestID: data?._id, requestStatus: "ready" });
   };
   const handleDenied = () => {
     if (!data?._id) {
-      console.log("missing requestID: ", data?._id);
+      // console.log("missing requestID: ", data?._id);
       return;
     }
     updateReq({ requestID: data?._id, requestStatus: "denied" });
   };
   const handleCancel = () => {
     if (!data?._id) {
-      console.log("missing requestID: ", data?._id);
+      // console.log("missing requestID: ", data?._id);
       return;
     }
     updateReq({ requestID: data?._id, requestStatus: "cancel" });
   };
   const handleTook = () => {
     if (!data?._id) {
-      console.log("missing requestID: ", data?._id);
+      // console.log("missing requestID: ", data?._id);
       return;
     }
     updateReq({ requestID: data?._id, requestStatus: "solved" });

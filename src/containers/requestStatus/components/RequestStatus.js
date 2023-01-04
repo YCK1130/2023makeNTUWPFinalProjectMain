@@ -9,12 +9,12 @@ import { useMakeNTU } from "../../../hooks/useMakeNTU";
 function RequestStatus(props) {
   //every request
   const { data, breakpoints } = props;
-  // console.log(data);
+  // // console.log(data);
   const [open, setOpen] = React.useState(false);
   const [timer, setTimer] = React.useState(0);
   const [intervalId, setIntervalID] = React.useState(0);
   const { getRequest } = useMakeNTU();
-  // console.log(breakpoints);
+  // // console.log(breakpoints);
   React.useEffect(() => {
     const d = new Date().getTime(); //number
     const pretime = 15 * 60 - Math.floor(d - data?.sendingTime) / 1000;

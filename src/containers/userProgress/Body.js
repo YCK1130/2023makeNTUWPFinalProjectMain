@@ -85,12 +85,12 @@ function Body() {
     } else {
       needList[name] = quantity;
     }
-    //console.log([...needList]);
+    //// console.log([...needList]);
     setAbleNext(Object.keys(needList).length !== 0);
   };
 
   const handleNext = () => {
-    //console.log(userRequest, userCards);
+    //// console.log(userRequest, userCards);
     if (activeStep === steps.length - 1) {
       reset();
       return;
@@ -104,11 +104,11 @@ function Body() {
       Object.keys(needList).forEach(function (key) {
         requestBody.push([key, needList[key]]);
       });
-      // console.log({ group, requestBody });
+      // // console.log({ group, requestBody });
       sendData(["REQUEST", { group, requestBody }]);
     }
 
-    console.log("User " + userID);
+    // console.log("User " + userID);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -120,11 +120,11 @@ function Body() {
     setResetOpen(true);
   };
   const handleResetClose = () => {
-    console.log("算了");
+    // console.log("算了");
     setResetOpen(false);
   };
   const reset = () => {
-    console.log("重置");
+    // console.log("重置");
     needList = {};
     setUserCardData([]);
     setActiveStep(0);
@@ -143,10 +143,11 @@ function Body() {
 
     if (a.length === 1) {
       Object.keys(needList).forEach(function (key) {
-        a.push("板子 : " + key + "  申請" + needList[key] + "個");
+        a.push(key + "  申請" + needList[key] + "個");
       });
+      a.push("-----銘謝惠顧-----");
     }
-    //console.log(a);
+    //// console.log(a);
 
     return a;
   };
@@ -169,7 +170,7 @@ function Body() {
 
     userRequest.map((rq) => {
       if (rq.status === "pending") {
-        //console.log(boardName);
+        //// console.log(boardName);
         rq.requestBody.map((rb) => {
           if (rb.board === boardName) {
             groupLimit -= rb.quantity;
@@ -177,7 +178,7 @@ function Body() {
         });
       }
     });
-    //console.log(groupLimit);
+    //// console.log(groupLimit);
     return groupLimit;
   };
 
