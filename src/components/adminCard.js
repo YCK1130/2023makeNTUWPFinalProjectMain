@@ -8,10 +8,15 @@ import {
   TextField,
   FormControl,
   CardMedia,
+  IconButton,
+  Box,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { NumericFormat } from "react-number-format";
 import CancelIcon from "@mui/icons-material/Cancel";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, ...other } = props;
 
@@ -154,9 +159,26 @@ export default function ComplexGrid({
           </Typography>
         </Grid>
         <Grid item>
-          <ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="no img" image={data?.image} component="img" />
+          {/*
+          <Box
+            component="img"
+            sx={{
+              maxWidth: 128,
+              maxHeight: 128,
+            }}
+            alt="The house from the offer."
+            display="flex"
+            src="https://images.modasena.com/firfirli-scuba-tesettur-jile-kiremit-343057-60-B.jpg"
+          />*/}
+          {
+            <IconButton sx={{ width: 128, height: 128 }}>
+              <AddPhotoAlternateOutlinedIcon />
+            </IconButton>
+          }
+          {/*<ButtonBase sx={{ width: 128, height: 128 }}>
+            <Img alt="no img" src={"https://lurl.cc/1F8aOb"} />
           </ButtonBase>
+          */}
         </Grid>
         <Grid
           container
