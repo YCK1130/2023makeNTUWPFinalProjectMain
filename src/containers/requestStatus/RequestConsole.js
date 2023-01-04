@@ -117,6 +117,8 @@ export default function RequestConsole({ breakpoints }) {
           value={value}
           scrollButtons="auto"
           variant="scrollable"
+          indicatorColor="secondary"
+          textColor="secondary"
           onChange={handleChange}
           aria-label="basic tabs example"
         >

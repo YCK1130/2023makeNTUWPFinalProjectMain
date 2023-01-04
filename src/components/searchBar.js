@@ -11,11 +11,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
 import PropTypes from "prop-types";
+import { useMakeNTU } from "../hooks/useMakeNTU";
 
 function SearchBar({ handleChange, handleCheck, searchMethod }) {
   const handleClick = (e) => {
     handleCheck(e.target.value);
   };
+  const { breakpoints } = useMakeNTU();
 
   return (
     <Paper
@@ -38,14 +40,30 @@ function SearchBar({ handleChange, handleCheck, searchMethod }) {
           value={searchMethod}
           onChange={handleClick}
         >
-          <FormControlLabel value="Name" control={<Radio />} label="by Name" />
-          <FormControlLabel value="Tag" control={<Radio />} label="by Tag" />
+          <FormControlLabel
+            value="Name"
+            control={<Radio />}
+            label="by Name"
+            sx={{
+              display: breakpoints.isSm || breakpoints.isXs ? "none" : "block",
+            }}
+          />
+          <FormControlLabel
+            value="Tag"
+            control={<Radio />}
+            label="by Tag"
+            sx={{
+              display: breakpoints.isSm || breakpoints.isXs ? "none" : "block",
+            }}
+          />
         </RadioGroup>
       </FormControl>
 
       <InputBase
         sx={{ ml: 1, flex: 1 }}
-        placeholder="Search"
+        placeholder={
+          breakpoints.isSm || breakpoints.isXs ? "Search by name" : "Search"
+        }
         onChange={(e) => {
           //   console.log(e.target.value);
           handleChange(e.target.value);

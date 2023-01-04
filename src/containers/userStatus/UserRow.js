@@ -64,7 +64,7 @@ function Row(props) {
         {state ? (
           <TableCell
             align="left"
-            sx={{ p: "6px", border: 0, minWidth: "4em", color: "green" }}
+            sx={{ p: "6px", border: 0, minWidth: "4em", color: "#00FF00" }}
           >
             已領取
           </TableCell>
@@ -80,7 +80,7 @@ function Row(props) {
           <TableCell
             align="left"
             sx={{
-              color: "red",
+              color: "#FF1212",
               border: 0,
               minWidth: "5em",
               p: "6px",
@@ -90,7 +90,10 @@ function Row(props) {
               "已拒絕"
             ) : row.status === "cancel" ? (
               "已取消"
-            ) : breakpoints.isPhone || breakpoints.isXs || breakpoints.isSm ? (
+            ) : breakpoints.isPhone ||
+              breakpoints.isXs ||
+              breakpoints.isSm ||
+              breakpoints.isMd ? (
               "已超時..."
             ) : (
               <List sx={{ p: "0px" }}>

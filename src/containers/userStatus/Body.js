@@ -97,7 +97,12 @@ function Body() {
             justifyContent: "space-around",
           }}
         >
-          <TableContainer component={Paper}>
+          <TableContainer
+            component={Paper}
+            sx={{
+              overflowX: "hidden",
+            }}
+          >
             <Table aria-label="collapsible table">
               <TableHead>
                 <TableRow
@@ -107,18 +112,19 @@ function Body() {
                     maxHeight: "10vh",
                   }}
                 >
-                  <TableCell />
+                  {/* <TableCell /> */}
                   <TableCell
                     sx={{
                       fontWeight: "bold",
                       fontSize: "h4.fontSize",
                     }}
                     align="center"
+                    colSpan={3}
                   >
-                    STATE
+                    My Requests
                   </TableCell>
 
-                  <TableCell />
+                  {/* <TableCell /> */}
                 </TableRow>
               </TableHead>
               <TableBody>

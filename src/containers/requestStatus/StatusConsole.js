@@ -170,7 +170,7 @@ export default function StatusConsole() {
                 }}
                 align="center"
               >
-                TEAM STATE
+                TEAM STATUS
               </TableCell>
               <TableCell />
             </TableRow>

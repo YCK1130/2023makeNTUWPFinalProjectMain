@@ -73,7 +73,14 @@ function RequestStatus(props) {
         {breakpoints.isXs ? (
           <></>
         ) : (
-          <TableCell align="center">{showTime() ?? "undefined"}</TableCell>
+          <TableCell
+            align="center"
+            sx={{
+              color: timer < 60 ? "#FF1212" : "white",
+            }}
+          >
+            {showTime() ?? "undefined"}
+          </TableCell>
         )}
         <TableCell align="center">
           {statusTEXT[data?.status] ?? "未知"}

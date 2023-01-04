@@ -34,8 +34,12 @@ export default function ImgDialog(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>取消</Button>
-          <Button onClick={() => uploadImg(myURL)}>確認</Button>
+          <Button onClick={handleClose} variant="contained">
+            Cancel
+          </Button>
+          <Button onClick={() => uploadImg(myURL)} variant="contained">
+            Upload
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

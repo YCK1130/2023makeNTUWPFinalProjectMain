@@ -8,9 +8,9 @@ import { selectSession } from "../../slices/sessionSlice";
 /**
  * This is Main Page
  */
-export default function Top() {
+export default function Top(props) {
   const history = useHistory();
-
+  const { userID, authority } = props;
   const useStyles = makeStyles(() => ({
     root: {
       flexGrow: 1,
@@ -19,7 +19,7 @@ export default function Top() {
       overflow: "auto",
     },
     paper: {
-      background: "rgb(0,0,0,.0)",
+      // background: "rgb(0,0,0,.0)",
       boxShadow: "none",
     },
     text: {
@@ -51,50 +51,63 @@ export default function Top() {
             marginTop: "5%",
             // marginLeft: "30%",
             width: "90%",
-            maxWidth: "500px",
+            maxWidth: "1000px",
             maxHeight: "500px",
           }}
         >
-          <Paper className={classes.paper}>
-            <Grid item style={{ marginTop: "15%", marginLeft: "5%" }}>
-              <Typography
-                gutterBottom
-                variant="h5"
-                className={classes.text}
-                style={{ opacity: ".5", textDecoration: "none" }}
-              >
-                MakeNTU
-              </Typography>
+          {/* <Paper className={classes.paper}> */}
+          <Grid item style={{ marginTop: "min(12.5%,20px)", marginLeft: "5%" }}>
+            <Typography
+              gutterBottom
+              variant="h5"
+              className={classes.text}
+              style={{ opacity: ".5", textDecoration: "none" }}
+            >
+              MakeNTU
+            </Typography>
+            <Typography
+              variant="h4"
+              className={classes.text}
+              style={{ marginBottom: "18px" }}
+            >
+              Competition Web
+            </Typography>
+            {isLogin && (
               <Typography
                 variant="h4"
                 className={classes.text}
                 style={{ marginBottom: "18px" }}
               >
-                Competition Web
+                {authority === 0
+                  ? `Welcome Back Group#${userID}`
+                  : `Welcome Back Administrater!`}
               </Typography>
-            </Grid>
-            {!isLogin && (
-              <Button
-                style={{
-                  width: "70%",
-                  display: "flex",
-                  margin: "auto",
-                  marginTop: "5%",
-                  marginBottom: "3%",
-                }}
-                variant="outlined"
-                color="primary"
-                onClick={() => history.push("/login")}
-              >
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to="/login"
-                >
-                  Log in
-                </Link>
-              </Button>
             )}
-            {/* <Button
+          </Grid>
+          {!isLogin && (
+            <Button
+              style={{
+                width: "90%",
+                maxWidth: "1000px",
+                display: "flex",
+                margin: "auto",
+                marginTop: "5%",
+                marginBottom: "3%",
+                fontSize: "4vmin",
+              }}
+              variant="contained"
+              color="primary"
+              onClick={() => history.push("/login")}
+            >
+              <Link
+                style={{ textDecoration: "none", color: "white" }}
+                to="/login"
+              >
+                Log in
+              </Link>
+            </Button>
+          )}
+          {/* <Button
               style={{
                 width: "70%",
                 display: "flex",
@@ -110,7 +123,7 @@ export default function Top() {
                 Start to Select Courses
               </Link>
             </Button> */}
-          </Paper>
+          {/* </Paper> */}
         </Grid>
       </div>
     </Element>

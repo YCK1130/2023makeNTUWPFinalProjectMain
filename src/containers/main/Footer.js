@@ -35,10 +35,11 @@ const Members = styled.div`
   align-items: center;
   /* justify-content: space-between; */
   @media screen and (max-width: 480px) {
+    color: #fff;
     width: 90%;
     height: 130px;
     display: flex;
-    overflow: auto;
+    // overflow: auto;
     font-size: 11px;
     letter-spacing: 1.5px;
     line-height: 1.5;
@@ -55,7 +56,7 @@ export default function Footer() {
     <FooterContainer>
       <Text>Developers</Text>
       <Members>
-        <p> 賴群貿大帥鍋、陳冠豪、楊竣凱、葉庭羽 </p>
+        <p> 陳冠豪、楊竣凱、葉庭羽、賴群貿</p>
       </Members>
     </FooterContainer>
   );

@@ -7,7 +7,8 @@ export const sessionSlice = createSlice({
     initialized: false,
     isLogin: false,
     authority: null,
-    teamID: null,
+    userID: null,
+    userName: null,
   },
   reducers: {
     //login
@@ -15,11 +16,13 @@ export const sessionSlice = createSlice({
       state.isLogin = true;
       state.authority = action.payload.authority;
       state.userID = action.payload.teamID;
+      state.userName = action.payload.teamName;
     },
     setLogout: (state) => {
       state.isLogin = false;
       state.authority = null;
       state.userID = null;
+      state.userName = null;
     },
     //initialize
     setInitialized: (state) => {

@@ -8,6 +8,7 @@ import {
   TextField,
   FormControl,
   IconButton,
+  Box,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { NumericFormat } from "react-number-format";
@@ -41,11 +42,12 @@ NumberFormatCustom.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
-const Img = styled("img")({
+const Img = styled(Box)({
   margin: "auto",
   display: "block",
   maxWidth: "100%",
   maxHeight: "100%",
+  fontSize: "1rem",
 });
 ComplexGrid.propTypes = {
   setAddCardData: PropTypes.func.isRequired,
@@ -61,6 +63,7 @@ export default function ComplexGrid({ setAddCardData }) {
   });
   const uploadImg = (link) => {
     console.log(link, "link");
+    setValues(() => ({ ...values, image: link }));
     setOpenDialog(false);
   };
   const [hasFocus, setHasFocus] = useState({ name: false, category: false });
@@ -215,10 +218,13 @@ export default function ComplexGrid({ setAddCardData }) {
               setOpenDialog(true);
             }} //setOpenDialog(true)}
           >
-            <AddPhotoAlternateOutlinedIcon />
+            {values?.image ? (
+              <Img alt="img not found" src={values?.image} component="img" />
+            ) : (
+              <AddPhotoAlternateOutlinedIcon />
+            )}
           </IconButton>
           {/* <ButtonBase sx={{ width: 100, height: 100 }}>
-            <Img alt="no img" src="/static/images/grid/complex.jpg" />
           </ButtonBase>*/}
         </Grid>
         <Grid

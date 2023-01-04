@@ -49,7 +49,10 @@ export default function Card(props) {
                 : { width: 128, height: 128 }
             }
           >
-            <Img alt="nano33" src="/photoData/nano33.jpg" />
+            <Img
+              alt="image not found"
+              src={userBoard?.image || "/photoData/MakeNTU2022_icon.png"}
+            />
             {/* 這裡是放照片的 */}
           </ButtonBase>
         </Grid>

@@ -680,7 +680,10 @@ export default function TeamData() {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={editId === "" ? handleCloseAdd : handleCloseEdit}>
+          <Button
+            onClick={editId === "" ? handleCloseAdd : handleCloseEdit}
+            color="secondary"
+          >
             Cancel
           </Button>
           <Button
@@ -735,7 +738,9 @@ export default function TeamData() {
             <Button onClick={handleCloseDelete}>Done</Button>
           ) : (
             <>
-              <Button onClick={handleCloseDelete}>Cancel</Button>
+              <Button onClick={handleCloseDelete} color="secondary">
+                Cancel
+              </Button>
               <Button
                 onClick={handleDeleteTeam}
                 variant="contained"
@@ -779,7 +784,7 @@ export default function TeamData() {
                 type="file"
                 onChange={(e) => handleUploadCsv(e.target.files[0])}
               />
-              <Button variant="outlined" color="primary" component="span">
+              <Button variant="contained" color="primary" component="span">
                 Select csv file
               </Button>
             </label>
@@ -797,7 +802,9 @@ export default function TeamData() {
             </Button>
           ) : (
             <>
-              <Button onClick={handleCloseAddMultiple}>Cancel</Button>
+              <Button onClick={handleCloseAddMultiple} color="secondary">
+                Cancel
+              </Button>
               {loaded ? (
                 <Button
                   onClick={handleAddMultipleTeams}
@@ -862,7 +869,9 @@ export default function TeamData() {
             </Button>
           ) : (
             <>
-              <Button onClick={handleCloseRegenerate}>Cancel</Button>
+              <Button onClick={handleCloseRegenerate} color="secondary">
+                Cancel
+              </Button>
               <Button
                 onClick={handleGeneratePassword}
                 variant="contained"

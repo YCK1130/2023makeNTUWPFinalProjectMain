@@ -58,7 +58,9 @@ export default function Header({ setSaving, ableSave, data }) {
   const [uploaded, setUploaded] = useState(false);
   const [importError, setImportError] = useState(false);
   const [csv, setCsv] = React.useState("");
-  const { dataINIT, handleReplaceBoard, showAlert } = useMakeNTU();
+  const [resetPageOpen, setResetPageOpen] = React.useState(false);
+  const { dataINIT, handleReplaceBoard, showAlert, resetDataBase } =
+    useMakeNTU();
   useEffect(() => {
     const csvData = data.map((item) => {
       const { id, name, category, limit, totalNum, image } = item;
@@ -200,6 +202,16 @@ export default function Header({ setSaving, ableSave, data }) {
   const handleSave = () => {
     setSaving(true);
   };
+  const handleReset = () => {
+    resetDataBase();
+    handleCloseReset();
+  };
+  const handleCloseReset = () => {
+    setResetPageOpen(false);
+  };
+  const handleOpenReset = () => {
+    setResetPageOpen(true);
+  };
   return (
     <HeaderContainer>
       <ButtonContainer>
@@ -233,7 +245,9 @@ export default function Header({ setSaving, ableSave, data }) {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseImport}>Cancel</Button>
+            <Button onClick={handleCloseImport} color="secondary">
+              Cancel
+            </Button>
 
             {uploaded ? (
               <Button
@@ -245,14 +259,14 @@ export default function Header({ setSaving, ableSave, data }) {
               </Button>
             ) : (
               <>
-                <Button
+                {/* <Button
                   onClick={handleInitData}
                   variant="contained"
                   color="primary"
                   sx={{ m: "5px" }}
                 >
                   {"Init"}
-                </Button>
+                </Button> */}
                 {loaded ? (
                   <Button
                     onClick={handleImport}
@@ -280,9 +294,33 @@ export default function Header({ setSaving, ableSave, data }) {
             <Box sx={{ minWidth: "15vw", minHeight: "10vh" }} />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseExport}>Cancel</Button>
+            <Button onClick={handleCloseExport} color="secondary">
+              Cancel
+            </Button>
             <Button onClick={handleExport} variant="contained" color="primary">
               {"Export"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          aria-labelledby="simple-dialog-title"
+          // disableBackdropClick
+          open={resetPageOpen}
+          onClose={handleCloseReset}
+          // sx={{ backgroundColor: "rgba(0,0,0,1)" }}
+        >
+          <DialogTitle id="simple-dialog-title">Exporting Data</DialogTitle>
+          <DialogContent>
+            <Box sx={{ minWidth: "15vw", minHeight: "10vh" }}>
+              {"Are you sure you want to RESET!? :("}
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseReset} color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={handleReset} variant="contained" color="primary">
+              {"Reset"}
             </Button>
           </DialogActions>
         </Dialog>
@@ -322,15 +360,34 @@ export default function Header({ setSaving, ableSave, data }) {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSave}
-              disabled={!ableSave}
+          <Grid item sm={5}>
+            <Grid
+              container
+              spacing={1}
+              justifyContent="flex-end"
+              alignItems="flex-start"
+              direction="row"
             >
-              Save
-            </Button>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpenReset}
+                >
+                  Reset
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSave}
+                  disabled={!ableSave}
+                >
+                  Save
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </ButtonContainer>

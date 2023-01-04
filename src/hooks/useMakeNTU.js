@@ -40,6 +40,7 @@ const MakeNTUContext = React.createContext({
   render: [],
   setRender: () => {},
   userProgressStatus: [],
+  resetDataBase: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -220,7 +221,9 @@ const MakeNTUProvider = (props) => {
   const handleReplaceBoard = (payload) => {
     sendData(["REPLACEBOARD", payload]);
   };
-
+  const resetDataBase = () => {
+    sendData(["RESETDATABASE"]);
+  };
   return (
     <MakeNTUContext.Provider
       value={{
@@ -256,6 +259,7 @@ const MakeNTUProvider = (props) => {
         render,
         setRender,
         userProgressStatus,
+        resetDataBase,
       }}
       {...props}
     />

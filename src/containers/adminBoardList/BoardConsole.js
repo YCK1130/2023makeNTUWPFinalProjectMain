@@ -124,7 +124,7 @@ export default function BoardConsole({
       ...addCardData,
       id: uuidv4(),
       remain: addCardData.totalNum,
-      image: "",
+      // image: "",
     };
     addBoard(newCard);
     setAddCardData({});

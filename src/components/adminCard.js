@@ -171,8 +171,12 @@ export default function ComplexGrid({
             src="https://images.modasena.com/firfirli-scuba-tesettur-jile-kiremit-343057-60-B.jpg"
           />*/}
           {
-            <IconButton sx={{ width: 128, height: 128 }}>
-              <AddPhotoAlternateOutlinedIcon />
+            <IconButton sx={{ width: 128, height: 128 }} disabled={true}>
+              <Img
+                alt="img not found"
+                src={data?.image || "/photoData/MakeNTU2022_icon.png"}
+                component="img"
+              />
             </IconButton>
           }
           {/*<ButtonBase sx={{ width: 128, height: 128 }}>
@@ -237,7 +241,9 @@ export default function ComplexGrid({
           position: "absolute",
           right: 0,
           top: 0,
+          opacity: data?.remain !== data?.totalNum ? 0.7 : 1,
         }}
+        disabled={data?.remain !== data?.totalNum}
         onClick={() => handleDeleteCard(data.id)}
       >
         <CancelIcon />

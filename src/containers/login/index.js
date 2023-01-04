@@ -161,9 +161,10 @@ export default function Login() {
             <Button
               type="submit"
               fullWidth
-              variant="outlined"
+              variant="contained"
               color="primary"
               className={classes.submit}
+              sx={{ my: "10px" }}
             >
               <div>Sign in</div>
             </Button>

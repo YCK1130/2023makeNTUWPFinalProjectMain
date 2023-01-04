@@ -159,14 +159,14 @@ const Drawer = ({ children }) => {
     : {
         1: [
           //admin區
-          { text: "Main", to: "/", icon: <HomeIcon /> },
+          { text: "Home", to: "/", icon: <HomeIcon /> },
           {
             text: "Team Data",
             to: "/teamdata",
             icon: <PeopleIcon />,
           },
           {
-            text: "Board List",
+            text: "Items List",
             to: "/boardlist",
             icon: <DeveloperBoardIcon />,
           },
@@ -178,19 +178,19 @@ const Drawer = ({ children }) => {
         ],
         0: [
           //user區
-          { text: "Main", to: "/", icon: <HomeIcon /> },
+          { text: "Home", to: "/", icon: <HomeIcon /> },
           {
-            text: "Borrow Board",
+            text: "Borrow Items",
             to: "/user",
             icon: <DeveloperBoardIcon />,
           },
           {
-            text: "User Status",
+            text: "Your Status",
             to: "/user/status",
             icon: <FactCheckIcon />,
           },
         ],
-      }[authority] || [{ text: "Main", to: "/", icon: <HomeIcon /> }];
+      }[authority] || [{ text: "Home", to: "/", icon: <HomeIcon /> }];
 
   const userName = isLogin ? userID : "";
 

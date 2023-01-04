@@ -53,7 +53,10 @@ export default function Card(props) {
       <Grid container spacing={2}>
         <Grid item>
           <ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="nano33" src="/photoData/nano33.jpg" />
+            <Img
+              alt="img not found"
+              src={props?.image || "/photoData/MakeNTU2022_icon.png"}
+            />
             {/* 這裡是放照片的 */}
           </ButtonBase>
         </Grid>

@@ -16,9 +16,11 @@ function AlertWindow(props) {
       <DialogTitle id="alert-dialog-title">您確認要取消申請嗎?</DialogTitle>
 
       <DialogActions>
-        <Button onClick={handleAlertClose}>否</Button>
-        <Button onClick={handleAlertAgree} autoFocus>
-          是
+        <Button onClick={handleAlertClose} variant="contained">
+          No
+        </Button>
+        <Button onClick={handleAlertAgree} autoFocus variant="contained">
+          Yes
         </Button>
       </DialogActions>
     </Dialog>

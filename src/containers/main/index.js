@@ -8,12 +8,11 @@ import { selectSession } from "../../slices/sessionSlice";
 export default function Main() {
   const { subscribe } = useMakeNTU();
   const { userID, authority } = useSelector(selectSession);
-
   subscribe({ id: userID, authority: authority, page: "main" });
 
   return (
     <div>
-      <Top />
+      <Top userID={userID} authority={authority} />
       <Footer />
     </div>
   );

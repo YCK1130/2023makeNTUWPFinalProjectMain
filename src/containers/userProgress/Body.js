@@ -25,7 +25,7 @@ var needList = {};
 
 const Wrapper = styled.div`
   width: 100%;
-  height: calc(74vh - 70px);
+  height: calc(74vh - 80px);
   margin: 5px 0 5px 0;
   display: flex;
   flex-direction: row;
@@ -207,7 +207,16 @@ function Body() {
                 {orders.map((e) => {
                   return (
                     <ListItem key={e}>
-                      <ListItemText primary={e} />
+                      <ListItemText
+                        primary={e}
+                        sx={
+                          e.slice(0, 4).toLowerCase() === "warn"
+                            ? {
+                                color: "#FF1212",
+                              }
+                            : {}
+                        }
+                      />
                     </ListItem>
                   );
                 })}
@@ -240,6 +249,7 @@ function Body() {
                         name={e.name}
                         tag={e.category}
                         left={e.remain}
+                        image={e.image}
                         limit={calcuLimit(e.limit, e.name)}
                         v={true}
                         id={e.id}
@@ -267,6 +277,7 @@ function Body() {
                         name={e.name}
                         tag={e.category}
                         left={e.remain}
+                        image={e.image}
                         limit={calcuLimit(e.limit, e.name)}
                         v={true}
                         id={e.id}
@@ -293,13 +304,16 @@ function Body() {
           justifyContent: "space-evenly",
         }}
       >
-        <Button
-          disabled={activeStep === 0 || activeStep === steps.length - 1}
-          onClick={handleBack}
-          sx={{ mr: 1 }}
-        >
-          Back
-        </Button>
+        <Box sx={{ maxWidth: "20%" }}>
+          <Button
+            disabled={activeStep === 0 || activeStep === steps.length - 1}
+            onClick={handleBack}
+            sx={{ m: "1px" }}
+            variant={"contained"}
+          >
+            Back
+          </Button>
+        </Box>
 
         {activeStep === 0 ? (
           <SearchBar
@@ -316,12 +330,23 @@ function Body() {
           />
         )}
 
-        <Box sx={{ maxWidth: "15%" }}>
+        <Box sx={{ maxWidth: "25%" }}>
           {activeStep !== steps.length - 1 ? (
-            <Button onClick={handleReset}>Reset</Button>
+            <Button
+              onClick={handleReset}
+              variant={"contained"}
+              sx={{ m: "2px" }}
+            >
+              Reset
+            </Button>
           ) : null}
 
-          <Button onClick={handleNext} disabled={!ableNext}>
+          <Button
+            onClick={handleNext}
+            disabled={!ableNext}
+            variant={"contained"}
+            sx={{ m: "2px" }}
+          >
             {activeStep === steps.length - 2
               ? "Confirm"
               : activeStep === steps.length - 1

@@ -93,12 +93,12 @@ const requestExpired = async (id, status) => {
       { requestID: id },
       { $set: { status: "expired" } }
     );
+    await changeBoardRemain(request);
+    broadcast({ id: request.borrower.teamID }, [
+      "status",
+      ["error", "One Request Expired :("],
+    ]);
   }
-  await changeBoardRemain(request);
-  broadcast({ id: request.borrower.teamID }, [
-    "status",
-    ["error", "One Request Expired :("],
-  ]);
   return;
 };
 
@@ -143,6 +143,27 @@ module.exports = {
     console.log(task, payload);
 
     switch (task) {
+      case "RESETDATABASE": {
+        await model.BoardModel.deleteMany({});
+        await model.RequestModel.deleteMany({});
+        await model.TeamModel.updateMany(
+          {},
+          { $set: { myCards: new Map(), requests: [] } }
+        );
+        console.log("Database has been cleared.");
+
+        const userData = await model.TeamModel.find({});
+        userData.map((user) => {
+          broadcast({ id: user.teamID }, ["GETUSER", user]);
+        });
+
+        broadcast({ authority: 1 }, ["GETBOARD", []]);
+        broadcast({ page: "requestStatus" }, ["UPDATEREQUEST", []]);
+        broadcast({ page: "requestStatus" }, ["UPDATERETURN", userData]);
+        console.log("All Change has been sent.");
+
+        break;
+      }
       case "SUBSCRIBE": {
         const { id, authority, page } = payload;
         //userStatus & userProgress & adminBoardList
@@ -228,6 +249,7 @@ module.exports = {
       }
       case "ADDBOARD": {
         const newData = payload;
+        console.log("AddBoard:", newData);
         const existing = await model.BoardModel.find({
           name: newData.name,
         });
@@ -274,6 +296,9 @@ module.exports = {
         const existing = await model.BoardModel.deleteOne({
           id: newDataID,
         });
+        const boards = await model.BoardModel.find({});
+        broadcastPage("userProgress", ["AddBoard", boards]);
+        broadcast({ page: "adminBoardList" }, ["GETBOARD", boards]);
         sendStatus(["success", "Delete successfully"], ws);
         break;
       }
@@ -290,7 +315,7 @@ module.exports = {
         // await requests..execPopulate();
         // console.log(requests);
         sendData(["GETREQUEST", requests], ws);
-        sendStatus(["success", "Get successfully"], ws);
+        // sendStatus(["success", "Get successfully"], ws);
         break;
       }
       case "REQUEST": {
@@ -299,7 +324,31 @@ module.exports = {
         let count = await model.RequestModel.countDocuments({
           borrower: gp,
         });
-
+        let boardMissing = false;
+        await Promise.all(
+          requestBody.map(async (board) => {
+            const myboard = await model.BoardModel.findOne({
+              name: board[0],
+            });
+            if (!myboard) {
+              console.log("Board missing:", board, myboard);
+              boardMissing = true;
+            }
+          })
+        );
+        if (boardMissing) {
+          sendData(
+            [
+              "USERPROGRESSSTATUS",
+              [
+                `Request Failed !`,
+                `Some Boards Missing. Please Refresh Page Again!`,
+              ],
+            ],
+            ws
+          );
+          break;
+        }
         let body = requestBody.map((e) => {
           return { board: e[0], quantity: e[1] };
         });
