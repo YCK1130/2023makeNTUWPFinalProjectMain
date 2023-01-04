@@ -13,7 +13,7 @@ const port = process.env.PORT || 8000;
 const PORT = 4000;
 
 if (process.env.NODE_ENV === "development") {
-  // console.log("NODE_ENV = development");
+  console.log("NODE_ENV = development");
   require("dotenv").config(); // eslint-disable-line
 }
 
@@ -22,8 +22,8 @@ if (process.env.NODE_ENV === "development") {
 const db = model.conn;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", async () => {
-  // console.log("Successfully connect to MongoDB!");
-  // console.log(`dbName = "${process.env.MONGO_DBNAME}"`);
+  console.log("Successfully connect to MongoDB!");
+  console.log(`dbName = "${process.env.MONGO_DBNAME}"`);
   //await model.BoardModel.deleteMany({});
   //await model.RequestModel.deleteMany({});
 
@@ -55,7 +55,7 @@ db.once("open", async () => {
   const wss = new ws.WebSocketServer({ server });
 
   if (process.env.NODE_ENV === "production") {
-    // console.log("Trust proxy is on");
+    console.log("Trust proxy is on");
     app.set("trust proxy", 1);
   }
 
@@ -64,6 +64,7 @@ db.once("open", async () => {
     ws.id = ""; //記id
     ws.authority = ""; //記authority
     ws.onmessage = wsConnect.onMessage(ws); //當ws有message時，執行後面的把丟入method
+    ws.onclose = wsConnect.onClose(ws);
   });
 
   app.use(logger("dev"));
@@ -72,10 +73,10 @@ db.once("open", async () => {
   app.use("/api", apiRouter);
 
   app.listen(port, () =>
-    // console.log(`App listening at http://localhost:${port}`)
+    console.log(`App listening at http://localhost:${port}`)
   );
 
   server.listen(PORT, () => {
-    // console.log(`WS listening on ${PORT}`);
+    console.log(`WS listening on ${PORT}`);
   });
 });

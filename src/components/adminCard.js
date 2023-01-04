@@ -6,17 +6,12 @@ import {
   ButtonBase,
   Grid,
   TextField,
-  FormControl,
   CardMedia,
   IconButton,
-  Box,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { NumericFormat } from "react-number-format";
 import CancelIcon from "@mui/icons-material/Cancel";
-import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, ...other } = props;
 

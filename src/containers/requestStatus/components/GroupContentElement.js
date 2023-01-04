@@ -1,12 +1,7 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
-import Collapse from "@mui/material/Collapse";
 import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
 import { useEffect } from "react";
 function BoardRequestContentElement(props) {
   const { card, changeReturn, numReturn, breakpoints } = props;

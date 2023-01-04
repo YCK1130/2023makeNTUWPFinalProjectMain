@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Element } from "react-scroll";
 import { makeStyles } from "@mui/styles";
-import { Button, Grid, Paper, Typography } from "@mui/material/";
+import { Button, Grid, Typography } from "@mui/material/";
 import { Link, useHistory } from "react-router-dom";
 import { selectSession } from "../../slices/sessionSlice";
 /**

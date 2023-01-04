@@ -6,7 +6,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import GroupContentElement from "./GroupContentElement";
 import { useMakeNTU } from "../../../hooks/useMakeNTU";

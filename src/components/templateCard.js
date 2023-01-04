@@ -6,7 +6,6 @@ import {
   ButtonBase,
   Grid,
   TextField,
-  FormControl,
   IconButton,
   Box,
 } from "@mui/material";
@@ -15,7 +14,6 @@ import { NumericFormat } from "react-number-format";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import ImgDialog from "./ImgDialog";
-import { useRef } from "react";
 
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, ...other } = props;

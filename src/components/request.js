@@ -1,28 +1,8 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
-import {
-  Paper,
-  Typography,
-  ButtonBase,
-  Grid,
-  TextField,
-  FormControl,
-} from "@mui/material";
-import PropTypes from "prop-types";
+import { Paper, Grid } from "@mui/material";
 
-const Img = styled("img")({
-  margin: "auto",
-  display: "block",
-  maxWidth: "100%",
-  maxHeight: "100%",
-});
-
-export default function ComplexGrid({
-  handleDeleteCard,
-  data,
-  changedData,
-  setChangedData,
-}) {
+export default function ComplexGrid({ data, changedData, setChangedData }) {
   const [values, setValues] = useState({});
   useEffect(() => {
     setValues({ limit: data.limit, totalNum: data.totalNum });

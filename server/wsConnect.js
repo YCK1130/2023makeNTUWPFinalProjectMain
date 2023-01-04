@@ -140,27 +140,28 @@ module.exports = {
   onMessage: (ws) => async (byteString) => {
     const { data } = byteString;
     const [task, payload] = JSON.parse(data);
-    // console.log(task, payload);
+    console.log(task, payload);
 
     switch (task) {
       case "RESETDATABASE": {
+        console.log("Reseting...");
         await model.BoardModel.deleteMany({});
         await model.RequestModel.deleteMany({});
         await model.TeamModel.updateMany(
           {},
           { $set: { myCards: new Map(), requests: [] } }
         );
-        // console.log("Database has been cleared.");
+        console.log("Database has been cleared.");
 
         const userData = await model.TeamModel.find({});
         userData.map((user) => {
           broadcast({ id: user.teamID }, ["GETUSER", user]);
         });
-
+        broadcastPage("userProgress", ["AddBoard", []]);
         broadcast({ authority: 1 }, ["GETBOARD", []]);
         broadcast({ page: "requestStatus" }, ["UPDATEREQUEST", []]);
         broadcast({ page: "requestStatus" }, ["UPDATERETURN", userData]);
-        // console.log("All Change has been sent.");
+        console.log("All Change has been sent.");
 
         break;
       }
@@ -278,7 +279,7 @@ module.exports = {
                   {
                     name: board.name,
                   },
-                  board,
+                  { ...board, remain: board.totalNum },
                   { upsert: true }
                 )
             )
@@ -286,6 +287,8 @@ module.exports = {
           sendStatus(["success", "Update successfully"], ws);
           const boards = await model.BoardModel.find({});
           sendData(["UpdateBoard", { status: "success", data: boards }], ws);
+          broadcastPage("userProgress", ["AddBoard", boards]);
+          broadcastPage("adminBoardList", ["AddBoard", boards]);
         } catch (e) {
           throw new Error("Board DB update error: " + e);
         }
@@ -567,5 +570,13 @@ module.exports = {
         break;
       }
     }
+  },
+  onClose: (ws) => async () => {
+    console.log(
+      `ws of id:${ws.id},auth:${ws.authority},page:${ws.box} is closing...`
+    );
+    if (userPage[ws.box]) userPage[ws.box].delete(ws);
+    if (userID[ws.id]) userID[ws.id].delete(ws);
+    if (userAuth[ws.authority]) userAuth[ws.authority].delete(ws);
   },
 };

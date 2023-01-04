@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { makeStyles } from "@mui/styles";
-import SearchBar from "../../components/searchBar";
-import PropTypes from "prop-types";
 import {
   Button,
   Dialog,

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Element } from "react-scroll";
 import { makeStyles } from "@mui/styles";
 import {
   Table,
@@ -12,9 +11,8 @@ import {
   Box,
   Paper,
 } from "@mui/material/";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { selectSession } from "../../slices/sessionSlice";
-import styled from "styled-components";
 import GroupStatus from "./components/GroupStatus";
 import { TeamDataAPI } from "../../api";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
@@ -23,81 +21,7 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
  * This is Main Page
  */
 
-const someCards = [
-  {
-    id: 1,
-    name: "aaa",
-    limit: 5,
-    totalNum: 10,
-    remain: 3,
-    image: "",
-  },
-  {
-    id: 2,
-    name: "bbb",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 3,
-    name: "ccc",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 4,
-    name: "ddd",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 11,
-    name: "a",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 21,
-    name: "b",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 31,
-    name: "c",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-  {
-    id: 41,
-    name: "d",
-    limit: 5,
-    remain: 3,
-    totalNum: 10,
-    category: "test",
-    image: "",
-  },
-];
 export default function StatusConsole() {
-  const history = useHistory();
   const [userStatus, setUserStatus] = useState([]);
   const [changedData, setChangedData] = useState([]);
   const useStyles = makeStyles(() => ({

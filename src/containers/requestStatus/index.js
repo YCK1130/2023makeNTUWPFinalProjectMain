@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import StatusConsole from "./StatusConsole";
 import RequestConsole from "./RequestConsole";
-import { useState } from "react";
 import styled from "styled-components";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
 import { useSelector } from "react-redux";

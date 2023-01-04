@@ -4,12 +4,8 @@ import {
   Table,
   TableBody,
   TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
   Tabs,
   Tab,
-  Typography,
   Box,
   Paper,
 } from "@mui/material";

@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Element } from "react-scroll";
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/material/";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import AdminCard from "../../components/adminCard";
 import styled from "styled-components";
 import TemplateCard from "../../components/templateCard";
 import { v4 as uuidv4 } from "uuid";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
 /**
  * This is Main Page

@@ -2,7 +2,7 @@ import React from "react";
 import Top from "./TopSection";
 import Footer from "./Footer.js";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectSession } from "../../slices/sessionSlice";
 
 export default function Main() {

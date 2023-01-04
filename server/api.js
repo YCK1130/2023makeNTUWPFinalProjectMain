@@ -14,7 +14,7 @@ const model = require("./database/mongo/model");
 // ========================================
 
 if (process.env.NODE_ENV === "development") {
-  // console.log("NODE_ENV = development");
+  console.log("NODE_ENV = development");
   require("dotenv").config(); // eslint-disable-line
 }
 
@@ -75,7 +75,7 @@ if (process.env.NODE_ENV === "production") {
   if (!sessionOptions.cookie.secure) {
     deprecate("Recommend to set secure cookie session if has https!\n");
   } else {
-    // console.log("Secure cookie is on");
+    console.log("Secure cookie is on");
   }
 }
 
@@ -250,7 +250,7 @@ router
           }
         })
       );
-      // console.log("All passwords are hashed!");
+      console.log("All passwords are hashed!");
       // Save all teams
       await Promise.all(
         teams.map(async (team) => {
@@ -258,7 +258,7 @@ router
           await teamDocument.save();
         })
       );
-      // console.log(`Successfully update ${cnt} teams`);
+      console.log(`Successfully update ${cnt} teams`);
       res.status(204).end();
     })
   )

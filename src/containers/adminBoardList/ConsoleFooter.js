@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { useState } from "react";
 import SearchBar from "../../components/searchBar";
 import PropTypes from "prop-types";
 
@@ -15,10 +14,18 @@ const FooterContainer = styled.div`
 ConsoleFooter.propTypes = {
   setKeyWord: PropTypes.func.isRequired,
 };
-export default function ConsoleFooter({ setKeyWord, searchMethod, handleCheck }) {
+export default function ConsoleFooter({
+  setKeyWord,
+  searchMethod,
+  handleCheck,
+}) {
   return (
     <FooterContainer>
-      <SearchBar handleCheck={handleCheck} handleChange={setKeyWord} searchMethod={searchMethod} />
+      <SearchBar
+        handleCheck={handleCheck}
+        handleChange={setKeyWord}
+        searchMethod={searchMethod}
+      />
     </FooterContainer>
   );
 }
