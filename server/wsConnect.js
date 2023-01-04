@@ -296,9 +296,9 @@ module.exports = {
       case "REQUEST": {
         let { group, requestBody } = payload;
         let gp = await model.TeamModel.findOne({ teamID: group });
-        let count = await model.RequestModel.find({
+        let count = await model.RequestModel.countDocuments({
           borrower: gp,
-        }).count();
+        });
 
         let body = requestBody.map((e) => {
           return { board: e[0], quantity: e[1] };
@@ -349,6 +349,7 @@ module.exports = {
         sendStatus(["success", "Request successfully"], ws);
         const boards = await model.BoardModel.find({});
         broadcast({ page: "userProgress" }, ["INITUSERCARD", boards]);
+        broadcast({ page: "adminBoardList" }, ["GETBOARD", boards]);
 
         let userData = await model.TeamModel.findOne({ teamID: group });
         await userData.populate("requests").execPopulate();

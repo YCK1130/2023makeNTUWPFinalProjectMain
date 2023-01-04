@@ -140,11 +140,11 @@ const MakeNTUProvider = (props) => {
         ],
       },
     ]);
-    await delay(1000);
+    // await delay(1000);
     sendData([
       "REQUEST",
       {
-        group: "1",
+        group: "2",
         requestBody: [
           ["board 1", 2],
           ["board 3", 3],
