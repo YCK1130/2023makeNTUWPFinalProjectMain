@@ -4,8 +4,7 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import useBreakpoints from "./useBreakpoints";
-const client = new WebSocket("ws://localhost:4000"); //step 2
-
+const client = new WebSocket(window.location.origin.replace("http", "ws"));
 const MakeNTUContext = React.createContext({
   dataINIT: () => {},
   WSINIT: () => {},

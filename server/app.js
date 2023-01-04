@@ -10,7 +10,7 @@ const wsConnect = require("./wsConnect");
 // ========================================
 
 const port = process.env.PORT || 8000;
-const PORT = 4000;
+const PORT = 8000;
 
 if (process.env.NODE_ENV === "development") {
   console.log("NODE_ENV = development");
@@ -72,9 +72,9 @@ db.once("open", async () => {
 
   app.use("/api", apiRouter);
 
-  app.listen(port, () =>
-    console.log(`App listening at http://localhost:${port}`)
-  );
+  // app.listen(port, () =>
+  //   console.log(`App listening at http://localhost:${port}`)
+  // );
 
   server.listen(PORT, () => {
     console.log(`WS listening on ${PORT}`);
