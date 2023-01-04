@@ -80,7 +80,7 @@ export default function Top(props) {
               >
                 {authority === 0
                   ? `Welcome Back Group#${userID}`
-                  : `Welcome Back Administrater!`}
+                  : `Welcome Back Administrator!`}
               </Typography>
             )}
           </Grid>
