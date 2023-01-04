@@ -7,14 +7,17 @@ import {
   Grid,
   TextField,
   FormControl,
+  IconButton,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { NumericFormat } from "react-number-format";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import ImgDialog from "./ImgDialog";
 import { useRef } from "react";
+
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, ...other } = props;
-
   return (
     <NumericFormat
       {...other}
@@ -48,12 +51,18 @@ ComplexGrid.propTypes = {
   setAddCardData: PropTypes.func.isRequired,
 };
 export default function ComplexGrid({ setAddCardData }) {
+  const [openDialog, setOpenDialog] = useState(false);
   const [values, setValues] = useState({
     name: "",
     category: "",
     limit: 1,
     totalNum: 5,
+    image: "",
   });
+  const uploadImg = (link) => {
+    console.log(link, "link");
+    setOpenDialog(false);
+  };
   const [hasFocus, setHasFocus] = useState({ name: false, category: false });
   // const nameInputRef = useRef(null);
   const handleChange = (event) => {
@@ -200,9 +209,17 @@ export default function ComplexGrid({ setAddCardData }) {
           />
         </Grid>
         <Grid item>
-          <ButtonBase sx={{ width: 100, height: 100 }}>
+          <IconButton
+            sx={{ width: 100, height: 100 }}
+            onClick={() => {
+              setOpenDialog(true);
+            }} //setOpenDialog(true)}
+          >
+            <AddPhotoAlternateOutlinedIcon />
+          </IconButton>
+          {/* <ButtonBase sx={{ width: 100, height: 100 }}>
             <Img alt="no img" src="/static/images/grid/complex.jpg" />
-          </ButtonBase>
+          </ButtonBase>*/}
         </Grid>
         <Grid
           container
@@ -296,6 +313,11 @@ export default function ComplexGrid({ setAddCardData }) {
       >
         <AddCircleIcon />
       </ButtonBase>
+      <ImgDialog
+        open={openDialog}
+        setOpenDialog={setOpenDialog}
+        uploadImg={uploadImg}
+      />
     </Paper>
   );
 }
