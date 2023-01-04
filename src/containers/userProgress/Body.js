@@ -43,6 +43,7 @@ function Body() {
   //const [needList, setNeedList] = React.useState({});
   const [userCardData, setUserCardData] = React.useState([]);
   const [ableNext, setAbleNext] = React.useState(false);
+  const [orders, setOrders] = React.useState([]);
   const [resetOpen, setResetOpen] = React.useState(false);
   const {
     userBoardINIT,
@@ -51,6 +52,7 @@ function Body() {
     cardData,
     userRequest,
     userCards,
+    userProgressStatus,
     subscribe,
   } = useMakeNTU();
   const { userID, authority } = useSelector(selectSession);
@@ -68,7 +70,10 @@ function Body() {
       })
     );
     setRerender(false);
-  }, [needList, cardData, rerender]);
+  }, [needList, cardData, rerender, userProgressStatus]);
+  useEffect(() => {
+    setOrders(order(userProgressStatus));
+  }, [userProgressStatus]);
 
   useEffect(() => {
     needList = {};
@@ -87,7 +92,7 @@ function Body() {
   const handleNext = () => {
     //console.log(userRequest, userCards);
     if (activeStep === steps.length - 1) {
-      handleReset();
+      reset();
       return;
     } else if (activeStep === steps.length - 2) {
       let requestBody = [];
@@ -115,35 +120,36 @@ function Body() {
     setResetOpen(true);
   };
   const handleResetClose = () => {
-    console.log("算了")
+    console.log("算了");
     setResetOpen(false);
   };
   const reset = () => {
-    console.log("重置")
+    console.log("重置");
     needList = {};
     setUserCardData([]);
     setActiveStep(0);
     setRerender(true);
     setResetOpen(false);
-  }
+  };
 
-  const order = () => {
-    let a = [];
+  const order = (servermsg) => {
+    let a = servermsg;
     // for (var [key, value] of needList.entries()) {
     //   a.push("板子 : " + key + "  申請" + value + "個");
     // }
-    Object.keys(needList).forEach(function (key) {
-      a.push("板子 : " + key + "  申請" + needList[key] + "個");
-    });
+    if (a.length === 2) {
+      a = ["Warning!!!!!  Something wrong!!!!!", ...a];
+    }
+
+    if (a.length === 1) {
+      Object.keys(needList).forEach(function (key) {
+        a.push("板子 : " + key + "  申請" + needList[key] + "個");
+      });
+    }
     //console.log(a);
 
-    if (a.length === 0) {
-      a.push("Warning!!!!!  Something wrong!!!!!");
-    }
     return a;
   };
-
-  const showNeedList = order();
 
   useEffect(() => {
     setRerender(false);
@@ -198,7 +204,7 @@ function Body() {
                 This is your order list:
               </Typography>
               <List dense={false}>
-                {showNeedList.map((e) => {
+                {orders.map((e) => {
                   return (
                     <ListItem key={e}>
                       <ListItemText primary={e} />
@@ -323,10 +329,10 @@ function Body() {
               : "Next"}
           </Button>
           <ResetWindow
-        open={resetOpen}
-        handleResetClose={handleResetClose}
-        handleResetAgree={reset}
-      />
+            open={resetOpen}
+            handleResetClose={handleResetClose}
+            handleResetAgree={reset}
+          />
         </Box>
       </Box>
     </Box>

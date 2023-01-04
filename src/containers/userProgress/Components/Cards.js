@@ -9,7 +9,7 @@ import Selector from "./Selector";
 import { NearMeDisabled } from "@mui/icons-material";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useMakeNTU } from "../../hooks/useMakeNTU";
+import { useMakeNTU } from "../../../hooks/useMakeNTU";
 
 const Img = styled("img")({
   margin: "auto",

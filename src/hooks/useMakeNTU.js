@@ -39,6 +39,7 @@ const MakeNTUContext = React.createContext({
   subscribe: () => {},
   render: [],
   setRender: () => {},
+  userProgressStatus: [],
 });
 
 const MakeNTUProvider = (props) => {
@@ -52,6 +53,7 @@ const MakeNTUProvider = (props) => {
   const [teamReqUpdateDate, setTeamReqUpdateDate] = React.useState([]);
   const [userRequest, setUserRequest] = React.useState([]);
   const [render, setRender] = React.useState(false);
+  const [userProgressStatus, setUserProgressStatus] = React.useState([]);
   const breakpoints = useBreakpoints();
 
   client.onmessage = async (byteString) => {
@@ -61,6 +63,9 @@ const MakeNTUProvider = (props) => {
 
     console.log(task, payload);
     switch (task) {
+      case "USERPROGRESSSTATUS":
+        setUserProgressStatus(payload);
+        break;
       case "GETUSER": {
         setUserRequest(payload.requests ?? []);
         setUserCards({ ...payload.myCards } ?? []);
@@ -250,6 +255,7 @@ const MakeNTUProvider = (props) => {
         subscribe,
         render,
         setRender,
+        userProgressStatus,
       }}
       {...props}
     />

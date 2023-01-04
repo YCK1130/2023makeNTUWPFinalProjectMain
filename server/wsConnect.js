@@ -322,7 +322,8 @@ module.exports = {
         try {
           await request.save();
         } catch (e) {
-          throw new Error("Request DB save error: " + e);
+          // throw new Error("Request DB save error: " + e);
+          sendData(["USERPROGRESSSTATUS", [`Request Failed !`, `${e}`]], ws);
         }
         await model.TeamModel.updateMany(
           { teamID: group },
@@ -346,7 +347,8 @@ module.exports = {
           "UPDATEREQUEST",
           requests,
         ]);
-        sendStatus(["success", "Request successfully"], ws);
+        // sendStatus(["success", "Request successfully"], ws);
+        sendData(["USERPROGRESSSTATUS", [`Request successfully !`]], ws);
         const boards = await model.BoardModel.find({});
         broadcast({ page: "userProgress" }, ["INITUSERCARD", boards]);
         broadcast({ page: "adminBoardList" }, ["GETBOARD", boards]);
@@ -456,7 +458,9 @@ module.exports = {
       case "UPDATERETURN": {
         const { id, returned } = payload;
         console.log(id, returned);
-        const team = await model.TeamModel.findOne({ teamID: id });
+        const team = await model.TeamModel.findOne({ teamID: id }).populate([
+          "requests",
+        ]);
         const teamsCard = JSON.parse(JSON.stringify(team.myCards));
         console.log(teamsCard);
         for (const [key, value] of Object.entries(returned)) {
@@ -482,7 +486,15 @@ module.exports = {
         // console.log(team.myCards);
         const teams = await model.TeamModel.find({});
 
-        sendData(["UPDATERETURN", teams], ws);
+        broadcast(
+          { id: newReq.borrower.teamID, authority: 0, page: "userStatus" },
+          ["GETUSER", team]
+        );
+        broadcast({ authority: 1, page: "requestStatus" }, [
+          "UPDATERETURN",
+          teams,
+        ]);
+        // sendData(["UPDATERETURN", teams], ws);
         sendStatus(["success", "Update successfully"], ws);
         break;
       }
