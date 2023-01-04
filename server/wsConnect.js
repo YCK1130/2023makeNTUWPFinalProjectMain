@@ -555,10 +555,10 @@ module.exports = {
         // // console.log(team.myCards);
         const teams = await model.TeamModel.find({});
 
-        broadcast(
-          { id: newReq.borrower.teamID, authority: 0, page: "userStatus" },
-          ["GETUSER", team]
-        );
+        broadcast({ id: id, authority: 0, page: "userStatus" }, [
+          "GETUSER",
+          team,
+        ]);
         broadcast({ authority: 1, page: "requestStatus" }, [
           "UPDATERETURN",
           teams,
