@@ -328,6 +328,7 @@ module.exports = {
           borrower: gp,
         });
         let boardMissing = false;
+        let numNotSatisfy = false;
         await Promise.all(
           requestBody.map(async (board) => {
             const myboard = await model.BoardModel.findOne({
@@ -337,8 +338,24 @@ module.exports = {
               // console.log("Board missing:", board, myboard);
               boardMissing = true;
             }
+            if (myboard.remain - board[1] < 0) {
+              numNotSatisfy = true;
+            }
           })
         );
+        if (numNotSatisfy) {
+          sendData(
+            [
+              "USERPROGRESSSTATUS",
+              [
+                `Request Failed !`,
+                `Some Boards are not enough for your request . Please Reselect Again!`,
+              ],
+            ],
+            ws
+          );
+          break;
+        }
         if (boardMissing) {
           sendData(
             [

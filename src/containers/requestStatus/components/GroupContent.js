@@ -13,9 +13,15 @@ function GroupContent(props) {
   const { team, open, breakpoints } = props;
   const [numReturn, setNumReturn] = React.useState({});
   const [boards, setBoards] = React.useState([]);
-  const { updateReturn } = useMakeNTU();
+  const { updateReturn, showAlert } = useMakeNTU();
   const handleEdit = () => {
     // console.log(team, numReturn);
+    for (const [key, value] of Object.entries(numReturn)) {
+      if (isNaN(value)) {
+        showAlert("error", "Please Enter Number!");
+        return;
+      }
+    }
     updateReturn({ id: team.id, returned: numReturn });
   };
 

@@ -122,7 +122,7 @@ export default function Login() {
               required
               fullWidth
               id="StudentId"
-              placeholder="Account"
+              placeholder="Student ID"
               value={values.account}
               name="StudentId"
               className={classes.accountmargin}
