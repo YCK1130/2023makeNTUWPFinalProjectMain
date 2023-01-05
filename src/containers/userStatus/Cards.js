@@ -63,7 +63,7 @@ export default function Card(props) {
                 {userBoard.name}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                Tag: {userBoard.category}
+                TAG: {userBoard.category}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 ID: {userBoard.id.slice(0, 8)}

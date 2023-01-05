@@ -14,8 +14,8 @@ import { useMakeNTU } from "../../../hooks/useMakeNTU";
 const Img = styled("img")({
   margin: "auto",
   display: "block",
-  maxWidth: "100%",
-  maxHeight: "auto",
+  maxWidth: "128px",
+  maxHeight: "128px",
 });
 
 export default function Card(props) {
@@ -67,7 +67,7 @@ export default function Card(props) {
                 {props.name}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {"Tag: " + props.tag}
+                {"TAG: " + props.tag}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {"ID: " + props.id.slice(0, 8)}
@@ -86,7 +86,7 @@ export default function Card(props) {
           </Grid>
           <Grid item>
             <Typography variant="subtitle1" component="div">
-              left:{props.left}
+              left:{String(props.left) + "  "}
             </Typography>
           </Grid>
         </Grid>

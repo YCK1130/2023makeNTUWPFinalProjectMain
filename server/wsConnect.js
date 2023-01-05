@@ -72,17 +72,19 @@ const broadcast = (condictions, data) => {
 };
 const changeBoardRemain = async (req) => {
   try {
-    req.requestBody.map(async (re) => {
-      await model.BoardModel.updateOne(
-        { name: re.board },
-        { $inc: { remain: re.quantity } }
-      );
-    });
+    await Promise.all(
+      req.requestBody.map(async (re) => {
+        await model.BoardModel.updateOne(
+          { name: re.board },
+          { $inc: { remain: re.quantity } }
+        );
+      })
+    );
   } catch (e) {
     throw new Error("Message DB save error: " + e);
   }
   const newBoard = await model.BoardModel.find({});
-  broadcastPage("userProgress", ["INITUSERCARD", newBoard]);
+  broadcast({ page: "userProgress" }, ["AddBoard", newBoard]);
 };
 
 const requestExpired = async (id, status) => {
@@ -337,6 +339,7 @@ module.exports = {
             if (!myboard) {
               // console.log("Board missing:", board, myboard);
               boardMissing = true;
+              return;
             }
             if (myboard.remain - board[1] < 0) {
               numNotSatisfy = true;
@@ -484,7 +487,6 @@ module.exports = {
               }
               // // console.log("newInvoice: ", board, newInvoice);
               myboard.invoice = newInvoice;
-              myboard.remain -= board.quantity;
               await myboard.save();
             })
           );
@@ -582,8 +584,8 @@ module.exports = {
             return saveBoard;
           })
         );
-        sendData(["GETBOARD", newBoards], ws);
-        //sendStatus(["success", "Reset successfully"], ws);
+        broadcastPage("adminBoardList", ["GETBOARD", newBoards]);
+        broadcastPage("userProgress", ["AddBoard", newBoards]);
         break;
       }
     }
