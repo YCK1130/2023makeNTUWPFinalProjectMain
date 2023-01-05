@@ -5,8 +5,8 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import useBreakpoints from "./useBreakpoints";
 const URL =
-  process.env.PORT === "production"
-    ? window.location.origin.replace("http", "ws") + "/ws"
+  process.env.NODE_ENV === "production"
+    ? window.location.origin.replace("http", "ws")
     : "ws://127.0.0.1:7780";
 const client = new WebSocket(URL);
 const MakeNTUContext = React.createContext({
