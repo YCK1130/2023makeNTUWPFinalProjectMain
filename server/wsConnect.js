@@ -562,6 +562,9 @@ module.exports = {
           "GETUSER",
           team,
         ]);
+        const boards = await model.BoardModel.find({});
+
+        broadcast({ page: "userProgress" }, ["AddBoard", boards]);
         broadcast({ authority: 1, page: "requestStatus" }, [
           "UPDATERETURN",
           teams,
