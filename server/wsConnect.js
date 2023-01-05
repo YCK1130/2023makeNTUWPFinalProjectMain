@@ -339,8 +339,9 @@ module.exports = {
             if (!myboard) {
               // console.log("Board missing:", board, myboard);
               boardMissing = true;
+              return;
             }
-            if (myboard?.remain - board[1] < 0) {
+            if (myboard.remain - board[1] < 0) {
               numNotSatisfy = true;
             }
           })
