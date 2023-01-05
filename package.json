@@ -33,6 +33,7 @@
     "node-fetch": "^2.6.1",
     "node-uuid": "^1.4.8",
     "papaparse": "^5.3.1",
+    "path": "^0.12.7",
     "prop-types": "^15.7.2",
     "pure-react-carousel": "^1.27.5",
     "qs": "^6.10.1",
@@ -64,7 +65,8 @@
     "window-dev-server": "set NODE_ENV=development&&nodemon ./server/app.js",
     "server": "node ./server/app.js",
     "database": "NODE_ENV=development node ./server/database/database.js",
-    "window-database": "set NODE_ENV=development&&node ./server/database/database.js"
+    "window-database": "set NODE_ENV=development&&node ./server/database/database.js",
+    "deploy": "NODE_ENV=production node ./server/app.js"
   },
   "eslintConfig": {
     "extends": "react-app"

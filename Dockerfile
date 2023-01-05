@@ -1,7 +1,11 @@
 FROM node:12-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN yarn install --freeze-lockfile
+
 COPY . .
-RUN npm run build
-CMD ["npm", "run", "server"]
+ENV MONGO_HOST mongodb
+ENV REDIS_HOST redisdb
+RUN yarn build
+
+CMD ["yarn", "deploy"]

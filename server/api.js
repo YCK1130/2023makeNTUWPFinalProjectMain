@@ -28,6 +28,7 @@ redisClient.on("error", console.error);
 
 const loginRequired = asyncHandler(async (req, res, next) => {
   if (!req.session.teamID) {
+    console.log("Login is required", req.session);
     res.status(403).end();
     return;
   }
@@ -37,6 +38,7 @@ const loginRequired = asyncHandler(async (req, res, next) => {
 const permissionRequired = (permission) =>
   asyncHandler(async (req, res, next) => {
     if (!req.session.authority || req.session.authority < permission) {
+      console.log("Permission denied", req.session);
       res.status(403).end();
       return;
     }
@@ -202,6 +204,7 @@ router
         filtered.push(filteredteam);
       });
       if (!pass) {
+        console.log("Can't access password", req.session);
         res.status(403).end();
         return;
       }

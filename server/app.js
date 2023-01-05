@@ -5,6 +5,7 @@ const logger = require("morgan");
 const apiRouter = require("./api");
 const model = require("./database/mongo/model");
 const wsConnect = require("./wsConnect");
+const path = require("path");
 // ========================================
 
 // ========================================
@@ -50,22 +51,10 @@ db.once("open", async () => {
     }
   });
   const app = express();
-  const server = http.createServer(app);
-  const wss = new ws.WebSocketServer({ server });
-
   if (process.env.NODE_ENV === "production") {
     console.log("Trust proxy is on");
     app.set("trust proxy", 1);
   }
-
-  wss.on("connection", (ws) => {
-    ws.box = ""; //記page
-    ws.id = ""; //記id
-    ws.authority = ""; //記authority
-    ws.onmessage = wsConnect.onMessage(ws); //當ws有message時，執行後面的把丟入method
-    ws.onclose = wsConnect.onClose(ws);
-  });
-
   app.use(logger("dev"));
   app.use(express.static("build"));
 
@@ -74,6 +63,30 @@ db.once("open", async () => {
   // app.listen(port, () =>
   //   console.log(`App listening at http://localhost:${port}`)
   // );
+  // if (process.env.NODE_ENV === "production") {
+  //   const __dirname = path.resolve();
+  //   app.use(express.static(path.join(__dirname, "../", "build")));
+  //   app.get("/*", function (req, res) {
+  //     res.sendFile(path.join(__dirname, "../", "build", "index.html"));
+  //   });
+  // }
+  // if (process.env.NODE_ENV === "production") {
+  //   const __dirname = path.resolve();
+  //   app.use(express.static(path.join(__dirname, "../", "build")));
+  //   app.get("/*", function (req, res) {
+  //     res.sendFile(path.join(__dirname, "../", "build", "index.html"));
+  //   });
+  // }
+  const server = http.createServer(app);
+  const wss = new ws.WebSocketServer({ server });
+
+  wss.on("connection", (ws) => {
+    ws.box = ""; //記page
+    ws.id = ""; //記id
+    ws.authority = ""; //記authority
+    ws.onmessage = wsConnect.onMessage(ws); //當ws有message時，執行後面的把丟入method
+    ws.onclose = wsConnect.onClose(ws);
+  });
 
   server.listen(PORT, () => {
     console.log(`WS listening on ${PORT}`);
