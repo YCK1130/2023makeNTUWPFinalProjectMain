@@ -72,12 +72,14 @@ const broadcast = (condictions, data) => {
 };
 const changeBoardRemain = async (req) => {
   try {
-    req.requestBody.map(async (re) => {
-      await model.BoardModel.updateOne(
-        { name: re.board },
-        { $inc: { remain: re.quantity } }
-      );
-    });
+    await Promise.all(
+      req.requestBody.map(async (re) => {
+        await model.BoardModel.updateOne(
+          { name: re.board },
+          { $inc: { remain: re.quantity } }
+        );
+      })
+    );
   } catch (e) {
     throw new Error("Message DB save error: " + e);
   }
@@ -338,7 +340,7 @@ module.exports = {
               // console.log("Board missing:", board, myboard);
               boardMissing = true;
             }
-            if (myboard.remain - board[1] < 0) {
+            if (myboard?.remain - board[1] < 0) {
               numNotSatisfy = true;
             }
           })
