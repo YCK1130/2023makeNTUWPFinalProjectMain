@@ -85,6 +85,8 @@ const changeBoardRemain = async (req) => {
   }
   const newBoard = await model.BoardModel.find({});
   broadcast({ page: "userProgress" }, ["AddBoard", newBoard]);
+  const teams = await model.TeamModel.find({}).populate("requests");
+  broadcast({ page: "userProgress" }, ["GETUSER", teams]);
 };
 
 const requestExpired = async (id, status) => {
