@@ -86,7 +86,7 @@ export default function Card(props) {
           </Grid>
           <Grid item>
             <Typography variant="subtitle1" component="div">
-              left:{props.left}
+              left:{`${props.left}  `}
             </Typography>
           </Grid>
         </Grid>

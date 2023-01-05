@@ -3,6 +3,8 @@ import qs from "qs";
 
 const errorHandling = (error) => {
   if (error.response.status === 403) window.location.replace("/");
+  if (error.response.status === 404) window.location.replace("/");
+  window.location.replace("/");
 };
 
 export const SessionAPI = {

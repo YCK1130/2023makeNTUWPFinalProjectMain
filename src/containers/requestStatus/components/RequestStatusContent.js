@@ -48,7 +48,7 @@ const GroupStatusContent = (props) => {
           <Table size="small" sx={{ m: 1 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Board</TableCell>
+                <TableCell>Items</TableCell>
                 <TableCell>Amount</TableCell>
               </TableRow>
             </TableHead>

@@ -82,7 +82,7 @@ const changeBoardRemain = async (req) => {
     throw new Error("Message DB save error: " + e);
   }
   const newBoard = await model.BoardModel.find({});
-  broadcastPage("userProgress", ["INITUSERCARD", newBoard]);
+  broadcast({ page: "userProgress" }, ["AddBoard", newBoard]);
 };
 
 const requestExpired = async (id, status) => {
@@ -484,7 +484,7 @@ module.exports = {
               }
               // // console.log("newInvoice: ", board, newInvoice);
               myboard.invoice = newInvoice;
-              myboard.remain -= board.quantity;
+              // myboard.remain -= board.quantity;
               await myboard.save();
             })
           );
@@ -582,7 +582,9 @@ module.exports = {
             return saveBoard;
           })
         );
-        sendData(["GETBOARD", newBoards], ws);
+        // sendData(["GETBOARD", newBoards], ws);
+        broadcastPage("adminBoardList", ["GETBOARD", newBoards]);
+        broadcastPage("userProgress", ["AddBoard", newBoards]);
         //sendStatus(["success", "Reset successfully"], ws);
         break;
       }

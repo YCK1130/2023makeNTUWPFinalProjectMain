@@ -32,7 +32,7 @@ const rowContent = (props) => {
           <Table size="small" sx={{ m: 1 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Stuff</TableCell>
+                <TableCell>Items</TableCell>
                 <TableCell>Amount</TableCell>
               </TableRow>
             </TableHead>
