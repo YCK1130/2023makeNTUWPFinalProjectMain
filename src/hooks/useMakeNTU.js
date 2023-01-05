@@ -4,7 +4,11 @@
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import useBreakpoints from "./useBreakpoints";
-const client = new WebSocket(window.location.origin.replace("http", "ws"));
+const URL =
+  process.env.PORT === "production"
+    ? window.location.origin.replace("http", "ws") + "/ws"
+    : "ws://127.0.0.1:7780";
+const client = new WebSocket(URL);
 const MakeNTUContext = React.createContext({
   dataINIT: () => {},
   WSINIT: () => {},
@@ -119,7 +123,35 @@ const MakeNTUProvider = (props) => {
   client.onclose = () => {
     showAlert("error", "Connection Error. Please Refresh Later!");
   };
+  const safeSend = function (message, ws, callback) {
+    waitForConnection(
+      function () {
+        ws.send(message);
+        if (typeof callback !== "undefined") {
+          callback();
+        }
+      },
+      ws,
+      1000
+    );
+  };
+
+  const waitForConnection = function (callback, ws, interval) {
+    // if (!ws) return;
+    if (ws.readyState === 1) {
+      callback();
+    } else {
+      // optional: implement backoff for interval here
+      setTimeout(function () {
+        waitForConnection(callback, ws, interval);
+      }, interval);
+    }
+  };
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+  const sendData = (data) => {
+    safeSend(JSON.stringify(data), client);
+    // client.send(JSON.stringify(data));
+  };
 
   const dataINIT = async () => {
     const newCard = {
@@ -168,9 +200,6 @@ const MakeNTUProvider = (props) => {
     ]);
   };
 
-  const sendData = (data) => {
-    client.send(JSON.stringify(data));
-  };
   const showAlert = (severity, msg, duration) => {
     //success,error
     setAlert({ open: true, severity, msg, duration });
