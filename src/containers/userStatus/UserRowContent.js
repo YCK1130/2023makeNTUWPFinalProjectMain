@@ -13,10 +13,20 @@ import { useMakeNTU } from "../../hooks/useMakeNTU";
 const rowContent = (props) => {
   const { row, open, teamID, state } = props;
   const [alertOpen, setAlertOpen] = React.useState(false);
-  const { cancelRequest, breakpoints } = useMakeNTU();
-  const handleClick = () => {
+  const { cancelRequest, breakpoints, updateReq, deleteRequestFromUser } =
+    useMakeNTU();
+  const handleCancel = () => {
     setAlertOpen(true);
   };
+  const handleConfirm = () => {
+    if (!row?._id) {
+      // console.log("missing requestID: ", data?._id);
+      return;
+    }
+    updateReq({ requestID: row?._id, requestStatus: "solved" });
+    deleteRequestFromUser([teamID, row?._id]);
+  };
+
   const handleAlertClose = () => {
     setAlertOpen(false);
   };
@@ -68,7 +78,16 @@ const rowContent = (props) => {
           {state ? (
             <></>
           ) : row.status === "pending" ? (
-            <Chip label="Cancel" variant="outlined" onClick={handleClick} />
+            <Chip label="Cancel" variant="outlined" onClick={handleCancel} />
+          ) : row.status === "waiting" ? (
+            <>
+              <Chip
+                label="Confirm"
+                variant="outlined"
+                onClick={handleConfirm}
+              />
+              <Chip label="Cancel" variant="outlined" onClick={handleCancel} />
+            </>
           ) : (
             <></>
           )}

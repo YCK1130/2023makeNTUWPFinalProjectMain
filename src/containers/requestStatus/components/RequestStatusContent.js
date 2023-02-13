@@ -38,8 +38,8 @@ const GroupStatusContent = (props) => {
       // console.log("missing requestID: ", data?._id);
       return;
     }
-    updateReq({ requestID: data?._id, requestStatus: "solved" });
-    deleteRequestFromUser([data.borrower.teamID, data?._id]);
+    updateReq({ requestID: data?._id, requestStatus: "waiting" });
+    // deleteRequestFromUser([data.borrower.teamID, data?._id]);
   };
   return (
     <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

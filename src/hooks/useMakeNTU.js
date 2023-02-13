@@ -85,8 +85,8 @@ const MakeNTUProvider = (props) => {
         break;
       }
       case "status": {
-        const [msgStatus, msg] = payload;
-        showAlert(msgStatus, msg);
+        const [msgStatus, msg, duration] = payload;
+        showAlert(msgStatus, msg, duration);
         //setStatus(payload);
         break;
       }

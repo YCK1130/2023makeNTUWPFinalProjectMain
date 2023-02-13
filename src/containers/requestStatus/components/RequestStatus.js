@@ -63,6 +63,7 @@ function RequestStatus(props) {
     denied: "已拒絕",
     cancel: "已取消",
     expired: "已逾期",
+    waiting: "等待確認中",
   };
   return (
     <React.Fragment>

@@ -460,7 +460,7 @@ module.exports = {
           );
           broadcast({ id: newReq.borrower.teamID }, [
             "status",
-            ["success", "Request Ready!!"],
+            ["success", "Request Ready!!", 8640000],
           ]);
         }
         if (requestStatus === "solved") {
@@ -516,6 +516,12 @@ module.exports = {
             ["success", "Boards have taken!!"],
           ]);
         } // broadcast
+        if (requestStatus === "waiting") {
+          broadcast({ id: newReq.borrower.teamID }, [
+            "status",
+            ["success", "請確認是否領取", 8640000],
+          ]);
+        } // broadcast
         if (requestStatus === "denied") {
           broadcast({ id: newReq.borrower.teamID }, [
             "status",
@@ -527,7 +533,7 @@ module.exports = {
         if (requestStatus === "cancel") {
           changeBoardRemain(newReq);
         } // broadcast
-        sendStatus(["success", "Update successfully"], ws);
+        // sendStatus(["success", "Update successfully"], ws);
         break;
       }
       case "UPDATERETURN": {

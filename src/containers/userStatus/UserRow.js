@@ -76,6 +76,13 @@ function Row(props) {
           <TableCell align="left" sx={{ border: 0, minWidth: "4em", p: "6px" }}>
             請來拿
           </TableCell>
+        ) : row.status === "waiting" ? (
+          <TableCell
+            align="left"
+            sx={{ color: "#00FF00", border: 0, minWidth: "4em", p: "6px" }}
+          >
+            請確認
+          </TableCell>
         ) : (
           <TableCell
             align="left"
