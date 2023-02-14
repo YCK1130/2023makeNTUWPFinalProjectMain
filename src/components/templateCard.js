@@ -8,6 +8,10 @@ import {
   TextField,
   IconButton,
   Box,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { NumericFormat } from "react-number-format";
@@ -103,7 +107,7 @@ export default function ComplexGrid({ setAddCardData }) {
         margin: "5px",
         width: "20%",
         height: "auto",
-        maxHeight: "330px",
+        maxHeight: "360px",
         maxWidth: 230,
         minWidth: 150,
         flexGrow: 1,
@@ -170,7 +174,32 @@ export default function ComplexGrid({ setAddCardData }) {
             width: "100%",
           }}
         >
-          <TextField
+        <FormControl sx={{
+              width: "100%",
+              padding: "2px",
+              backgroundColor: "rgba(255,255,255,0.3)",
+              marginTop: "5px",
+              borderRadius: "10px",
+              borderWidth: "1rem",
+              borderColor: "#1d1d1d",
+              display: "flex",
+              justifyContent: "center"}}>
+        <InputLabel id="demo-simple-select-helper-label">category</InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          name="category"
+          value={values.category}
+          label="category"
+          onChange={handleChange}
+        >
+          <MenuItem value=""><em>None</em></MenuItem>
+          <MenuItem value="Tools">Tools</MenuItem>
+          <MenuItem value="Boards">Boards</MenuItem>
+          <MenuItem value="Modules">Modules</MenuItem>
+        </Select>
+        </FormControl>
+          {/* <TextField
             id="input-category"
             label="category"
             name="category"
@@ -207,7 +236,7 @@ export default function ComplexGrid({ setAddCardData }) {
               justifyContent: "center",
             }}
             // ref={nameInputRef}
-          />
+          /> */}
         </Grid>
         <Grid item>
           <IconButton
