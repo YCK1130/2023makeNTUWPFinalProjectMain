@@ -7,12 +7,13 @@ import {
   DialogActions,
   Box,
   Button,
+  Typography,
 } from "@mui/material/";
 import { Redirect } from "react-router";
 import { selectSession } from "../../slices/sessionSlice";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
 
-const Drawer = ({ children }) => {
+const Announcement = ({ children }) => {
   const { authority } = useSelector(selectSession);
   const dispatch = useDispatch();
   const { adminAnnounceOpen, setAdminAnnounceOpen, announcementMSG } =
@@ -30,7 +31,9 @@ const Drawer = ({ children }) => {
       <DialogTitle id="simple-dialog-title">管理員通知</DialogTitle>
       <DialogContent>
         <Box sx={{ minWidth: "15vw", minHeight: "10vh" }}>
-          {announcementMSG}
+          {announcementMSG.map((msg) => (
+            <Typography>{msg}</Typography>
+          ))}
         </Box>
       </DialogContent>
       <DialogActions>
@@ -41,4 +44,4 @@ const Drawer = ({ children }) => {
     </Dialog>
   );
 };
-export default Drawer;
+export default Announcement;
