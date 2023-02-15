@@ -307,7 +307,7 @@ export default function Header({ setSaving, ableSave, data }) {
           onClose={handleCloseReset}
           // sx={{ backgroundColor: "rgba(0,0,0,1)" }}
         >
-          <DialogTitle id="simple-dialog-title">Exporting Data</DialogTitle>
+          <DialogTitle id="simple-dialog-title">Reset</DialogTitle>
           <DialogContent>
             <Box sx={{ minWidth: "15vw", minHeight: "10vh" }}>
               {"Are you sure you want to RESET!? :("}

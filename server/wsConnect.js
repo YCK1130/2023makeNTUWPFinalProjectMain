@@ -603,6 +603,14 @@ module.exports = {
         //sendStatus(["success", "Reset successfully"], ws);
         break;
       }
+      case "BROADCASTANOUNCEMENT": {
+        const { task, msg, authority } = payload;
+        broadcastAuth(authority ?? 0, [
+          "ADMINANOUNCEMENT",
+          { task, msg, authority },
+        ]);
+        break;
+      }
     }
   },
   onClose: (ws) => async () => {
