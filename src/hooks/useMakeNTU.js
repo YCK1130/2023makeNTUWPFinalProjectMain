@@ -47,7 +47,7 @@ const MakeNTUContext = React.createContext({
   resetDataBase: () => {},
   adminAnnounceOpen: false,
   setAdminAnnounceOpen: () => {},
-  announcementMSG: "",
+  announcementMSG: [],
   broadcastAnouncement: () => {},
 });
 
@@ -64,7 +64,7 @@ const MakeNTUProvider = (props) => {
   const [render, setRender] = React.useState(false);
   const [userProgressStatus, setUserProgressStatus] = React.useState([]);
   const [adminAnnounceOpen, setAdminAnnounceOpen] = React.useState(false);
-  const [announcementMSG, setAnnouncementMSG] = React.useState("");
+  const [announcementMSG, setAnnouncementMSG] = React.useState([]);
   const breakpoints = useBreakpoints();
 
   client.onmessage = async (byteString) => {

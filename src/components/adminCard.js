@@ -238,8 +238,15 @@ export default function ComplexGrid({
           top: 0,
           opacity: data?.remain !== data?.totalNum ? 0.7 : 1,
         }}
-        disabled={data?.remain !== data?.totalNum}
-        onClick={() => handleDeleteCard(data.id, data?.name || "Untitled")}
+        // disabled={data?.remain !== data?.totalNum}
+        onClick={() =>
+          handleDeleteCard(
+            data.id,
+            data.category,
+            data?.name || "Untitled",
+            data?.remain !== data?.totalNum
+          )
+        }
       >
         <CancelIcon />
       </ButtonBase>

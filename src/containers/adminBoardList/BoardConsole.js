@@ -149,8 +149,11 @@ export default function BoardConsole({
     setCards(remainCards);
   }, [delCardID]);
 
-  const handleDeleteCard = (cardID, cardName) => {
-    const delMSG = `The Board ${cardName} has been deleted.`;
+  const handleDeleteCard = (cardID, cardCategory, cardName, changed) => {
+    const delMSG = [
+      `The ${cardCategory}: "${cardName}" has been deleted.`,
+      `Please Refresh Your Page.`,
+    ];
     setDelCardID(cardID);
     broadcastAnouncement({ task: "deletecard", msg: delMSG, toAuthority: 0 });
   };
