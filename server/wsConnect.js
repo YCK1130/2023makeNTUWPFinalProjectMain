@@ -655,10 +655,10 @@ module.exports = {
           break;
         }
         case "BROADCASTANOUNCEMENT": {
-          const { task, msg, authority } = payload;
-          broadcastAuth(authority ?? 0, [
+          const { task, msg, toAuthority } = payload;
+          broadcastAuth(toAuthority ?? 0, [
             "ADMINANOUNCEMENT",
-            { task, msg, authority },
+            { task, msg, toAuthority },
           ]);
           break;
         }
