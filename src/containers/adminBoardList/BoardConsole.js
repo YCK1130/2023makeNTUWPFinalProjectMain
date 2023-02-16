@@ -74,6 +74,7 @@ export default function BoardConsole({
     showAlert,
     setUpdateBoardStatus,
     subscribe,
+    broadcastAnouncement,
   } = useMakeNTU();
   const { teamID, authority } = useSelector(selectSession);
 
@@ -142,15 +143,20 @@ export default function BoardConsole({
   useEffect(() => {
     if (cards.length === 0) return;
     // const exist = cards.filter((card) => card.id === delCardID);
-    // // console.log(delCardID);
     deleteBoard(delCardID); // talk to server
     const remainCards = cards.filter((card) => card.id !== delCardID);
-
     setChangedData(changedData.filter((card) => card.id !== delCardID));
-    // // // console.log("deleting", exist);
     setCards(remainCards);
   }, [delCardID]);
 
+  const handleDeleteCard = (cardID, cardCategory, cardName, changed) => {
+    const delMSG = [
+      `The ${cardCategory}: "${cardName}" has been deleted.`,
+      `Please Refresh Your Page.`,
+    ];
+    setDelCardID(cardID);
+    broadcastAnouncement({ task: "deletecard", msg: delMSG, toAuthority: 0 });
+  };
   const classes = useStyles();
   const { isLogin } = useSelector(selectSession);
   return (
@@ -185,7 +191,7 @@ export default function BoardConsole({
               <AdminCard
                 key={card?.name + card?.id}
                 data={card}
-                handleDeleteCard={setDelCardID}
+                handleDeleteCard={handleDeleteCard}
                 changedData={changedData}
                 setChangedData={setChangedData}
               ></AdminCard>

@@ -1,6 +1,7 @@
 // const React = require("react");
 
 //import { useState, createContext, useContext, useEffect } from "react";
+import { bool } from "prop-types";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import useBreakpoints from "./useBreakpoints";
@@ -40,10 +41,14 @@ const MakeNTUContext = React.createContext({
   cancelRequest: () => {},
   deleteRequestFromUser: () => {},
   subscribe: () => {},
-  render: [],
+  render: false,
   setRender: () => {},
   userProgressStatus: [],
   resetDataBase: () => {},
+  adminAnnounceOpen: false,
+  setAdminAnnounceOpen: () => {},
+  announcementMSG: [],
+  broadcastAnouncement: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -58,6 +63,8 @@ const MakeNTUProvider = (props) => {
   const [userRequest, setUserRequest] = React.useState([]);
   const [render, setRender] = React.useState(false);
   const [userProgressStatus, setUserProgressStatus] = React.useState([]);
+  const [adminAnnounceOpen, setAdminAnnounceOpen] = React.useState(false);
+  const [announcementMSG, setAnnouncementMSG] = React.useState([]);
   const breakpoints = useBreakpoints();
 
   client.onmessage = async (byteString) => {
@@ -85,8 +92,8 @@ const MakeNTUProvider = (props) => {
         break;
       }
       case "status": {
-        const [msgStatus, msg] = payload;
-        showAlert(msgStatus, msg);
+        const [msgStatus, msg, duration] = payload;
+        showAlert(msgStatus, msg, duration);
         //setStatus(payload);
         break;
       }
@@ -114,6 +121,10 @@ const MakeNTUProvider = (props) => {
       case "UPDATERETURN": {
         setTeamReqUpdateDate(payload);
         break;
+      }
+      case "ADMINANOUNCEMENT": {
+        setAnnouncementMSG(payload?.msg ?? "");
+        setAdminAnnounceOpen(true);
       }
       default:
         break;
@@ -251,6 +262,9 @@ const MakeNTUProvider = (props) => {
   const resetDataBase = () => {
     sendData(["RESETDATABASE"]);
   };
+  const broadcastAnouncement = (payload) => {
+    sendData(["BROADCASTANOUNCEMENT", payload]);
+  };
   return (
     <MakeNTUContext.Provider
       value={{
@@ -287,6 +301,10 @@ const MakeNTUProvider = (props) => {
         setRender,
         userProgressStatus,
         resetDataBase,
+        adminAnnounceOpen,
+        setAdminAnnounceOpen,
+        announcementMSG,
+        broadcastAnouncement,
       }}
       {...props}
     />

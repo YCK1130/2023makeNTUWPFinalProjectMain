@@ -21,7 +21,7 @@ import AdminBoardList from "./containers/adminBoardList";
 import RequestStatus from "./containers/requestStatus";
 import AdminLaserCutter from "./containers/admin_leichie";
 import LaserCutter from "./containers/user_leichie";
-
+import AdminAnounce from "./containers/adminAnnounce";
 import DP from "./containers/3dp";
 import theme from "./theme";
 // compononets
@@ -85,6 +85,7 @@ export default function App() {
     <div style={{ userSelect: "none" }}>
       <Router>
         <Drawer>
+          <AdminAnounce />
           <Routes />
         </Drawer>
       </Router>
