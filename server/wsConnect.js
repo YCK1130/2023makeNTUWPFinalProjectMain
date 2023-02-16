@@ -327,23 +327,24 @@ module.exports = {
             requests.map(async (request) => {
               if (request.status !== "solved") {
                 // console.log("request before", request);
-                request.requestBody = request.requestBody.filter(
-                  (board) => board.board !== deletedName
-                );
+                if (request.requestBody.length === 0) {
+                  request.status = "cancel";
+                  // const user = await model.TeamModel.findOne({
+                  //   _id: request.borrower,
+                  // });
+                  // user.requests = user.requests.filter(
+                  //   (id) => id !== request._id
+                  // );
+                  // await user.save();
+                  // await model.RequestModel.deleteOne({
+                  //   _id: request._id,
+                  // });
+                } else {
+                  request.requestBody = request.requestBody.filter(
+                    (board) => board.board !== deletedName
+                  );
+                }
                 // console.log("request after", request);
-              }
-              if (request.requestBody.length === 0) {
-                request.status = "cancel";
-                // const user = await model.TeamModel.findOne({
-                //   _id: request.borrower,
-                // });
-                // user.requests = user.requests.filter(
-                //   (id) => id !== request._id
-                // );
-                // await user.save();
-                // await model.RequestModel.deleteOne({
-                //   _id: request._id,
-                // });
               }
               await request.save();
             })
