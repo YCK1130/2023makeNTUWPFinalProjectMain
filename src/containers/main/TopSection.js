@@ -116,6 +116,8 @@ export default function Top(props) {
               </Button>
             </Grid>
           )}
+
+          {/* // TODO: Uncomment this to enable machine register system
           {isLogin && (
             <>
               <Grid item xs={12}>
@@ -163,7 +165,7 @@ export default function Top(props) {
                 </Button>
               </Grid>
             </>
-          )}
+          )} */}
           {/*<Grid item xs={12} style={{ width: "100%", display: "flex", justifyContent: "center" }}>*/}
           {/*  <img src={makentuImg} style={{ borderRadius: "50%" }} />*/}
           {/*</Grid>*/}

@@ -169,6 +169,7 @@ const Drawer = ({ children }) => {
             to: "/teamdata",
             icon: <PeopleIcon />,
           },
+          /* // TODO: Uncomment this to enable machine register system
           {
             text: "雷射切割機管理",
             to: "/adminlasercutter",
@@ -179,6 +180,7 @@ const Drawer = ({ children }) => {
             to: "/3dp",
             icon: <AdminPanelSettingsIcon />,
           },
+          */
           {
             text: "開發板＆工具列表",
             to: "/boardlist",
@@ -203,8 +205,10 @@ const Drawer = ({ children }) => {
             to: "/user/status",
             icon: <FactCheckIcon />,
           },
+          /* // TODO: Uncomment this to enable machine register system
           { text: "雷射切割機借用", to: "/lasercutter", icon: <PostAddIcon /> },
           { text: "3D列印機借用", to: "/3dp", icon: <PostAddIcon /> },
+          */
         ],
       }[authority] || [{ text: "Home", to: "/", icon: <HomeIcon /> }];
 

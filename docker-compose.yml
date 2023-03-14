@@ -1,11 +1,11 @@
 version: "3.4"
-web:
-  build:
-    context: .
-    dockerfile: ./Dockerfile
-  ports:
-    - "8000:8000"
 services:
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8000:8000"
   mongodb:
     image: mongo
     ports:

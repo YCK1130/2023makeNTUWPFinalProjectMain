@@ -49,6 +49,8 @@ db.once("open", async () => {
     app.set("trust proxy", 1);
   }
 
+  // TODO: Uncomment this to enable machine register system
+  /* 
   const schema = makeExecutableSchema({
     typeDefs: fs.readFileSync("./server/schema.graphql", "utf-8"),
     resolvers: {
@@ -109,11 +111,6 @@ db.once("open", async () => {
   // });
 
   await server.start();
-
-  app.use(logger("dev"));
-  app.use(express.static("build"));
-
-  app.use("/api", apiRouter);
   app.use(
     "/graphql",
     cors(),
@@ -122,6 +119,12 @@ db.once("open", async () => {
       context: async ({ req }) => ({ pubsub, timer }),
     })
   );
+  */
+
+  app.use(logger("dev"));
+  app.use(express.static("build"));
+
+  app.use("/api", apiRouter);
 
   let oldReq = await model.RequestModel.find({
     $or: [{ status: "pending" }, { status: "ready" }],
@@ -159,10 +162,14 @@ db.once("open", async () => {
   WSServer.listen(WSPORT, () => {
     console.log(`WS listening on ${WSPORT}`);
   });
-  // app.listen(port, () =>
-  //   console.log(`App listening at http://localhost:${port}`)
-  // );
-  httpServer.listen(port, () =>
+
+  // TODO: Comment this to enable machine register system
+  app.listen(port, () =>
     console.log(`App listening at http://localhost:${port}`)
   );
+
+  // TODO: Uncomment this to enable machine register system
+  // httpServer.listen(port, () =>
+  //   console.log(`App listening at http://localhost:${port}`)
+  // );
 });

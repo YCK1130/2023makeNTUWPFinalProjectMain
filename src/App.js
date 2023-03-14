@@ -42,12 +42,19 @@ const Routes = () => {
       <MainRoute exact path="/">
         <Main />
       </MainRoute>
+      {/* // TODO: Uncomment this to enable machine register system
       <MainRoute exact path="/3dp">
         <DP />
       </MainRoute>
       <MainRoute exact path="/lasercutter">
         <LaserCutter />
       </MainRoute>
+      <PrivateRoute exact path="/adminlasercutter">
+        <AdminLaserCutter />
+      </PrivateRoute>
+      <PrivateRoute exact path="/lasercutter">
+        <LaserCutter />
+      </PrivateRoute> */}
       <LoginRoute exact path="/login">
         <Login />
       </LoginRoute>
@@ -56,12 +63,6 @@ const Routes = () => {
       </PrivateRoute>
       <PrivateRoute exact path="/teamdata">
         <TeamData />
-      </PrivateRoute>
-      <PrivateRoute exact path="/adminlasercutter">
-        <AdminLaserCutter />
-      </PrivateRoute>
-      <PrivateRoute exact path="/lasercutter">
-        <LaserCutter />
       </PrivateRoute>
       <UserRoute exact path="/user">
         <UserProgress />
