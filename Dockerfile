@@ -1,6 +1,7 @@
 FROM node:16-alpine
 WORKDIR /app
 RUN corepack enable
+RUN corepack prepare pnpm@8.3.0 --activate
 
 COPY . .
 RUN pnpm install --frozen-lockfile
