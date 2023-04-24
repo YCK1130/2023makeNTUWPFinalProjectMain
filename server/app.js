@@ -163,10 +163,6 @@ db.once("open", async () => {
     console.log(`WS listening on ${WSPORT}`);
   });
 
-  // TODO: Comment this to enable machine register system
-  app.listen(port, () =>
-    console.log(`App listening at http://localhost:${port}`)
-  );
 
   // TODO: Uncomment this to enable machine register system
   // httpServer.listen(port, () =>

@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import AlertWindow from "./AlertWindow";
 import { useMakeNTU } from "../../hooks/useMakeNTU";
 
-const rowContent = (props) => {
+const RowContent = (props) => {
   const { row, open, teamID, state } = props;
   const [alertOpen, setAlertOpen] = React.useState(false);
   const { cancelRequest, breakpoints, updateReq, deleteRequestFromUser } =
@@ -102,4 +102,4 @@ const rowContent = (props) => {
   );
 };
 
-export default rowContent;
+export default RowContent;

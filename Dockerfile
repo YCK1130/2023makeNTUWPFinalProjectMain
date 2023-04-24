@@ -1,11 +1,12 @@
-FROM node:12-alpine
+FROM node:14-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN yarn install --freeze-lockfile
+RUN npm install -g pnpm
+RUN pnpm install
 
 COPY . .
 ENV MONGO_HOST mongodb
-# ENV REDIS_HOST redisdb
+ENV REDIS_HOST redisdb
 RUN yarn build
 
 CMD ["yarn", "deploy"]
