@@ -7,6 +7,9 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=eeinfo
+      - MONGO_INITDB_ROOT_PASSWORD=password
 
   redisdb:
     image: redis

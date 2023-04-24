@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const { number } = require("yargs");
 require("dotenv").config();
 
-const { MONGO_HOST, MONGO_DBNAME } = process.env;
+const { MONGO_HOST, MONGO_DBNAME, MONGO_USERNAME, MONGO_PASSWORD, MONGO_PORT } = process.env;
+console.log(`mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DBNAME}?authSource=admin`)
 const conn = mongoose.createConnection(
-  `mongodb://${MONGO_HOST}/${MONGO_DBNAME}`,
+  `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DBNAME}?authSource=admin`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

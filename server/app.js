@@ -27,7 +27,7 @@ const path = require("path");
 // ========================================
 
 const port = process.env.PORT || 8000;
-const WSPORT = process.env.PORT || 7780;
+const WSPORT = process.env.PORT || 8000;
 
 if (process.env.NODE_ENV === "development") {
   console.log("NODE_ENV = development");
