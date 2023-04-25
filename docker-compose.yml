@@ -24,6 +24,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password
     networks:
       - makentu-web
+    volumes:
+      - './mongo_data:/data/db'
   redisdb:
     image: redis
     expose:

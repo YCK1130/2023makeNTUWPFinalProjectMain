@@ -122,9 +122,13 @@ db.once("open", async () => {
   */
 
   app.use(logger("dev"));
-  app.use(express.static("build"));
+  app.use(express.static(path.join(__dirname, "../build")));
 
   app.use("/api", apiRouter);
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+  });
 
   let oldReq = await model.RequestModel.find({
     $or: [{ status: "pending" }, { status: "ready" }],
