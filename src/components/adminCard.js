@@ -27,9 +27,9 @@ const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
           },
         });
       }}
-      //   thousandSeparator
-      //   isNumericString
-      //   prefix="$"
+    //   thousandSeparator
+    //   isNumericString
+    //   prefix="$"
     />
   );
 });
@@ -138,46 +138,25 @@ export default function ComplexGrid({
           sx={{
             width: "100%",
           }}
+          alignItems="center"
+          justifyContent="space-around"
         >
           <Typography
             gutterBottom
             variant="subtitle1"
             component="div"
-            autoComplete="off"
-            sx={{
-              width: "100%",
-              fontSize: "0.2rem",
-              color: "rgba(255,255,255,0.8)",
-            }}
           >
             {`category${" : "}${data?.category || "Untitled"}`}
           </Typography>
         </Grid>
         <Grid item>
-          {/*
-          <Box
-            component="img"
-            sx={{
-              maxWidth: 128,
-              maxHeight: 128,
-            }}
-            alt="The house from the offer."
-            display="flex"
-            src="https://images.modasena.com/firfirli-scuba-tesettur-jile-kiremit-343057-60-B.jpg"
-          />*/}
-          {
-            <IconButton sx={{ width: 128, height: 128 }} disabled={true}>
-              <Img
-                alt="img not found"
-                src={data?.image || "/photoData/MakeNTU2022_icon.png"}
-                component="img"
-              />
-            </IconButton>
-          }
-          {/*<ButtonBase sx={{ width: 128, height: 128 }}>
-            <Img alt="no img" src={"https://lurl.cc/1F8aOb"} />
-          </ButtonBase>
-          */}
+          <IconButton sx={{ width: 128, height: 128 }} disabled={true}>
+            <Img
+              alt="img not found"
+              src={data?.image || "/photoData/MakeNTU2022_icon.png"}
+              component="img"
+            />
+          </IconButton>
         </Grid>
         <Grid
           container
