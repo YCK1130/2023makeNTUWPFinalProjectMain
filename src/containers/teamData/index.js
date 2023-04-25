@@ -101,8 +101,9 @@ export default function TeamData() {
     authority: "",
   });
   const { teamID, authority } = useSelector(selectSession);
-  const { subscribe } = useMakeNTU();
+  const { subscribe, setNowPage } = useMakeNTU();
   useEffect(() => {
+    setNowPage({ id: teamID, authority: authority, page: "teamData" });
     subscribe({ id: teamID, authority: authority, page: "teamData" });
   }, []);
   const showAlert = (severity, msg) => {

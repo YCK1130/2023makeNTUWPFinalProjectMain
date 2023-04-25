@@ -75,11 +75,13 @@ export default function BoardConsole({
     setUpdateBoardStatus,
     subscribe,
     broadcastAnouncement,
+    setNowPage,
   } = useMakeNTU();
   const { teamID, authority } = useSelector(selectSession);
 
   useEffect(() => {
     getBoards();
+    setNowPage({ id: teamID, authority: authority, page: "adminBoardList" });
     subscribe({ id: teamID, authority: authority, page: "adminBoardList" });
   }, []);
 
@@ -119,6 +121,7 @@ export default function BoardConsole({
       // // // console.log("existed");
       return;
     }
+
     // // console.log("handling", addCardData);
     const newCard = {
       ...addCardData,

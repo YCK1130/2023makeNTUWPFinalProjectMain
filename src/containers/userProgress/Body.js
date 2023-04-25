@@ -54,11 +54,13 @@ function Body() {
     userCards,
     userProgressStatus,
     subscribe,
+    setNowPage,
   } = useMakeNTU();
   const { teamID, authority } = useSelector(selectSession);
 
   useEffect(() => {
     getUser(teamID);
+    setNowPage({ id: teamID, authority: authority, page: "userProgress" });
     subscribe({ id: teamID, authority: authority, page: "userProgress" });
     needList = {};
   }, []);
@@ -130,6 +132,7 @@ function Body() {
     setActiveStep(0);
     setRerender(true);
     setResetOpen(false);
+    setAbleNext(false);
   };
 
   const order = (servermsg) => {
@@ -148,7 +151,6 @@ function Body() {
       a.push("-----銘謝惠顧-----");
     }
     //// console.log(a);
-
     return a;
   };
 

@@ -28,11 +28,14 @@ import theme from "./theme";
 import Loading from "./components/loading";
 // initialize, slices
 import { init, selectSession } from "./slices/sessionSlice";
+import { useMakeNTU } from "./hooks/useMakeNTU";
 
 const Routes = () => {
   const dispatch = useDispatch();
+  const { connect } = useMakeNTU();
   useEffect(() => {
     dispatch(init());
+    connect();
   }, []);
   const { initialized } = useSelector(selectSession);
   return !initialized ? (

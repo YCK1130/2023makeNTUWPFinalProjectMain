@@ -22,10 +22,11 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 export default function RequestPage() {
-  const { breakpoints, subscribe } = useMakeNTU();
+  const { breakpoints, subscribe, setNowPage } = useMakeNTU();
   const { teamID, authority } = useSelector(selectSession);
 
   useEffect(() => {
+    setNowPage({ id: teamID, authority: authority, page: "requestStatus" });
     subscribe({ id: teamID, authority: authority, page: "requestStatus" });
   }, []);
   return (

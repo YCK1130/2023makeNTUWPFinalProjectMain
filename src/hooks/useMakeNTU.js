@@ -2,53 +2,57 @@
 
 //import { useState, createContext, useContext, useEffect } from "react";
 import { bool } from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import useBreakpoints from "./useBreakpoints";
 const URL =
   process.env.NODE_ENV === "production"
     ? window.location.origin.replace("http", "ws")
     : "ws://127.0.0.1:8000";
-const client = new WebSocket(URL);
+// const client = new WebSocket(URL);
+var client = new WebSocket(URL);
+var mypage = {};
 const MakeNTUContext = React.createContext({
-  dataINIT: () => { },
-  WSINIT: () => { },
-  userBoardINIT: () => { },
-  sendData: () => { },
+  dataINIT: () => {},
+  WSINIT: () => {},
+  userBoardINIT: () => {},
+  sendData: () => {},
   cardData: [],
-  addBoard: () => { },
-  deleteBoard: () => { },
-  updateBoards: () => { },
-  getBoards: () => { },
-  setUpdateBoardStatus: () => { },
+  addBoard: () => {},
+  deleteBoard: () => {},
+  updateBoards: () => {},
+  getBoards: () => {},
+  setUpdateBoardStatus: () => {},
   alert: {},
   addBoardData: {},
   getBoardData: [],
   updateBoardStatus: "",
-  showAlert: () => { },
-  setAlert: () => { },
+  showAlert: () => {},
+  setAlert: () => {},
   userRequest: [],
-  getUser: () => { },
+  getUser: () => {},
   userCards: [],
   requestData: [],
-  getRequest: () => { },
-  updateReq: () => { },
-  updateReturn: () => { },
+  getRequest: () => {},
+  updateReq: () => {},
+  updateReturn: () => {},
   teamReqUpdateDate: [],
   breakpoints: {},
-  handleReplaceBoard: () => { },
+  handleReplaceBoard: () => {},
   breakpoints: {},
-  cancelRequest: () => { },
-  deleteRequestFromUser: () => { },
-  subscribe: () => { },
+  cancelRequest: () => {},
+  deleteRequestFromUser: () => {},
+  subscribe: () => {},
   render: false,
-  setRender: () => { },
+  setRender: () => {},
   userProgressStatus: [],
-  resetDataBase: () => { },
+  resetDataBase: () => {},
   adminAnnounceOpen: false,
-  setAdminAnnounceOpen: () => { },
+  setAdminAnnounceOpen: () => {},
   announcementMSG: [],
-  broadcastAnouncement: () => { },
+  broadcastAnouncement: () => {},
+  connect: () => {},
+  setNowPage: () => {},
 });
 
 const MakeNTUProvider = (props) => {
@@ -65,9 +69,46 @@ const MakeNTUProvider = (props) => {
   const [userProgressStatus, setUserProgressStatus] = React.useState([]);
   const [adminAnnounceOpen, setAdminAnnounceOpen] = React.useState(false);
   const [announcementMSG, setAnnouncementMSG] = React.useState([]);
+  const [nowPage, setNowPage] = React.useState({});
+  // const [client, setClient] = React.useState(client);
   const breakpoints = useBreakpoints();
 
-  client.onmessage = async (byteString) => {
+  useEffect(() => {
+    mypage = nowPage;
+  }, [nowPage]);
+  const connect = () => {
+    client = new WebSocket(URL);
+    client.onopen = onopen;
+    client.onclose = onclose;
+    client.onmessage = onmessage;
+    client.onerror = onerror;
+  };
+  // console.log("rerender", nowPage);
+
+  const onopen = () => {
+    // console.log("onopen", mypage);
+    subscribe(mypage);
+    // showAlert("success", "Successfully build an end to end encryption!");
+  };
+  const onclose = (e) => {
+    console.log(
+      "Socket is closed. Reconnect will be attempted in 1 second.",
+      e.reason
+    );
+
+    // showAlert(
+    //   "error",
+    //   "Connection Error. Reconnect will be attempted in 1 second!",
+    //   1000
+    // );
+    // console.log("nowpage", (() => nowPage)());
+    // console.log("var", mypage);
+    setTimeout(() => {
+      // console.log(nowPage);
+      connect();
+    }, 1000);
+  };
+  const onmessage = async (byteString) => {
     // 收回傳訊息
     const { data } = byteString;
     const [task, payload] = JSON.parse(data);
@@ -130,8 +171,10 @@ const MakeNTUProvider = (props) => {
         break;
     }
   };
-  client.onclose = () => {
-    showAlert("error", "Connection Error. Please Refresh Later!");
+  const onerror = (err) => {
+    console.error("Socket encountered error: ", err.message, "Closing socket");
+    showAlert("error", "Encountered error. Please Refresh Later!");
+    client.close();
   };
   const safeSend = function (message, ws, callback) {
     waitForConnection(
@@ -145,7 +188,6 @@ const MakeNTUProvider = (props) => {
       1000
     );
   };
-
   const waitForConnection = function (callback, ws, interval) {
     // if (!ws) return;
     if (ws.readyState === 1) {
@@ -162,7 +204,6 @@ const MakeNTUProvider = (props) => {
     safeSend(JSON.stringify(data), client);
     // client.send(JSON.stringify(data));
   };
-
   const dataINIT = async () => {
     const newCard = {
       limit: 5,
@@ -209,7 +250,6 @@ const MakeNTUProvider = (props) => {
       },
     ]);
   };
-
   const showAlert = (severity, msg, duration) => {
     //success,error
     setAlert({ open: true, severity, msg, duration });
@@ -218,6 +258,8 @@ const MakeNTUProvider = (props) => {
     sendData(["WSINIT", payload]);
   };
   const subscribe = (payload) => {
+    // console.log("sub", nowPage, payload);
+    // setNowPage(payload);
     sendData(["SUBSCRIBE", payload]);
   };
   const userBoardINIT = (payload) => {
@@ -249,7 +291,6 @@ const MakeNTUProvider = (props) => {
   const deleteRequestFromUser = (payload) => {
     sendData(["DELETEREQUESTFROMUSER", payload]);
   };
-
   const getRequest = (payload) => {
     sendData(["GETREQUEST", payload]);
   };
@@ -305,6 +346,8 @@ const MakeNTUProvider = (props) => {
         setAdminAnnounceOpen,
         announcementMSG,
         broadcastAnouncement,
+        connect,
+        setNowPage,
       }}
       {...props}
     />

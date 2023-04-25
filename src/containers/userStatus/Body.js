@@ -37,6 +37,7 @@ function Body() {
     render,
     setRender,
     breakpoints,
+    setNowPage,
   } = useMakeNTU();
   const { teamID, authority } = useSelector(selectSession);
   const [userBoard, setUserBoard] = useState([]);
@@ -44,6 +45,7 @@ function Body() {
 
   useEffect(() => {
     getUser(teamID);
+    setNowPage({ id: teamID, authority: authority, page: "userStatus" });
     subscribe({ id: teamID, authority: authority, page: "userStatus" });
   }, []);
   useEffect(() => {

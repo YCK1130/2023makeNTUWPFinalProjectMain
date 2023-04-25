@@ -11,13 +11,14 @@ import {
   MenuItem,
   Select,
   InputLabel,
-  FormControl
+  FormControl,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { NumericFormat } from "react-number-format";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import ImgDialog from "./ImgDialog";
+import { useMakeNTU } from "../hooks/useMakeNTU";
 
 const NumberFormatCustom = forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, ...other } = props;
@@ -63,6 +64,7 @@ export default function ComplexGrid({ setAddCardData }) {
     totalNum: 5,
     image: "",
   });
+  const { showAlert } = useMakeNTU();
   const uploadImg = (link) => {
     // console.log(link, "link");
     setValues(() => ({ ...values, image: link }));
@@ -174,7 +176,8 @@ export default function ComplexGrid({ setAddCardData }) {
             width: "100%",
           }}
         >
-        <FormControl sx={{
+          <FormControl
+            sx={{
               width: "100%",
               padding: "2px",
               backgroundColor: "rgba(255,255,255,0.3)",
@@ -183,22 +186,28 @@ export default function ComplexGrid({ setAddCardData }) {
               borderWidth: "1rem",
               borderColor: "#1d1d1d",
               display: "flex",
-              justifyContent: "center"}}>
-        <InputLabel id="demo-simple-select-helper-label">category</InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          name="category"
-          value={values.category}
-          label="category"
-          onChange={handleChange}
-        >
-          <MenuItem value=""><em>None</em></MenuItem>
-          <MenuItem value="Tools">Tools</MenuItem>
-          <MenuItem value="Boards">Boards</MenuItem>
-          <MenuItem value="Modules">Modules</MenuItem>
-        </Select>
-        </FormControl>
+              justifyContent: "center",
+            }}
+          >
+            <InputLabel id="demo-simple-select-helper-label">
+              category
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              name="category"
+              value={values.category}
+              label="category"
+              onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="Tools">Tools</MenuItem>
+              <MenuItem value="Boards">Boards</MenuItem>
+              <MenuItem value="Modules">Modules</MenuItem>
+            </Select>
+          </FormControl>
           {/* <TextField
             id="input-category"
             label="category"
@@ -343,6 +352,8 @@ export default function ComplexGrid({ setAddCardData }) {
             setAddCardData(values);
             // nameInputRef.current.value = "";
           } else {
+            showAlert("error", `FILL ALL BLANKS! :)`);
+
             // // console.log("something missing: ", name, limit, totalNum);
           }
         }}
