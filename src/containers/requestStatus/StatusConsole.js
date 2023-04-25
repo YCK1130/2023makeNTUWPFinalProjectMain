@@ -86,7 +86,25 @@ export default function StatusConsole() {
                 maxHeight: "10vh",
               }}
             >
-              <TableCell />
+              {/* <TableCell /> */}
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "h5.fontSize",
+                }}
+                align="center"
+              >
+                ID
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "h5.fontSize",
+                }}
+                align="center"
+              >
+                NAME
+              </TableCell>
               <TableCell
                 sx={{
                   fontWeight: "bold",

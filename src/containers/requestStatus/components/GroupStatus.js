@@ -20,6 +20,7 @@ function BoardRequest(props) {
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, maxHeight: "10vh" }}>
+        <TableCell align="center">{team?.id ?? "undefined"}</TableCell>
         <TableCell align="left">{team?.teamName ?? "undefined"}</TableCell>
 
         {notReturned === 0 ? (
