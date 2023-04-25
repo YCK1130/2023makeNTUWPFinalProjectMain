@@ -1,21 +1,35 @@
 # MakeNTU
 
+## Dvelopment
+```
+# use correct node version
+nvm use                       
+
+# use correct pnpm version
+corepack enable
+corepack prepare pnpm@8.3.0 --activate
+
+# install dependency
+pnpm install
+
+# environment
+cp .env.default .env
+```
 ## Run database
 ```
-cd server
-docker-compose up -d
+docker-compose -f server/docker-compose.yml up -d
 ```
 ## init database
 ```
-yarn database reset
+pnpm database reset
 ```
 
 ## Run Backend 
 ```
-yarn dev-server
+pnpm dev-server
 ```
 
 ## Run Frontend
 ```
-yarn start
+pnpm start
 ```
