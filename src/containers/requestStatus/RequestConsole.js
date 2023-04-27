@@ -26,7 +26,7 @@ const Wrapper = styled.div`
   border: 3px solid;
   @media screen and (max-width: 700px) {
     width: 100%;
-  } ;
+  }
 `;
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,7 +81,11 @@ const someReqs = [
     status: "unSolved",
   },
 ];
-export default function RequestConsole({ breakpoints }) {
+export default function RequestConsole({
+  breakpoints,
+  handleOpenWarning,
+  setDenyID,
+}) {
   const [value, setValue] = useState(0);
   const [requests, setRequests] = useState([]);
   const { requestData, getRequest } = useMakeNTU();
@@ -152,6 +156,8 @@ export default function RequestConsole({ breakpoints }) {
                       key={`${request?.sendingTime}+ ${request?.requestID}`}
                       data={request}
                       breakpoints={breakpoints}
+                      handleOpenWarning={handleOpenWarning}
+                      setDenyID={setDenyID}
                     ></RequestStatus>
                   );
                 })}

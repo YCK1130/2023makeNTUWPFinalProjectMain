@@ -92,7 +92,13 @@ const changeBoardRemain = async (req) => {
 const requestExpired = async (id, status) => {
   let request = await model.RequestModel.findOne({ requestID: id });
   if (!request) return;
-  if (request.status === status) {
+  let nowTime = new Date().getTime();
+  let epsilon = 1; //sec
+  console.log(id, nowTime, nowTime - request.sendingTime);
+  if (
+    request.status === status &&
+    nowTime - request.sendingTime > (15 * 60 - epsilon) * 1000
+  ) {
     await model.RequestModel.updateOne(
       { requestID: id },
       { $set: { status: "expired" } }
@@ -484,15 +490,34 @@ module.exports = {
         }
         case "UPDATEREQ": {
           const { requestID, requestStatus } = payload;
+          const newReq = await model.RequestModel.findOne({
+            _id: requestID,
+          }).populate(["borrower"]);
+          if (requestStatus === "cancel" && newReq.status === "ready") {
+            await model.RequestModel.updateOne(
+              { _id: requestID },
+              { $set: { status: "pending" }, sendingTime: new Date().getTime() }
+            );
+            const requests = await model.RequestModel.find().populate([
+              "borrower",
+            ]);
+            broadcast({ authority: 1, page: "requestStatus" }, [
+              "UPDATEREQUEST",
+              requests,
+            ]);
+            const userData = await model.TeamModel.findOne({
+              teamID: newReq.borrower.teamID,
+            }).populate(["requests"]);
+            broadcast(
+              { id: newReq.borrower.teamID, authority: 0, page: "userStatus" },
+              ["GETUSER", userData]
+            );
+            break;
+          }
           await model.RequestModel.updateOne(
             { _id: requestID },
             { $set: { status: requestStatus } }
           );
-          const newReq = await model.RequestModel.findOne({
-            _id: requestID,
-          }).populate(["borrower"]);
-          // // console.log(newReq);
-
           if (requestStatus === "ready") {
             await model.RequestModel.updateOne(
               { _id: requestID },
@@ -608,9 +633,7 @@ module.exports = {
               else return item;
             });
             myboard.invoice = newInvoice.filter((item) => item.number > 0);
-            // // console.log(myboard.invoice);
             await myboard.save();
-            // // console.log(myboard.invoice);
             if (teamsCard[key] === 0) delete teamsCard[key];
           }
           team.myCards = teamsCard;

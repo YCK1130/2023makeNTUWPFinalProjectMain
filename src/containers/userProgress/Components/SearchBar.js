@@ -82,7 +82,7 @@ function SearchBar({ visibility, handleCheck, handleChange, searchMethod }) {
     </Paper>
   );
 }
-SearchBar.propTypes = {
-  handleChage: PropTypes.func.isRequired,
-};
+// SearchBar.propTypes = {
+//   handleChage: PropTypes.func.isRequired,
+// };
 export default SearchBar;

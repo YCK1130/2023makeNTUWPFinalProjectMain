@@ -10,11 +10,19 @@ export default function BoardPage() {
   const [ableSave, setAbleSave] = useState(false);
   const [cards, setCards] = useState([]);
   const [searchMethod, setSearchMethod] = React.useState("Name");
-
+  const [delPageOpen, setDelPageOpen] = React.useState(false);
+  const [delData, setDelData] = React.useState({});
 
   return (
     <div>
-      <ConsoleHeader setSaving={setSaving} ableSave={ableSave} data={cards} />
+      <ConsoleHeader
+        setSaving={setSaving}
+        ableSave={ableSave}
+        data={cards}
+        delPageOpen={delPageOpen}
+        setDelPageOpen={setDelPageOpen}
+        delData={delData}
+      />
       <BoardConsole
         keyWord={searchKeyWord}
         saving={saving}
@@ -23,8 +31,15 @@ export default function BoardPage() {
         cards={cards}
         setCards={setCards}
         searchMethod={searchMethod}
+        setDelPageOpen={setDelPageOpen}
+        delData={delData}
+        setDelData={setDelData}
       />
-      <ConsoleFooter searchMethod={searchMethod} handleCheck={setSearchMethod} setKeyWord={setKeyWord} />
+      <ConsoleFooter
+        searchMethod={searchMethod}
+        handleCheck={setSearchMethod}
+        setKeyWord={setKeyWord}
+      />
     </div>
   );
 }

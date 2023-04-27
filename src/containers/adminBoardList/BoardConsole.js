@@ -33,6 +33,9 @@ export default function BoardConsole({
   cards,
   setCards,
   searchMethod,
+  setDelPageOpen,
+  delData,
+  setDelData,
 }) {
   const history = useHistory();
   const [addCardData, setAddCardData] = useState({});
@@ -151,14 +154,23 @@ export default function BoardConsole({
     setChangedData(changedData.filter((card) => card.id !== delCardID));
     setCards(remainCards);
   }, [delCardID]);
-
   const handleDeleteCard = (cardID, cardCategory, cardName, changed) => {
-    const delMSG = [
-      `The ${cardCategory}: "${cardName}" has been deleted.`,
-      `Please Refresh Your Page.`,
-    ];
-    setDelCardID(cardID);
-    broadcastAnouncement({ task: "deletecard", msg: delMSG, toAuthority: 0 });
+    if (changed) return;
+    setDelPageOpen(true);
+    setDelData(() => {
+      return () => {
+        const delMSG = [
+          `The ${cardCategory}: "${cardName}" has been deleted.`,
+          `Please Refresh Your Page.`,
+        ];
+        setDelCardID(cardID);
+        broadcastAnouncement({
+          task: "deletecard",
+          msg: delMSG,
+          toAuthority: 0,
+        });
+      };
+    });
   };
   const classes = useStyles();
   const { isLogin } = useSelector(selectSession);

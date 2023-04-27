@@ -46,7 +46,14 @@ const useStyles = makeStyles(() => ({
     display: "none",
   },
 }));
-export default function Header({ setSaving, ableSave, data }) {
+export default function Header({
+  setSaving,
+  ableSave,
+  data,
+  delPageOpen,
+  setDelPageOpen,
+  delData,
+}) {
   const classes = useStyles();
   const [importOpen, setImportOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
@@ -210,6 +217,13 @@ export default function Header({ setSaving, ableSave, data }) {
   const handleOpenReset = () => {
     setResetPageOpen(true);
   };
+  const handleCloseDel = () => {
+    setDelPageOpen(false);
+  };
+  const handleDelete = () => {
+    delData();
+    handleCloseDel();
+  };
   return (
     <HeaderContainer>
       <ButtonContainer>
@@ -319,6 +333,32 @@ export default function Header({ setSaving, ableSave, data }) {
             </Button>
             <Button onClick={handleReset} variant="contained" color="primary">
               {"Reset"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          aria-labelledby="simple-dialog-title"
+          // disableBackdropClick
+          open={delPageOpen}
+          onClose={handleCloseDel}
+          // sx={{ backgroundColor: "rgba(0,0,0,1)" }}
+        >
+          <DialogTitle id="simple-dialog-title">Delete Card</DialogTitle>
+          <DialogContent>
+            <Box sx={{ minWidth: "15vw", minHeight: "10vh" }}>
+              {"Are you sure you want to Delete Card?"}
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDel} color="secondary">
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleDelete(delData)}
+              variant="contained"
+              color="primary"
+            >
+              {"Delete"}
             </Button>
           </DialogActions>
         </Dialog>

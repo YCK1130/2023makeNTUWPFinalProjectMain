@@ -9,8 +9,8 @@ import Collapse from "@mui/material/Collapse";
 
 import Box from "@mui/material/Box";
 import { useMakeNTU } from "../../../hooks/useMakeNTU";
-const GroupStatusContent = (props) => {
-  const { data, open } = props;
+const RequestStatusContent = (props) => {
+  const { data, open, handleOpenWarning, setDenyID } = props;
   const { updateReq, deleteRequestFromUser } = useMakeNTU();
   const handleAsk = () => {
     if (!data?._id) {
@@ -24,7 +24,8 @@ const GroupStatusContent = (props) => {
       // console.log("missing requestID: ", data?._id);
       return;
     }
-    updateReq({ requestID: data?._id, requestStatus: "denied" });
+    handleOpenWarning();
+    setDenyID(data);
   };
   const handleCancel = () => {
     if (!data?._id) {
@@ -104,4 +105,4 @@ const GroupStatusContent = (props) => {
   );
 };
 
-export default GroupStatusContent;
+export default RequestStatusContent;

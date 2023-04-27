@@ -4,11 +4,11 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import GroupStatusContent from "./RequestStatusContent";
+import RequestStatusContent from "./RequestStatusContent";
 import { useMakeNTU } from "../../../hooks/useMakeNTU";
 function RequestStatus(props) {
   //every request
-  const { data, breakpoints } = props;
+  const { data, breakpoints, handleOpenWarning, setDenyID } = props;
   // // console.log(data);
   const [open, setOpen] = React.useState(false);
   const [timer, setTimer] = React.useState(0);
@@ -97,7 +97,12 @@ function RequestStatus(props) {
         </TableCell>
       </TableRow>
       <TableRow>
-        <GroupStatusContent data={data} open={open} />
+        <RequestStatusContent
+          data={data}
+          open={open}
+          handleOpenWarning={handleOpenWarning}
+          setDenyID={setDenyID}
+        />
       </TableRow>
     </React.Fragment>
   );

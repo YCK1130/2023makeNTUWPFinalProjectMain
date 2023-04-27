@@ -96,15 +96,7 @@ const MakeNTUProvider = (props) => {
       e.reason
     );
 
-    // showAlert(
-    //   "error",
-    //   "Connection Error. Reconnect will be attempted in 1 second!",
-    //   1000
-    // );
-    // console.log("nowpage", (() => nowPage)());
-    // console.log("var", mypage);
     setTimeout(() => {
-      // console.log(nowPage);
       connect();
     }, 1000);
   };
